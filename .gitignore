@@ -1,0 +1,38 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Dataset and model caches
+data/raw/
+data/processed/
+data/perturbed/
+models/cache/
+outputs/
+results/
+wandb/
+
+# Keep directory placeholders
+!data/.gitkeep
+!outputs/.gitkeep
+!results/.gitkeep
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
