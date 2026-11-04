@@ -9,10 +9,73 @@ Separates end-to-end DocQA errors into:
 """
 
 from dataclasses import dataclass
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
-from src.data.schema import CounterfactualCondition, DocumentQASample, PredictionRecord
+from src.data.schema import (
+    BoundingBox,
+    CounterfactualCondition,
+    DocumentQASample,
+    PredictionRecord,
+)
 from src.evaluation.metrics import compute_anls, compute_cer, compute_matra_error_rate
+
+
+def format_layout_aware_oracle_text(
+    oracle_text: Optional[str], layout_blocks: List[BoundingBox]
+) -> Tuple[str, str]:
+    """Produces (1) flat reading-order text and (2) explicit coordinate-annotated text.
+
+    Used to mathematically isolate Layout/Structure Error (E_lay) from Visual Extraction
+    Error (E_vis):
+      - Flat text: standard reading order without spatial bounding boxes.
+      - Coordinate text: '[x0, y0, x1, y1] token' preserving tabular/form structure.
+    """
+    if not layout_blocks:
+        base = oracle_text or ""
+        return base, base
+
+    sorted_blocks = sorted(layout_blocks, key=lambda b: (round(b.y0 / 12.0), b.x0))
+    flat_tokens = [b.text for b in sorted_blocks if b.text]
+    coord_lines = [
+        f"[{int(b.x0)},{int(b.y0)},{int(b.x1)},{int(b.y1)}] {b.text}"
+        for b in sorted_blocks
+        if b.text
+    ]
+    flat_str = " ".join(flat_tokens) if flat_tokens else (oracle_text or "")
+    coord_str = "\n".join(coord_lines) if coord_lines else flat_str
+    return flat_str, coord_str
+
+
+def decompose_telescoping_error(
+    acc_degraded: float,
+    acc_clean: float,
+    acc_oracle_flat: float,
+    acc_oracle_layout: float,
+) -> Dict[str, float]:
+    """Formal telescoping mathematical error attribution.
+
+    Total Error on input X is 1 - Acc(X). Using a nested oracle sequence:
+      E_total(degraded) = 1 - acc_degraded
+                        = (acc_clean - acc_degraded)            [Perturbation Loss: E_deg]
+                        + (acc_oracle_flat - acc_clean)         [Visual Extraction Error: E_vis]
+                        + (acc_oracle_layout - acc_oracle_flat) [Layout/Structure Error: E_lay]
+                        + (1 - acc_oracle_layout)               [Semantic Reasoning Error: E_sem]
+
+    Notice that E_deg + E_vis + E_lay + E_sem == 1 - acc_degraded identically.
+    """
+    e_total = round(1.0 - acc_degraded, 4)
+    e_deg = round(acc_clean - acc_degraded, 4)
+    e_vis = round(acc_oracle_flat - acc_clean, 4)
+    e_lay = round(acc_oracle_layout - acc_oracle_flat, 4)
+    e_sem = round(1.0 - acc_oracle_layout, 4)
+    return {
+        "total_error": e_total,
+        "perturbation_error": e_deg,
+        "visual_extraction_error": e_vis,
+        "layout_structure_error": e_lay,
+        "semantic_reasoning_error": e_sem,
+        "identity_check_sum": round(e_deg + e_vis + e_lay + e_sem, 4),
+    }
 
 
 @dataclass

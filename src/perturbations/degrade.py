@@ -21,26 +21,61 @@ SEVERITY_PRESETS: Dict[str, Dict[str, Dict[str, float]]] = {
         "mild": {"radius": 0.8},
         "moderate": {"radius": 1.6},
         "severe": {"radius": 2.6},
+        "level_1": {"radius": 0.5},
+        "level_2": {"radius": 1.0},
+        "level_3": {"radius": 1.6},
+        "level_4": {"radius": 2.3},
+        "level_5": {"radius": 3.2},
+    },
+    "salt_and_pepper": {
+        "mild": {"amount": 0.01},
+        "moderate": {"amount": 0.04},
+        "severe": {"amount": 0.09},
+        "level_1": {"amount": 0.005},
+        "level_2": {"amount": 0.015},
+        "level_3": {"amount": 0.035},
+        "level_4": {"amount": 0.065},
+        "level_5": {"amount": 0.110},
     },
     "resolution_downscale": {
         "mild": {"scale": 0.65},
         "moderate": {"scale": 0.45},
         "severe": {"scale": 0.28},
+        "level_1": {"scale": 0.80},
+        "level_2": {"scale": 0.62},
+        "level_3": {"scale": 0.45},
+        "level_4": {"scale": 0.32},
+        "level_5": {"scale": 0.20},
     },
     "jpeg_artifacts": {
         "mild": {"quality": 35},
         "moderate": {"quality": 18},
         "severe": {"quality": 8},
+        "level_1": {"quality": 50},
+        "level_2": {"quality": 32},
+        "level_3": {"quality": 18},
+        "level_4": {"quality": 10},
+        "level_5": {"quality": 5},
     },
     "perspective_skew": {
         "mild": {"angle": 4.0},
         "moderate": {"angle": 9.0},
         "severe": {"angle": 15.0},
+        "level_1": {"angle": 2.5},
+        "level_2": {"angle": 5.5},
+        "level_3": {"angle": 9.0},
+        "level_4": {"angle": 13.0},
+        "level_5": {"angle": 18.0},
     },
     "ink_bleed_threshold": {
         "mild": {"noise_std": 12.0, "erode_size": 1},
         "moderate": {"noise_std": 25.0, "erode_size": 3},
         "severe": {"noise_std": 40.0, "erode_size": 5},
+        "level_1": {"noise_std": 8.0, "erode_size": 1},
+        "level_2": {"noise_std": 16.0, "erode_size": 1},
+        "level_3": {"noise_std": 25.0, "erode_size": 3},
+        "level_4": {"noise_std": 35.0, "erode_size": 3},
+        "level_5": {"noise_std": 48.0, "erode_size": 5},
     },
 }
 
@@ -97,6 +132,21 @@ def apply_ink_bleed_threshold(
     return out
 
 
+def apply_salt_and_pepper(
+    image: Image.Image, amount: float, seed: int = 42
+) -> Image.Image:
+    """Applies impulse salt-and-pepper noise to test stroke/diacritic robustness."""
+    rng = np.random.default_rng(seed)
+    rgb = image.convert("RGB")
+    arr = np.asarray(rgb, dtype=np.uint8).copy()
+    h, w, _ = arr.shape
+    probs = rng.random((h, w))
+    half = amount / 2.0
+    arr[probs < half] = 0
+    arr[(probs >= half) & (probs < amount)] = 255
+    return Image.fromarray(arr, mode="RGB")
+
+
 def apply_perturbation(
     image: Image.Image,
     perturbation_type: str,
@@ -112,6 +162,8 @@ def apply_perturbation(
     params = SEVERITY_PRESETS[perturbation_type][severity]
     if perturbation_type == "gaussian_blur":
         return apply_gaussian_blur(image, radius=params["radius"])
+    if perturbation_type == "salt_and_pepper":
+        return apply_salt_and_pepper(image, amount=params["amount"], seed=seed)
     if perturbation_type == "resolution_downscale":
         return apply_resolution_downscale(image, scale=params["scale"])
     if perturbation_type == "jpeg_artifacts":
