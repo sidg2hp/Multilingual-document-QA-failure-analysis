@@ -27,8 +27,9 @@ wandb/
 !outputs/.gitkeep
 !results/.gitkeep
 
-# Jupyter Notebook
+# Jupyter Notebook & Pytest
 .ipynb_checkpoints
+.pytest_cache/
 
 # OS / Editor files
 .DS_Store
