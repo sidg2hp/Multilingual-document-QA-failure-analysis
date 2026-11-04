@@ -1,0 +1,110 @@
+project:
+  name: "multilingual-docqa-failure-analysis"
+  seed: 42
+  output_dir: "outputs"
+  hardware_profile:
+    gpu: "NVIDIA GeForce RTX 3050 6GB Laptop GPU"
+    vram_limit_mb: 5800
+    torch_dtype: "float16"
+    clear_cuda_cache_every_n: 5
+
+datasets:
+  patram_bench:
+    hf_repo: "bharatgenai/Patram-Bench"
+    languages: ["hi", "bn", "ta", "te", "mr", "gu", "kn", "ml", "pa", "or", "en"]
+    include_code_mixed: true
+    max_samples_per_language: 50
+    streaming: true
+  indic_vision_bench:
+    hf_repo: "krutrim-ai-labs/IndicVisionBench"
+    configs: ["ocr", "vqa_indic", "vqa_en"]
+    languages: ["Hindi", "Bengali", "Tamil", "Telugu", "Marathi", "Gujarati"]
+    max_samples_per_language: 50
+    streaming: true
+  funsd:
+    hf_repo: "nielsr/funsd"
+    split: "test"
+    max_samples: 100
+
+perturbations:
+  seed: 42
+  severities: ["mild", "moderate", "severe"]
+  types:
+    - name: "gaussian_blur"
+      description: "Destroys fine Indic matras and conjunct ligatures"
+      params:
+        mild: {kernel_size: 3, sigma: 0.8}
+        moderate: {kernel_size: 5, sigma: 1.5}
+        severe: {kernel_size: 9, sigma: 2.5}
+    - name: "resolution_downscale"
+      description: "Simulates low-DPI scanning of forms and circulars"
+      params:
+        mild: {scale_factor: 0.65}
+        moderate: {scale_factor: 0.45}
+        severe: {scale_factor: 0.28}
+    - name: "jpeg_artifacts"
+      description: "Simulates WhatsApp/portal re-compression noise around characters"
+      params:
+        mild: {quality: 35}
+        moderate: {quality: 18}
+        severe: {quality: 8}
+    - name: "perspective_skew"
+      description: "Simulates mobile camera angle distortion affecting layout reading order"
+      params:
+        mild: {max_angle_deg: 4.0}
+        moderate: {max_angle_deg: 9.0}
+        severe: {max_angle_deg: 15.0}
+    - name: "ink_bleed_threshold"
+      description: "Simulates archival bleed-through and uneven xerox binarization"
+      params:
+        mild: {noise_std: 12, morph_kernel: 1}
+        moderate: {noise_std: 25, morph_kernel: 2}
+        severe: {noise_std: 40, morph_kernel: 3}
+
+models:
+  ocr_engines:
+    tesseract:
+      version: "5.x"
+      lang_map:
+        hi: "hin+eng"
+        bn: "ben+eng"
+        ta: "tam+eng"
+        te: "tel+eng"
+        mr: "mar+eng"
+        gu: "guj+eng"
+        kn: "kan+eng"
+        ml: "mal+eng"
+        pa: "pan+eng"
+        or: "ori+eng"
+        en: "eng"
+    paddleocr:
+      version: "PP-OCRv4"
+      use_angle_cls: true
+      use_gpu: true
+
+  text_qa_reader:
+    model_id: "Qwen/Qwen2.5-3B-Instruct"
+    quantization: "nf4"
+    max_new_tokens: 128
+    temperature: 0.0
+
+  vlms:
+    primary_vlm:
+      model_id: "Qwen/Qwen2.5-VL-3B-Instruct"
+      quantization_modes: ["nf4", "int8"]
+      min_pixels: 200704       # 256 * 28 * 28 (fits easily in 6GB VRAM)
+      max_pixels: 802816       # 1024 * 28 * 28
+      max_new_tokens: 128
+      temperature: 0.0
+    secondary_vlm:
+      model_id: "HuggingFaceTB/SmolVLM-Instruct"
+      quantization_modes: ["nf4", "fp16"]
+      max_new_tokens: 128
+      temperature: 0.0
+
+counterfactual_conditions:
+  - "C0_clean_end2end"
+  - "C_delta_degraded_end2end"
+  - "C1_self_ocr_then_reason"
+  - "C2_oracle_layout_crop"
+  - "C3_oracle_text_injection"
