@@ -60,11 +60,27 @@ Run `src/perturbations/degrade.py` offline on CPU to generate deterministic `mil
 - `jpeg_artifacts` (targets stroke boundaries)
 - `perspective_skew` (targets multi-column/table reading order)
 
-### Phase 3: Sequential Model Inference on RTX 3050 (Week 2–3)
+### Phase 3: Sequential Model Inference on RTX 3050 (Week 2–3, While Waiting for PARAM Ganga)
 Run one model at a time (strictly evicting VRAM via `.unload()`):
 1. `Tesseract 5 (hin+eng / ben+eng / ...)` $\to$ saves extracted text to JSONL first.
 2. `PaddleOCR (PP-OCRv4)` / `Surya OCR` $\to$ saves extracted text to JSONL first.
 3. Load `Qwen2.5-3B-Instruct (NF4)` once and batch-evaluate all saved OCR transcripts + $C_3$ Oracle Text transcripts.
 4. Load `Qwen2.5-VL-3B-Instruct (NF4 & INT8)` and evaluate $C_0, C_\delta, C_1, C_2, C_3$.
 5. Load `SmolVLM-2.2B-Instruct (NF4, INT8, FP16)` and evaluate $C_0, C_\delta, C_1, C_2, C_3$.
-6. *(Optional Zero-Cost Cloud Validation)*: Run `bharatgenai/patram-7b-instruct` and `Qwen2.5-VL-7B-Instruct` on the exact same 600-sample JSONL using a free Kaggle 2xT4 notebook to confirm findings hold at 7B scale.
+6. Train and validate the **Adaptive OCR-VLM Router (`src/routing/router.py`)** on CPU using the 7 image/script features (`src/routing/features.py`) and plot the Accuracy–Latency Pareto curve.
+
+### Phase 4: Top-Tier Conference Scaling on IITR PARAM Ganga (2x Tesla V100 16GB)
+Once your PARAM Ganga account is approved (`sbatch slurm/run_param_ganga.sh` with `configs/param_ganga_config.yaml`):
+- **Critical Hardware Compatibility Note for Tesla V100 (`sm_70` Volta)**:
+  - Tesla V100 GPUs **do not support native `bfloat16`** or **`FlashAttention-2`** (which require Ampere `sm_80+`). Always run with `torch_dtype="float16"`, `attn_implementation="sdpa"`, and `device_map="auto"` across the 2x V100 GPUs (32GB combined VRAM).
+- **Critical Multilingual Model Selection (Avoiding Reviewer Rejection)**:
+  - Do **not** use `LLaVA-1.5-7B` as a primary Indic baseline—its Llama-2 tokenizer lacks Indic script vocabulary (splitting Hindi characters into raw bytes) and its 336px CLIP encoder cannot resolve dense document text.
+  - Instead, run **Indic-capable 7B–8B VLMs in full FP16** across the 2x V100s:
+    1. `bharatgenai/patram-7b-instruct` (India's document foundation VLM)
+    2. `Qwen/Qwen2.5-VL-7B-Instruct`
+    3. `OpenGVLab/InternVL2_5-8B`
+  - Pair OCR pipelines (`Tesseract 5`, `PaddleOCR v4`, `Surya OCR`) with `Qwen/Qwen2.5-7B-Instruct` and `meta-llama/Meta-Llama-3.1-8B-Instruct` (which includes native 128K multilingual Indic tokens).
+- **Full 3-Ablation Matrix on PARAM Ganga**:
+  1. **5-Level Degradation Spectrum (`level_1` to `level_5`)**: Gaussian blur, Salt-and-Pepper noise, JPEG artifacts, Resolution downscale, and Perspective skew.
+  2. **Code-Mixing Ratio (`SMI` bins)**: `[0.00–0.05]`, `[0.05–0.20]`, `[0.20–0.35]`, and `[0.35–0.50]`.
+  3. **Prompting Intervention**: Direct QA ($C_0$) vs. Step-wise Self-OCR Chain-of-Thought ($C_1$).

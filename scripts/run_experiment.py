@@ -21,11 +21,14 @@ from src.data.schema import CounterfactualCondition, DocumentQASample, Predictio
 from src.evaluation.attribution import (
     SampleAttribution,
     attribute_sample_errors,
+    decompose_telescoping_error,
     summarize_attributions,
 )
 from src.models.ocr_pipeline import CascadedOCRPipeline
 from src.models.vlm_runner import OCRFreeVLMRunner
 from src.perturbations.degrade import apply_perturbation
+from src.routing.features import extract_routing_features
+from src.routing.router import AdaptiveDocQARouter
 
 
 def run_model_across_conditions(
@@ -130,11 +133,55 @@ def main() -> None:
     vlm_attrs = run_model_across_conditions(vlm_runner, samples)
     vlm_runner.unload()
 
+    ocr_summary = summarize_attributions(ocr_attrs)
+    vlm_summary = summarize_attributions(vlm_attrs)
+
+    # Compute formal telescoping error decomposition for both pipelines
+    ocr_telescoping = decompose_telescoping_error(
+        acc_degraded=float(ocr_summary.get("mean_anls_c_delta_degraded", 0.0)),
+        acc_clean=float(ocr_summary.get("mean_anls_c0_clean", 0.0)),
+        acc_oracle_flat=float(ocr_summary.get("mean_anls_c2_oracle_layout", 0.0)),
+        acc_oracle_layout=float(ocr_summary.get("mean_anls_c3_oracle_text", 0.0)),
+    )
+    vlm_telescoping = decompose_telescoping_error(
+        acc_degraded=float(vlm_summary.get("mean_anls_c_delta_degraded", 0.0)),
+        acc_clean=float(vlm_summary.get("mean_anls_c0_clean", 0.0)),
+        acc_oracle_flat=float(vlm_summary.get("mean_anls_c2_oracle_layout", 0.0)),
+        acc_oracle_layout=float(vlm_summary.get("mean_anls_c3_oracle_text", 0.0)),
+    )
+
+    # Evaluate Adaptive OCR-VLM Router across samples
+    routing_feats = [
+        extract_routing_features(
+            s.image_obj,
+            sample_id=s.sample_id,
+            script_mixing_index=float(s.metadata.get("smi", 0.0)),
+        )
+        for s in samples
+        if s.image_obj is not None
+    ]
+    ocr_scores = [a.anls_c_delta_degraded for a in ocr_attrs]
+    vlm_scores = [a.anls_c_delta_degraded for a in vlm_attrs]
+
+    router = AdaptiveDocQARouter()
+    if len(routing_feats) >= 2:
+        router.fit(routing_feats, ocr_scores, vlm_scores)
+    routing_pareto = (
+        router.evaluate_pareto_frontier(routing_feats, ocr_scores, vlm_scores)
+        if routing_feats
+        else {}
+    )
+
     report = {
         "mode": args.mode,
         "num_samples": len(samples),
-        "cascaded_ocr_summary": summarize_attributions(ocr_attrs),
-        "ocr_free_vlm_summary": summarize_attributions(vlm_attrs),
+        "cascaded_ocr_summary": ocr_summary,
+        "ocr_free_vlm_summary": vlm_summary,
+        "telescoping_error_decomposition": {
+            "cascaded_ocr": ocr_telescoping,
+            "ocr_free_vlm": vlm_telescoping,
+        },
+        "adaptive_router_pareto": routing_pareto,
         "per_sample_attributions": {
             "cascaded_ocr": [asdict(a) for a in ocr_attrs],
             "ocr_free_vlm": [asdict(a) for a in vlm_attrs],

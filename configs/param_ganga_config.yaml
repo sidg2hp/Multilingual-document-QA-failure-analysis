@@ -1,0 +1,70 @@
+project:
+  name: "multilingual-docqa-failure-analysis-hpc"
+  seed: 42
+  output_dir: "outputs/param_ganga"
+  hardware_profile:
+    cluster: "IITR PARAM Ganga"
+    gpu: "2x NVIDIA Tesla V100-PCIE-16GB (32GB Total VRAM, Volta sm_70)"
+    # IMPORTANT: Tesla V100 (sm_70) does NOT support native bfloat16 or FlashAttention-2.
+    # Always use float16 and PyTorch SDPA on V100 nodes.
+    torch_dtype: "float16"
+    attn_implementation: "sdpa"
+    device_map: "auto"
+
+datasets:
+  patram_bench:
+    hf_repo: "bharatgenai/Patram-Bench"
+    languages: ["hi", "bn", "ta", "te", "mr", "gu", "kn", "ml", "pa", "or", "en"]
+    include_code_mixed: true
+    max_samples_per_language: 250
+    streaming: true
+  indic_vision_bench:
+    hf_repo: "krutrim-ai-labs/IndicVisionBench"
+    configs: ["ocr", "vqa_indic", "vqa_en"]
+    languages: ["Hindi", "Bengali", "Tamil", "Telugu", "Marathi", "Gujarati", "Kannada", "Malayalam", "Odia", "Punjabi"]
+    max_samples_per_language: 200
+    streaming: true
+  funsd:
+    hf_repo: "nielsr/funsd"
+    split: "test"
+    max_samples: 150
+
+ablations:
+  degradation_spectrum_levels: ["level_1", "level_2", "level_3", "level_4", "level_5"]
+  perturbation_types:
+    - "gaussian_blur"
+    - "salt_and_pepper"
+    - "jpeg_artifacts"
+    - "resolution_downscale"
+    - "perspective_skew"
+  code_mixing_smi_bins:
+    - [0.00, 0.05]   # Pure Monolingual
+    - [0.05, 0.20]   # Light Code-Mixing
+    - [0.20, 0.35]   # Moderate Code-Mixing
+    - [0.35, 0.50]   # Balanced 50/50 Script Switching
+  prompting_strategies:
+    - "direct_qa"
+    - "cot_self_ocr_stepwise"
+
+models:
+  ocr_engines:
+    - "tesseract_v5"
+    - "paddleocr_v4"
+    - "surya_ocr"
+  text_qa_readers:
+    - model_id: "Qwen/Qwen2.5-7B-Instruct"
+      precision: "fp16"
+    - model_id: "meta-llama/Meta-Llama-3.1-8B-Instruct"
+      precision: "fp16"
+  vlms:
+    - model_id: "Qwen/Qwen2.5-VL-7B-Instruct"
+      precision: "fp16"
+    - model_id: "bharatgenai/patram-7b-instruct"
+      precision: "fp16"
+    - model_id: "OpenGVLab/InternVL2_5-8B"
+      precision: "fp16"
+
+routing:
+  ocr_relative_cost: 0.22
+  vlm_relative_cost: 1.00
+  lambdas: [0.0, 0.05, 0.10, 0.15, 0.25, 0.40, 0.60]
