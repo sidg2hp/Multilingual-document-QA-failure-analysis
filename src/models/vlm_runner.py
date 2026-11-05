@@ -27,21 +27,47 @@ class OCRFreeVLMRunner:
         quantization: str = "nf4",
         min_pixels: int = 256 * 28 * 28,
         max_pixels: int = 1024 * 28 * 28,
+        max_new_tokens: int = 96,
         dry_run: bool = False,
     ) -> None:
         self.model_id = model_id
         self.quantization = quantization
         self.min_pixels = min_pixels
         self.max_pixels = max_pixels
+        self.max_new_tokens = max_new_tokens
         self.dry_run = dry_run
         self._processor = None
         self._model = None
+
+    def _resolve_model_class(self):
+        """Selects the correct conditional-generation class for the model family.
+
+        Qwen2.5-VL is not reliably loaded through the legacy
+        ``AutoModelForVision2Seq`` alias. Prefer its dedicated class, then the
+        modern image-text auto class, and only then fall back to the legacy one.
+        """
+        model_lower = self.model_id.lower()
+        if "qwen2.5-vl" in model_lower or "qwen2-vl" in model_lower:
+            try:
+                from transformers import Qwen2_5_VLForConditionalGeneration
+
+                return Qwen2_5_VLForConditionalGeneration
+            except ImportError:
+                pass
+        try:
+            from transformers import AutoModelForImageTextToText
+
+            return AutoModelForImageTextToText
+        except ImportError:
+            from transformers import AutoModelForVision2Seq
+
+            return AutoModelForVision2Seq
 
     def _load_vlm(self) -> None:
         if self.dry_run or self._model is not None:
             return
         import torch
-        from transformers import AutoModelForVision2Seq, AutoProcessor, BitsAndBytesConfig
+        from transformers import AutoProcessor, BitsAndBytesConfig
 
         bnb_config = None
         if self.quantization == "nf4":
@@ -54,12 +80,17 @@ class OCRFreeVLMRunner:
         elif self.quantization == "int8":
             bnb_config = BitsAndBytesConfig(load_in_8bit=True)
 
-        self._processor = AutoProcessor.from_pretrained(
-            self.model_id,
-            min_pixels=self.min_pixels,
-            max_pixels=self.max_pixels,
-        )
-        self._model = AutoModelForVision2Seq.from_pretrained(
+        try:
+            self._processor = AutoProcessor.from_pretrained(
+                self.model_id,
+                min_pixels=self.min_pixels,
+                max_pixels=self.max_pixels,
+            )
+        except TypeError:
+            self._processor = AutoProcessor.from_pretrained(self.model_id)
+
+        model_cls = self._resolve_model_class()
+        self._model = model_cls.from_pretrained(
             self.model_id,
             quantization_config=bnb_config,
             device_map="auto",
@@ -83,6 +114,7 @@ class OCRFreeVLMRunner:
         self._load_vlm()
         import torch
 
+        is_qwen = "qwen" in self.model_id.lower()
         if image is not None:
             messages = [
                 {
@@ -96,9 +128,29 @@ class OCRFreeVLMRunner:
             text_input = self._processor.apply_chat_template(
                 messages, tokenize=False, add_generation_prompt=True
             )
-            inputs = self._processor(
-                text=[text_input], images=[image], padding=True, return_tensors="pt"
-            ).to(self._model.device)
+
+            image_inputs = None
+            video_inputs = None
+            if is_qwen:
+                try:
+                    from qwen_vl_utils import process_vision_info
+
+                    image_inputs, video_inputs = process_vision_info(messages)
+                except ImportError:
+                    image_inputs = [image]
+            else:
+                image_inputs = [image]
+
+            processor_kwargs = {
+                "text": [text_input],
+                "padding": True,
+                "return_tensors": "pt",
+            }
+            if image_inputs is not None:
+                processor_kwargs["images"] = image_inputs
+            if video_inputs is not None:
+                processor_kwargs["videos"] = video_inputs
+            inputs = self._processor(**processor_kwargs)
         else:
             messages = [{"role": "user", "content": [{"type": "text", "text": prompt}]}]
             text_input = self._processor.apply_chat_template(
@@ -106,10 +158,18 @@ class OCRFreeVLMRunner:
             )
             inputs = self._processor(
                 text=[text_input], padding=True, return_tensors="pt"
-            ).to(self._model.device)
+            )
+
+        device = getattr(self._model, "device", None)
+        if device is not None:
+            inputs = inputs.to(device)
 
         with torch.no_grad():
-            output_ids = self._model.generate(**inputs, max_new_tokens=96, do_sample=False)
+            output_ids = self._model.generate(
+                **inputs,
+                max_new_tokens=self.max_new_tokens,
+                do_sample=False,
+            )
         generated_ids = output_ids[0][inputs["input_ids"].shape[1] :]
         return self._processor.decode(generated_ids, skip_special_tokens=True).strip()
 

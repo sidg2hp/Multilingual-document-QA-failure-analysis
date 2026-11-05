@@ -1,11 +1,12 @@
 """Main CLI entrypoint for running counterfactual Document QA failure analysis."""
 
 import argparse
+import csv
 from dataclasses import asdict
 import json
 from pathlib import Path
 import sys
-from typing import Dict, List
+from typing import Dict, List, Optional, Tuple
 import yaml
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
@@ -36,6 +37,49 @@ from src.evaluation.statistics import (
 from src.perturbations.degrade import apply_perturbation
 from src.routing.features import extract_routing_features
 from src.routing.router import AdaptiveDocQARouter
+from src.utils.prediction_cache import PredictionCache
+from src.utils.seed import set_global_seed
+
+
+def runner_model_name(runner: object) -> str:
+    """Returns the canonical model name used for cache keys and reports."""
+    if hasattr(runner, "ocr_backend"):
+        return f"{runner.ocr_backend}+{runner.reader_model_id}"
+    return getattr(runner, "model_id", "unknown")
+
+
+def evaluate_with_cache(
+    runner: object,
+    sample: DocumentQASample,
+    condition: CounterfactualCondition,
+    cache: Optional[PredictionCache] = None,
+    image_override: Optional[object] = None,
+    perturbation_type: Optional[str] = None,
+    perturbation_severity: Optional[str] = None,
+) -> PredictionRecord:
+    """Evaluates a condition, reusing a cached prediction when available."""
+    if cache is not None:
+        cached = cache.get(
+            model_name=runner_model_name(runner),
+            quantization=getattr(runner, "quantization", ""),
+            sample_id=sample.sample_id,
+            condition=condition,
+            perturbation_type=perturbation_type,
+            perturbation_severity=perturbation_severity,
+        )
+        if cached is not None:
+            return cached
+
+    record = runner.evaluate_sample(
+        sample=sample,
+        condition=condition,
+        image_override=image_override,
+        perturbation_type=perturbation_type,
+        perturbation_severity=perturbation_severity,
+    )
+    if cache is not None:
+        cache.put(record)
+    return record
 
 
 def run_model_across_conditions(
@@ -43,6 +87,8 @@ def run_model_across_conditions(
     samples: List[DocumentQASample],
     perturbation_type: str = "gaussian_blur",
     perturbation_severity: str = "severe",
+    cache: Optional[PredictionCache] = None,
+    seed: int = 42,
 ) -> List[SampleAttribution]:
     """Evaluates a single model across C0, C_delta, C1, C2, C3 and computes attributions."""
     attributions: List[SampleAttribution] = []
@@ -65,22 +111,113 @@ def run_model_across_conditions(
                     sample.image_obj,
                     perturbation_type=perturbation_type,
                     severity=perturbation_severity,
+                    seed=seed,
                 )
                 p_type = perturbation_type
                 p_sev = perturbation_severity
 
-            rec = runner.evaluate_sample(
+            records[cond] = evaluate_with_cache(
+                runner=runner,
                 sample=sample,
                 condition=cond,
+                cache=cache,
                 image_override=img_override,
                 perturbation_type=p_type,
                 perturbation_severity=p_sev,
             )
-            records[cond] = rec
 
         attributions.append(attribute_sample_errors(sample, records))
 
     return attributions
+
+
+def run_condition_sweep(
+    runner: object,
+    samples: List[DocumentQASample],
+    perturbation_types: List[str],
+    severities: List[str],
+    cache: Optional[PredictionCache] = None,
+    seed: int = 42,
+) -> Tuple[List[Dict[str, object]], Dict[str, List[SampleAttribution]]]:
+    """Sweeps perturbations while computing perturbation-independent conditions once.
+
+    Conditions C0, C1, C2, and C3 do not depend on the perturbation. Computing
+    them once per sample reduces expensive inference calls by roughly 4x. Only
+    C_delta is recomputed for every (perturbation, severity) pair.
+    """
+    baseline_conditions = [
+        CounterfactualCondition.C0_CLEAN,
+        CounterfactualCondition.C1_SELF_OCR_PROBE,
+        CounterfactualCondition.C2_ORACLE_LAYOUT,
+        CounterfactualCondition.C3_ORACLE_TEXT,
+    ]
+
+    baseline: Dict[str, Dict[CounterfactualCondition, PredictionRecord]] = {}
+    for sample in samples:
+        baseline[sample.sample_id] = {
+            cond: evaluate_with_cache(runner, sample, cond, cache) for cond in baseline_conditions
+        }
+
+    rows: List[Dict[str, object]] = []
+    attributions_by_setting: Dict[str, List[SampleAttribution]] = {}
+
+    for perturbation_type in perturbation_types:
+        for severity in severities:
+            setting_attributions: List[SampleAttribution] = []
+            for sample in samples:
+                image_override = None
+                if sample.image_obj is not None:
+                    image_override = apply_perturbation(
+                        sample.image_obj,
+                        perturbation_type=perturbation_type,
+                        severity=severity,
+                        seed=seed,
+                    )
+                delta_record = evaluate_with_cache(
+                    runner,
+                    sample,
+                    CounterfactualCondition.C_DELTA_DEGRADED,
+                    cache,
+                    image_override=image_override,
+                    perturbation_type=perturbation_type,
+                    perturbation_severity=severity,
+                )
+                records = dict(baseline[sample.sample_id])
+                records[CounterfactualCondition.C_DELTA_DEGRADED] = delta_record
+                setting_attributions.append(attribute_sample_errors(sample, records))
+
+            summary = summarize_attributions(setting_attributions)
+            delta_ci = bootstrap_ci(
+                [attr.anls_c_delta_degraded for attr in setting_attributions], seed=seed
+            )
+            setting_key = f"{perturbation_type}|{severity}"
+            attributions_by_setting[setting_key] = setting_attributions
+            rows.append(
+                {
+                    "model": runner_model_name(runner),
+                    "quantization": getattr(runner, "quantization", ""),
+                    "perturbation_type": perturbation_type,
+                    "severity": severity,
+                    "num_samples": summary.get("num_samples", 0),
+                    "anls_c0_clean": summary.get("mean_anls_c0_clean", 0.0),
+                    "anls_c_delta_degraded": summary.get("mean_anls_c_delta_degraded", 0.0),
+                    "delta_vis": summary.get("mean_delta_vis", 0.0),
+                    "delta_lay": summary.get("mean_delta_lay", 0.0),
+                    "delta_rec": summary.get("mean_delta_rec", 0.0),
+                    "error_sem": summary.get("mean_error_sem", 0.0),
+                    "hallucination_to_abstention_ratio": summary.get(
+                        "hallucination_to_abstention_ratio"
+                    ),
+                    "num_abstained_degraded": summary.get("num_abstained_degraded", 0),
+                    "num_confident_hallucination_degraded": summary.get(
+                        "num_confident_hallucination_degraded", 0
+                    ),
+                    "ci_low_c_delta_degraded": delta_ci.get("ci_low"),
+                    "ci_high_c_delta_degraded": delta_ci.get("ci_high"),
+                }
+            )
+
+    return rows, attributions_by_setting
 
 
 CONDITION_ATTRIBUTION_FIELDS = {
@@ -161,7 +298,43 @@ def main() -> None:
         default=10,
         help="Maximum samples to evaluate in this run",
     )
+    parser.add_argument(
+        "--perturbation-type",
+        type=str,
+        default="gaussian_blur",
+        help="Perturbation family used for C_delta in single-setting mode",
+    )
+    parser.add_argument(
+        "--severity",
+        type=str,
+        default="severe",
+        help="Severity preset used for C_delta in single-setting mode",
+    )
+    parser.add_argument(
+        "--sweep",
+        action="store_true",
+        help="Sweep five perturbations across five degradation levels",
+    )
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Resume from the JSONL prediction cache",
+    )
+    parser.add_argument(
+        "--cache-path",
+        type=str,
+        default=None,
+        help="Override the JSONL prediction cache path",
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="Global random seed",
+    )
     args = parser.parse_args()
+
+    set_global_seed(args.seed)
 
     with open(args.config, "r", encoding="utf-8") as f:
         cfg = yaml.safe_load(f)
@@ -177,6 +350,13 @@ def main() -> None:
     out_dir = Path(cfg["project"]["output_dir"])
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    cache_path = args.cache_path or str(
+        out_dir / "cache" / f"predictions_{args.mode}.jsonl"
+    )
+    cache = PredictionCache(cache_path) if args.resume else None
+
+    vlms_cfg = cfg["models"]["vlms"]["primary_vlm"]
+
     # Sequential model evaluation to stay strictly within 6GB VRAM on RTX 3050
     ocr_runner = CascadedOCRPipeline(
         ocr_backend="tesseract",
@@ -184,15 +364,84 @@ def main() -> None:
         quantization=cfg["models"]["text_qa_reader"]["quantization"],
         dry_run=dry_run,
     )
-    ocr_attrs = run_model_across_conditions(ocr_runner, samples)
-    ocr_runner.unload()
-
     vlm_runner = OCRFreeVLMRunner(
-        model_id=cfg["models"]["vlms"]["primary_vlm"]["model_id"],
+        model_id=vlms_cfg["model_id"],
         quantization="nf4",
+        max_new_tokens=int(vlms_cfg.get("max_new_tokens", 96)),
         dry_run=dry_run,
     )
-    vlm_attrs = run_model_across_conditions(vlm_runner, samples)
+
+    if args.sweep:
+        perturbation_types = [
+            "gaussian_blur",
+            "salt_and_pepper",
+            "jpeg_artifacts",
+            "resolution_downscale",
+            "perspective_skew",
+        ]
+        severities = ["level_1", "level_2", "level_3", "level_4", "level_5"]
+
+        ocr_rows, ocr_by_setting = run_condition_sweep(
+            ocr_runner, samples, perturbation_types, severities, cache, args.seed
+        )
+        ocr_runner.unload()
+        vlm_rows, vlm_by_setting = run_condition_sweep(
+            vlm_runner, samples, perturbation_types, severities, cache, args.seed
+        )
+        vlm_runner.unload()
+
+        paired_by_setting: Dict[str, object] = {}
+        for setting in sorted(set(ocr_by_setting) & set(vlm_by_setting)):
+            paired_by_setting[setting] = build_paired_comparisons(
+                ocr_by_setting[setting], vlm_by_setting[setting]
+            )
+
+        payload = {
+            "mode": args.mode,
+            "num_samples": len(samples),
+            "seed": args.seed,
+            "cache": {"enabled": cache is not None, "entries": len(cache) if cache else 0},
+            "sweep": {
+                "perturbation_types": perturbation_types,
+                "severities": severities,
+            },
+            "rows": ocr_rows + vlm_rows,
+            "paired_model_comparisons_vlm_minus_ocr_by_setting": paired_by_setting,
+        }
+
+        sweep_json = out_dir / f"sweep_{args.mode}.json"
+        with open(sweep_json, "w", encoding="utf-8") as handle:
+            json.dump(payload, handle, indent=2, ensure_ascii=False)
+
+        sweep_csv = out_dir / f"sweep_{args.mode}.csv"
+        if payload["rows"]:
+            with open(sweep_csv, "w", encoding="utf-8", newline="") as handle:
+                writer = csv.DictWriter(handle, fieldnames=list(payload["rows"][0].keys()))
+                writer.writeheader()
+                writer.writerows(payload["rows"])
+
+        print(f"Saved perturbation sweep JSON to {sweep_json}")
+        print(f"Saved perturbation sweep CSV to {sweep_csv}")
+        return
+
+    ocr_attrs = run_model_across_conditions(
+        ocr_runner,
+        samples,
+        perturbation_type=args.perturbation_type,
+        perturbation_severity=args.severity,
+        cache=cache,
+        seed=args.seed,
+    )
+    ocr_runner.unload()
+
+    vlm_attrs = run_model_across_conditions(
+        vlm_runner,
+        samples,
+        perturbation_type=args.perturbation_type,
+        perturbation_severity=args.severity,
+        cache=cache,
+        seed=args.seed,
+    )
     vlm_runner.unload()
 
     ocr_summary = summarize_attributions(ocr_attrs)
@@ -212,18 +461,23 @@ def main() -> None:
         acc_oracle_text=float(vlm_summary.get("mean_anls_c3_oracle_text", 0.0)),
     )
 
-    # Evaluate Adaptive OCR-VLM Router across samples
-    routing_feats = [
-        extract_routing_features(
-            s.image_obj,
-            sample_id=s.sample_id,
-            script_mixing_index=float(s.metadata.get("smi", 0.0)),
+    # Evaluate the Adaptive OCR-VLM Router on correctly aligned samples
+    vlm_by_id = {attr.sample_id: attr for attr in vlm_attrs}
+    routing_feats = []
+    ocr_scores = []
+    vlm_scores = []
+    for sample, ocr_attr in zip(samples, ocr_attrs):
+        if sample.image_obj is None or sample.sample_id not in vlm_by_id:
+            continue
+        routing_feats.append(
+            extract_routing_features(
+                sample.image_obj,
+                sample_id=sample.sample_id,
+                script_mixing_index=float(sample.metadata.get("smi", 0.0)),
+            )
         )
-        for s in samples
-        if s.image_obj is not None
-    ]
-    ocr_scores = [a.anls_c_delta_degraded for a in ocr_attrs]
-    vlm_scores = [a.anls_c_delta_degraded for a in vlm_attrs]
+        ocr_scores.append(ocr_attr.anls_c_delta_degraded)
+        vlm_scores.append(vlm_by_id[sample.sample_id].anls_c_delta_degraded)
 
     router = AdaptiveDocQARouter()
     if len(routing_feats) >= 2:
@@ -237,6 +491,12 @@ def main() -> None:
     report = {
         "mode": args.mode,
         "num_samples": len(samples),
+        "seed": args.seed,
+        "perturbation": {
+            "type": args.perturbation_type,
+            "severity": args.severity,
+        },
+        "cache": {"enabled": cache is not None, "entries": len(cache) if cache else 0},
         "cascaded_ocr_summary": ocr_summary,
         "ocr_free_vlm_summary": vlm_summary,
         "telescoping_error_decomposition": {
