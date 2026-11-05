@@ -26,6 +26,13 @@ from src.evaluation.attribution import (
 )
 from src.models.ocr_pipeline import CascadedOCRPipeline
 from src.models.vlm_runner import OCRFreeVLMRunner
+from src.evaluation.statistics import (
+    bootstrap_ci,
+    cohens_d_paired,
+    holm_bonferroni,
+    paired_bootstrap_difference,
+    wilcoxon_signed_rank,
+)
 from src.perturbations.degrade import apply_perturbation
 from src.routing.features import extract_routing_features
 from src.routing.router import AdaptiveDocQARouter
@@ -74,6 +81,61 @@ def run_model_across_conditions(
         attributions.append(attribute_sample_errors(sample, records))
 
     return attributions
+
+
+CONDITION_ATTRIBUTION_FIELDS = {
+    "c0_clean": "anls_c0_clean",
+    "c_delta_degraded": "anls_c_delta_degraded",
+    "c1_self_ocr": "anls_c1_self_ocr",
+    "c2_oracle_layout": "anls_c2_oracle_layout",
+    "c3_oracle_text": "anls_c3_oracle_text",
+}
+
+
+def build_confidence_intervals(
+    attributions: List[SampleAttribution],
+) -> Dict[str, Dict[str, object]]:
+    """Bootstrap 95% CIs for each condition's per-sample ANLS."""
+    if not attributions:
+        return {}
+    return {
+        cond: bootstrap_ci([getattr(attr, field) for attr in attributions])
+        for cond, field in CONDITION_ATTRIBUTION_FIELDS.items()
+    }
+
+
+def build_paired_comparisons(
+    ocr_attributions: List[SampleAttribution],
+    vlm_attributions: List[SampleAttribution],
+) -> Dict[str, object]:
+    """Paired VLM-vs-OCR tests with Holm-Bonferroni correction across conditions."""
+    if len(ocr_attributions) != len(vlm_attributions) or not ocr_attributions:
+        return {}
+
+    comparisons: Dict[str, Dict[str, object]] = {}
+    for cond, field in CONDITION_ATTRIBUTION_FIELDS.items():
+        vlm_values = [getattr(attr, field) for attr in vlm_attributions]
+        ocr_values = [getattr(attr, field) for attr in ocr_attributions]
+        boot = paired_bootstrap_difference(vlm_values, ocr_values)
+        wilcoxon = wilcoxon_signed_rank(vlm_values, ocr_values)
+        comparisons[cond] = {
+            **boot,
+            "wilcoxon_p_value": wilcoxon.get("p_value"),
+            "cohens_d_paired": cohens_d_paired(vlm_values, ocr_values),
+        }
+
+    keys_with_p = [
+        key for key, value in comparisons.items() if value.get("p_value") is not None
+    ]
+    if keys_with_p:
+        adjusted = holm_bonferroni(
+            [float(comparisons[key]["p_value"]) for key in keys_with_p]
+        )
+        for key, adjusted_p in zip(keys_with_p, adjusted):
+            comparisons[key]["holm_adjusted_p_value"] = adjusted_p
+
+    comparisons["note"] = "positive mean_difference means VLM > OCR"
+    return comparisons
 
 
 def main() -> None:
@@ -181,6 +243,13 @@ def main() -> None:
             "cascaded_ocr": ocr_telescoping,
             "ocr_free_vlm": vlm_telescoping,
         },
+        "confidence_intervals_95": {
+            "cascaded_ocr": build_confidence_intervals(ocr_attrs),
+            "ocr_free_vlm": build_confidence_intervals(vlm_attrs),
+        },
+        "paired_model_comparisons_vlm_minus_ocr": build_paired_comparisons(
+            ocr_attrs, vlm_attrs
+        ),
         "adaptive_router_pareto": routing_pareto,
         "per_sample_attributions": {
             "cascaded_ocr": [asdict(a) for a in ocr_attrs],
