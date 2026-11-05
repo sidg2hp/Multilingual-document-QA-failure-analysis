@@ -480,11 +480,11 @@ def main() -> None:
         vlm_scores.append(vlm_by_id[sample.sample_id].anls_c_delta_degraded)
 
     router = AdaptiveDocQARouter()
-    if len(routing_feats) >= 2:
-        router.fit(routing_feats, ocr_scores, vlm_scores)
     routing_pareto = (
-        router.evaluate_pareto_frontier(routing_feats, ocr_scores, vlm_scores)
-        if routing_feats
+        router.evaluate_pareto_frontier_cv(
+            routing_feats, ocr_scores, vlm_scores, seed=args.seed
+        )
+        if len(routing_feats) >= 2
         else {}
     )
 

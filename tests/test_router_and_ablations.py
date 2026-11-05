@@ -8,7 +8,7 @@ from src.evaluation.attribution import (
 )
 from src.data.schema import BoundingBox
 from src.perturbations.degrade import apply_perturbation
-from src.routing.features import extract_routing_features
+from src.routing.features import DocumentRoutingFeatures, extract_routing_features
 from src.routing.router import AdaptiveDocQARouter, PIPELINE_OCR, PIPELINE_VLM
 
 
@@ -85,3 +85,35 @@ def test_adaptive_ocr_vlm_router_and_pareto() -> None:
     pareto = router.evaluate_pareto_frontier([f_clean, f_blur], [0.91, 0.22], [0.91, 0.81])
     assert pareto["oracle_router_upper_bound_anls"] >= pareto["always_ocr_anls"]
     assert len(pareto["pareto_frontier"]) > 0
+
+
+def test_router_cv_prevents_in_sample_leakage() -> None:
+    features = []
+    ocr_scores = []
+    vlm_scores = []
+    for index in range(12):
+        is_clean = index % 2 == 0
+        features.append(
+            DocumentRoutingFeatures(
+                sample_id=f"doc_{index}",
+                laplacian_variance=500.0 if is_clean else 20.0,
+                rms_contrast=0.5,
+                shannon_entropy=5.0,
+                impulse_noise_ratio=0.0,
+                horizontal_transition_rate=0.1,
+                vertical_transition_rate=0.1,
+                script_mixing_index=0.0 if is_clean else 0.4,
+            )
+        )
+        ocr_scores.append(0.9 if is_clean else 0.2)
+        vlm_scores.append(0.8 if is_clean else 0.85)
+
+    router = AdaptiveDocQARouter()
+    result = router.evaluate_pareto_frontier_cv(
+        features, ocr_scores, vlm_scores, n_splits=3, seed=7
+    )
+    assert result["evaluation_protocol"] == "3-fold_cross_validated"
+    assert result["n_splits"] == 3
+    assert "oof_prediction_mae_ocr" in result
+    assert "oof_prediction_mae_vlm" in result
+    assert len(result["pareto_frontier"]) > 0

@@ -15,6 +15,7 @@ from dataclasses import dataclass
 from typing import Dict, List, Tuple
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import KFold
 
 from src.routing.features import DocumentRoutingFeatures
 
@@ -154,6 +155,96 @@ class AdaptiveDocQARouter:
             )
 
         return {
+            "evaluation_protocol": "in_sample",
+            "always_ocr_anls": round(float(np.mean(y_ocr)), 4),
+            "always_ocr_cost": self.ocr_relative_cost,
+            "always_vlm_anls": round(float(np.mean(y_vlm)), 4),
+            "always_vlm_cost": self.vlm_relative_cost,
+            "oracle_router_upper_bound_anls": round(oracle_anls, 4),
+            "pareto_frontier": curve,
+        }
+
+    def evaluate_pareto_frontier_cv(
+        self,
+        features: List[DocumentRoutingFeatures],
+        true_ocr_anls: List[float],
+        true_vlm_anls: List[float],
+        lambdas: List[float] | None = None,
+        n_splits: int = 5,
+        seed: int = 42,
+    ) -> Dict[str, object]:
+        """Evaluates the router with out-of-fold predictions to prevent leakage.
+
+        The regressors are trained on $k-1$ folds and scored on the held-out
+        fold. Pareto decisions are then made from those out-of-fold predictions,
+        so the reported accuracy is not inflated by fitting and evaluating on
+        the same documents.
+        """
+        if lambdas is None:
+            lambdas = [0.0, 0.05, 0.10, 0.20, 0.35, 0.50]
+
+        n = len(features)
+        if n != len(true_ocr_anls) or n != len(true_vlm_anls):
+            raise ValueError("features and score lists must have equal length")
+        if n < 2:
+            return {}
+
+        x_mat = np.asarray([f.to_vector() for f in features], dtype=np.float32)
+        y_ocr = np.asarray(true_ocr_anls, dtype=np.float32)
+        y_vlm = np.asarray(true_vlm_anls, dtype=np.float32)
+
+        effective_splits = min(int(n_splits), n)
+        if effective_splits < 2:
+            result = self.evaluate_pareto_frontier(features, true_ocr_anls, true_vlm_anls, lambdas)
+            result["evaluation_protocol"] = "in_sample_fallback_too_few_samples"
+            return result
+
+        kfold = KFold(n_splits=effective_splits, shuffle=True, random_state=seed)
+        oof_ocr = np.zeros(n, dtype=np.float32)
+        oof_vlm = np.zeros(n, dtype=np.float32)
+
+        for train_idx, test_idx in kfold.split(x_mat):
+            reg_ocr = RandomForestRegressor(
+                n_estimators=64, max_depth=6, random_state=seed
+            )
+            reg_vlm = RandomForestRegressor(
+                n_estimators=64, max_depth=6, random_state=seed
+            )
+            reg_ocr.fit(x_mat[train_idx], y_ocr[train_idx])
+            reg_vlm.fit(x_mat[train_idx], y_vlm[train_idx])
+            oof_ocr[test_idx] = reg_ocr.predict(x_mat[test_idx])
+            oof_vlm[test_idx] = reg_vlm.predict(x_mat[test_idx])
+
+        oracle_anls = float(np.mean(np.maximum(y_ocr, y_vlm)))
+        curve = []
+        for lam in lambdas:
+            routed_scores = []
+            routed_costs = []
+            vlm_fraction = 0
+            for index in range(n):
+                u_ocr = float(oof_ocr[index]) - lam * self.ocr_relative_cost
+                u_vlm = float(oof_vlm[index]) - lam * self.vlm_relative_cost
+                if u_vlm > u_ocr:
+                    routed_scores.append(float(y_vlm[index]))
+                    routed_costs.append(self.vlm_relative_cost)
+                    vlm_fraction += 1
+                else:
+                    routed_scores.append(float(y_ocr[index]))
+                    routed_costs.append(self.ocr_relative_cost)
+            curve.append(
+                {
+                    "lambda": lam,
+                    "routed_anls": round(float(np.mean(routed_scores)), 4),
+                    "relative_cost": round(float(np.mean(routed_costs)), 4),
+                    "vlm_routing_rate": round(vlm_fraction / float(n), 4),
+                }
+            )
+
+        return {
+            "evaluation_protocol": f"{effective_splits}-fold_cross_validated",
+            "n_splits": effective_splits,
+            "oof_prediction_mae_ocr": round(float(np.mean(np.abs(oof_ocr - y_ocr))), 4),
+            "oof_prediction_mae_vlm": round(float(np.mean(np.abs(oof_vlm - y_vlm))), 4),
             "always_ocr_anls": round(float(np.mean(y_ocr)), 4),
             "always_ocr_cost": self.ocr_relative_cost,
             "always_vlm_anls": round(float(np.mean(y_vlm)), 4),
