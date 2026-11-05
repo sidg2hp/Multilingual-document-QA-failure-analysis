@@ -65,11 +65,13 @@ graph TD
 
 ```text
 ├── configs/
-│   └── experiment_config.yaml       # Reproducible hyperparameters, quantization & seeds
+│   ├── experiment_config.yaml       # Reproducible hyperparameters, quantization & seeds
+│   └── param_ganga_config.yaml      # 2x V100 HPC scaling profile
 ├── docs/
-│   └── research_protocol.md         # Experimental methodology & workshop paper blueprint
+│   ├── research_protocol.md         # Experimental methodology & workshop paper blueprint
+│   └── paper_readiness_and_improvements.md  # Acceptance assessment + change log
 ├── scripts/
-│   └── run_experiment.py            # CLI entrypoint for data prep, inference, and attribution
+│   └── run_experiment.py            # CLI: data prep, inference, sweep, attribution, stats
 ├── src/
 │   ├── data/
 │   │   ├── schema.py                # Dataclasses for documents, perturbations, and conditions
@@ -78,12 +80,22 @@ graph TD
 │   │   └── degrade.py               # Controlled visual degradations & bbox layout interventions
 │   ├── models/
 │   │   ├── ocr_pipeline.py          # Tesseract / PaddleOCR + Text-QA cascade runners
-│   │   └── vlm_runner.py            # Memory-efficient 4-bit/8-bit VLM counterfactual runner
-│   └── evaluation/
-│       ├── metrics.py               # CER, WER, ANLS, Field F1, Hallucination vs. Abstention
-│       └── attribution.py           # Stage-wise causal error decomposition & reporting
+│   │   └── vlm_runner.py            # Memory-bounded OCR-free VLM counterfactual runner
+│   ├── routing/
+│   │   ├── features.py              # 7 lightweight image/script routing features
+│   │   └── router.py                # Accuracy-cost router + CV Pareto evaluation
+│   ├── evaluation/
+│   │   ├── metrics.py               # CER, WER, MER, ANLS, EM, F1, HAR, failure modes
+│   │   ├── attribution.py           # Telescoping causal decomposition & grouped summaries
+│   │   └── statistics.py            # Bootstrap CIs, paired tests, Holm-Bonferroni
+│   └── utils/
+│       ├── prediction_cache.py      # Resumable JSONL prediction cache
+│       └── seed.py                  # Global deterministic seeding
 └── tests/
-    └── test_metrics_and_attribution.py
+    ├── test_metrics_and_attribution.py
+    ├── test_router_and_ablations.py
+    ├── test_statistics_and_failure_modes.py
+    └── test_cache_and_sweep.py
 ```
 
 ## Quickstart
@@ -95,6 +107,21 @@ pip install -r requirements.txt
 # 2. Run unit tests for metrics, perturbations, and error attribution
 pytest tests/
 
-# 3. Run a dry-run counterfactual evaluation pipeline
-python scripts/run_experiment.py --config configs/experiment_config.yaml --mode dry_run
+# 3. Run a dry-run counterfactual evaluation pipeline (resumable cache)
+python scripts/run_experiment.py --config configs/experiment_config.yaml \
+  --mode dry_run --resume --seed 42
+
+# 4. Run the full 5-perturbation x 5-severity sweep
+python scripts/run_experiment.py --config configs/experiment_config.yaml \
+  --mode dry_run --sweep --resume --seed 42
 ```
+
+Dry-run predictions are synthetic and intended only for pipeline verification;
+they are not experimental evidence.
+
+## Paper Readiness
+
+`docs/paper_readiness_and_improvements.md` contains an honest acceptance
+assessment (current state vs. executed study), the reviewer objections that must
+be addressed, the minimum experiment package, and a commit-by-commit record of
+the rigor improvements in this repository.

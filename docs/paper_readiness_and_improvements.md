@@ -219,14 +219,56 @@ These are intentionally *not* solved by code changes alone:
 
 ---
 
-## 4. Commit-by-commit change log
+## 4. Reproducing the updated pipeline
 
-See the repository history. The commits are ordered so each one is reviewable:
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Unit tests for metrics, failure modes, statistics, cache, sweeps, and routing
+pytest tests/ -q
+
+# Single-setting run with a resumable prediction cache
+python scripts/run_experiment.py \
+  --config configs/experiment_config.yaml \
+  --mode dry_run --resume --seed 42
+
+# Full perturbation sweep (5 families x 5 severity levels)
+python scripts/run_experiment.py \
+  --config configs/experiment_config.yaml \
+  --mode dry_run --sweep --resume --seed 42
+```
+
+The single-setting run writes `outputs/attribution_report_<mode>.json`. The
+sweep writes `outputs/sweep_<mode>.json` and `outputs/sweep_<mode>.csv`. All
+reports include per-condition confidence intervals, the corrected telescoping
+decomposition, HAR, and grouped per-script/per-language summaries.
+
+**Dry-run outputs are synthetic and must never be reported as results.**
+
+---
+
+## 5. Commit-by-commit change log
+
+The test footprint for each change ships with that change; there is no separate
+"tests only" commit.
 
 1. `docs: add paper readiness assessment and improvement plan`
+   - Adds this assessment, the venue estimate, and the reviewer-critique map.
 2. `fix(eval): correct telescoping decomposition and add HAR failure modes`
+   - Corrects the $C_2$/$C_3$ roles in the decomposition, adds signed
+     components and a monotonicity flag, adds `classify_answer_failure`, HAR,
+     exact match, and the Indic confident-hallucination proxy, and adds
+     per-script/per-language summaries.
 3. `feat(eval): add bootstrap, paired tests, and multiple-comparison correction`
+   - Adds `src/evaluation/statistics.py`, wires confidence intervals and paired
+     VLM-vs-OCR tests into the report, and adds statistical tests.
 4. `feat(runtime): add resumable cache, perturbation sweep, and VLM loader fix`
+   - Adds `src/utils/prediction_cache.py`, `src/utils/seed.py`, the
+     `--sweep/--resume/--seed` CLI, shared-baseline sweeping, and the correct
+     Qwen2.5-VL model resolution and `process_vision_info` path.
 5. `fix(routing): evaluate router Pareto frontier with cross-validation`
-6. `test: cover statistics, failure modes, cache, and CV routing`
-7. `docs: finalize improvement changelog and README usage`
+   - Adds `evaluate_pareto_frontier_cv` and switches the experiment runner to
+     out-of-fold routing decisions.
+6. `docs: finalize improvement changelog and README usage`
+   - Updates this changelog and the README quickstart/structure.
