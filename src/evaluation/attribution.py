@@ -16,8 +16,16 @@ from src.data.schema import (
     CounterfactualCondition,
     DocumentQASample,
     PredictionRecord,
+    ScriptType,
 )
-from src.evaluation.metrics import compute_anls, compute_cer, compute_matra_error_rate
+from src.evaluation.metrics import (
+    classify_answer_failure,
+    compute_anls,
+    compute_cer,
+    compute_hallucination_to_abstention_ratio,
+    compute_matra_error_rate,
+    is_indic_confident_hallucination,
+)
 
 
 def format_layout_aware_oracle_text(
@@ -49,32 +57,42 @@ def format_layout_aware_oracle_text(
 def decompose_telescoping_error(
     acc_degraded: float,
     acc_clean: float,
-    acc_oracle_flat: float,
     acc_oracle_layout: float,
-) -> Dict[str, float]:
-    """Formal telescoping mathematical error attribution.
+    acc_oracle_text: float,
+) -> Dict[str, object]:
+    """Formal telescoping error attribution over the nested oracle sequence.
 
-    Total Error on input X is 1 - Acc(X). Using a nested oracle sequence:
-      E_total(degraded) = 1 - acc_degraded
-                        = (acc_clean - acc_degraded)            [Perturbation Loss: E_deg]
-                        + (acc_oracle_flat - acc_clean)         [Visual Extraction Error: E_vis]
-                        + (acc_oracle_layout - acc_oracle_flat) [Layout/Structure Error: E_lay]
-                        + (1 - acc_oracle_layout)               [Semantic Reasoning Error: E_sem]
+    The conditions are nested from least to most information:
 
-    Notice that E_deg + E_vis + E_lay + E_sem == 1 - acc_degraded identically.
+        degraded -> clean -> oracle layout (C2) -> oracle text (C3)
+
+    Therefore the total error on the degraded input decomposes as:
+
+      E_total = 1 - acc_degraded
+              = (acc_clean        - acc_degraded)   [perturbation loss]
+              + (acc_oracle_layout - acc_clean)      [layout / localization loss]
+              + (acc_oracle_text   - acc_oracle_layout) [recognition loss]
+              + (1                 - acc_oracle_text)   [semantic reasoning loss]
+
+    Components are intentionally signed. A negative component means the oracle
+    intervention reduced accuracy (for example, cropping away useful context),
+    which is an empirical finding rather than a numerical error.
     """
     e_total = round(1.0 - acc_degraded, 4)
     e_deg = round(acc_clean - acc_degraded, 4)
-    e_vis = round(acc_oracle_flat - acc_clean, 4)
-    e_lay = round(acc_oracle_layout - acc_oracle_flat, 4)
-    e_sem = round(1.0 - acc_oracle_layout, 4)
+    e_lay = round(acc_oracle_layout - acc_clean, 4)
+    e_rec = round(acc_oracle_text - acc_oracle_layout, 4)
+    e_sem = round(1.0 - acc_oracle_text, 4)
     return {
         "total_error": e_total,
         "perturbation_error": e_deg,
-        "visual_extraction_error": e_vis,
-        "layout_structure_error": e_lay,
+        "layout_localization_error": e_lay,
+        "recognition_error": e_rec,
         "semantic_reasoning_error": e_sem,
-        "identity_check_sum": round(e_deg + e_vis + e_lay + e_sem, 4),
+        "identity_check_sum": round(e_deg + e_lay + e_rec + e_sem, 4),
+        "monotonic_nested_sequence": bool(
+            acc_degraded <= acc_clean <= acc_oracle_layout <= acc_oracle_text
+        ),
     }
 
 
@@ -100,6 +118,10 @@ class SampleAttribution:
     degraded_failure_mode: str  # "correct", "abstained", or "confident_hallucination"
     ocr_cer_clean: Optional[float] = None
     ocr_matra_er_clean: Optional[float] = None
+    delta_vis_signed: float = 0.0
+    delta_lay_signed: float = 0.0
+    delta_rec_signed: float = 0.0
+    indic_confident_hallucination: bool = False
 
 
 def attribute_sample_errors(
@@ -138,9 +160,12 @@ def attribute_sample_errors(
         else s_c2
     )
 
-    delta_vis = round(max(0.0, s_c0 - s_cd), 4)
-    delta_lay = round(max(0.0, s_c2 - s_c0), 4)
-    delta_rec = round(max(0.0, s_c3 - s_c2), 4)
+    delta_vis_signed = round(s_c0 - s_cd, 4)
+    delta_lay_signed = round(s_c2 - s_c0, 4)
+    delta_rec_signed = round(s_c3 - s_c2, 4)
+    delta_vis = round(max(0.0, delta_vis_signed), 4)
+    delta_lay = round(max(0.0, delta_lay_signed), 4)
+    delta_rec = round(max(0.0, delta_rec_signed), 4)
     delta_dissoc = round(s_c1 - s_c0, 4)
     error_sem = round(1.0 - s_c3, 4)
 
@@ -163,12 +188,25 @@ def attribute_sample_errors(
         CounterfactualCondition.C_DELTA_DEGRADED,
         records_by_condition.get(CounterfactualCondition.C0_CLEAN),
     )
-    if s_cd >= failure_threshold:
-        degraded_mode = "correct"
-    elif deg_rec is not None and deg_rec.abstained:
-        degraded_mode = "abstained"
+    if deg_rec is not None:
+        degraded_mode = classify_answer_failure(
+            deg_rec.predicted_answer, gts, deg_rec.abstained, failure_threshold
+        )
     else:
-        degraded_mode = "confident_hallucination"
+        degraded_mode = "correct" if s_cd >= failure_threshold else "confident_hallucination"
+
+    indic_hallucination = False
+    if deg_rec is not None and sample.script_type in (
+        ScriptType.MONOLINGUAL_INDIC,
+        ScriptType.CODE_MIXED,
+    ):
+        reference = sample.oracle_text or (gts[0] if gts else "")
+        indic_hallucination = is_indic_confident_hallucination(
+            deg_rec.predicted_answer,
+            reference,
+            abstained=deg_rec.abstained,
+            threshold=failure_threshold,
+        )
 
     # Compute OCR CER & Matra Error Rate if oracle_text and extracted_ocr_text exist
     c0_rec = records_by_condition.get(CounterfactualCondition.C0_CLEAN)
@@ -200,14 +238,19 @@ def attribute_sample_errors(
         degraded_failure_mode=degraded_mode,
         ocr_cer_clean=cer_clean,
         ocr_matra_er_clean=mer_clean,
+        delta_vis_signed=delta_vis_signed,
+        delta_lay_signed=delta_lay_signed,
+        delta_rec_signed=delta_rec_signed,
+        indic_confident_hallucination=indic_hallucination,
     )
 
 
-def summarize_attributions(attributions: List[SampleAttribution]) -> Dict[str, object]:
-    """Aggregates stage-wise error attribution and hallucination rates across samples."""
-    if not attributions:
-        return {}
+def _aggregate_subset(attributions: List[SampleAttribution]) -> Dict[str, object]:
+    """Computes the metric bundle for one group of attributions."""
     n = float(len(attributions))
+    if n == 0:
+        return {}
+
     stage_counts: Dict[str, int] = {}
     mode_counts: Dict[str, int] = {}
     for attr in attributions:
@@ -218,11 +261,20 @@ def summarize_attributions(attributions: List[SampleAttribution]) -> Dict[str, o
             mode_counts.get(attr.degraded_failure_mode, 0) + 1
         )
 
+    num_abstained = mode_counts.get("abstained", 0)
+    num_hallucinated = mode_counts.get("confident_hallucination", 0)
+    num_indic_hallucinated = sum(
+        1 for a in attributions if a.indic_confident_hallucination
+    )
+
     return {
         "num_samples": len(attributions),
         "mean_anls_c0_clean": round(sum(a.anls_c0_clean for a in attributions) / n, 4),
         "mean_anls_c_delta_degraded": round(
             sum(a.anls_c_delta_degraded for a in attributions) / n, 4
+        ),
+        "mean_anls_c1_self_ocr": round(
+            sum(a.anls_c1_self_ocr for a in attributions) / n, 4
         ),
         "mean_anls_c2_oracle_layout": round(
             sum(a.anls_c2_oracle_layout for a in attributions) / n, 4
@@ -233,7 +285,23 @@ def summarize_attributions(attributions: List[SampleAttribution]) -> Dict[str, o
         "mean_delta_vis": round(sum(a.delta_vis for a in attributions) / n, 4),
         "mean_delta_lay": round(sum(a.delta_lay for a in attributions) / n, 4),
         "mean_delta_rec": round(sum(a.delta_rec for a in attributions) / n, 4),
+        "mean_delta_vis_signed": round(
+            sum(a.delta_vis_signed for a in attributions) / n, 4
+        ),
+        "mean_delta_lay_signed": round(
+            sum(a.delta_lay_signed for a in attributions) / n, 4
+        ),
+        "mean_delta_rec_signed": round(
+            sum(a.delta_rec_signed for a in attributions) / n, 4
+        ),
+        "mean_delta_dissoc": round(sum(a.delta_dissoc for a in attributions) / n, 4),
         "mean_error_sem": round(sum(a.error_sem for a in attributions) / n, 4),
+        "num_abstained_degraded": num_abstained,
+        "num_confident_hallucination_degraded": num_hallucinated,
+        "num_indic_confident_hallucination": num_indic_hallucinated,
+        "hallucination_to_abstention_ratio": compute_hallucination_to_abstention_ratio(
+            num_hallucinated, num_abstained
+        ),
         "primary_failure_stage_distribution": {
             k: round(v / n, 4) for k, v in stage_counts.items()
         },
@@ -241,3 +309,25 @@ def summarize_attributions(attributions: List[SampleAttribution]) -> Dict[str, o
             k: round(v / n, 4) for k, v in mode_counts.items()
         },
     }
+
+
+def summarize_attributions(attributions: List[SampleAttribution]) -> Dict[str, object]:
+    """Aggregates stage-wise error attribution, HAR, and script/language breakdowns."""
+    if not attributions:
+        return {}
+
+    summary = _aggregate_subset(attributions)
+
+    by_script: Dict[str, List[SampleAttribution]] = {}
+    by_language: Dict[str, List[SampleAttribution]] = {}
+    for attr in attributions:
+        by_script.setdefault(attr.script_type, []).append(attr)
+        by_language.setdefault(attr.language, []).append(attr)
+
+    summary["by_script_type"] = {
+        key: _aggregate_subset(items) for key, items in sorted(by_script.items())
+    }
+    summary["by_language"] = {
+        key: _aggregate_subset(items) for key, items in sorted(by_language.items())
+    }
+    return summary

@@ -38,15 +38,16 @@ def test_telescoping_error_decomposition_identity() -> None:
     decomp = decompose_telescoping_error(
         acc_degraded=0.42,
         acc_clean=0.68,
-        acc_oracle_flat=0.84,
-        acc_oracle_layout=0.93,
+        acc_oracle_layout=0.84,
+        acc_oracle_text=0.93,
     )
     assert decomp["total_error"] == 0.58
     assert decomp["identity_check_sum"] == decomp["total_error"]
     assert decomp["perturbation_error"] == 0.26
-    assert decomp["visual_extraction_error"] == 0.16
-    assert decomp["layout_structure_error"] == 0.09
+    assert decomp["layout_localization_error"] == 0.16
+    assert decomp["recognition_error"] == 0.09
     assert decomp["semantic_reasoning_error"] == 0.07
+    assert decomp["monotonic_nested_sequence"] is True
 
 
 def test_layout_aware_oracle_formatting() -> None:

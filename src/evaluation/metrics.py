@@ -10,7 +10,7 @@ Includes:
 
 import unicodedata
 from collections import Counter
-from typing import List, Sequence
+from typing import List, Optional, Sequence
 
 
 def _levenshtein_distance(seq1: Sequence, seq2: Sequence) -> int:
@@ -95,6 +95,71 @@ def compute_anls(
         if score > best_score:
             best_score = score
     return round(best_score, 4)
+
+
+def compute_exact_match(prediction: str, ground_truths: List[str]) -> float:
+    """Computes normalized exact match against the best ground-truth answer."""
+    if not ground_truths:
+        return 0.0
+    pred_norm = normalize_text(prediction)
+    return 1.0 if any(pred_norm == normalize_text(gt) for gt in ground_truths) else 0.0
+
+
+def classify_answer_failure(
+    prediction: str,
+    ground_truths: List[str],
+    abstained: bool = False,
+    threshold: float = 0.5,
+) -> str:
+    """Classifies a prediction as correct, an abstention, or a confident hallucination.
+
+    An empty prediction is treated as an abstention even if the caller did not set
+    ``abstained``. The distinction matters because aggregate ANLS treats explicit
+    abstention and fluent fabrication identically.
+    """
+    if compute_anls(prediction, ground_truths, threshold=threshold) >= threshold:
+        return "correct"
+    if abstained or not (prediction or "").strip():
+        return "abstained"
+    return "confident_hallucination"
+
+
+def compute_hallucination_to_abstention_ratio(
+    num_hallucinated: int, num_abstained: int
+) -> Optional[float]:
+    """Computes HAR = confident hallucinations / explicit abstentions.
+
+    Returns ``None`` when neither failure mode occurred. When there are
+    hallucinations but no abstentions, returns the hallucination count as a
+    documented saturation value rather than infinity, so the result remains
+    JSON-serializable.
+    """
+    if num_abstained > 0:
+        return round(num_hallucinated / float(num_abstained), 4)
+    if num_hallucinated == 0:
+        return None
+    return float(num_hallucinated)
+
+
+def is_indic_confident_hallucination(
+    prediction: str,
+    reference: str,
+    abstained: bool = False,
+    threshold: float = 0.5,
+) -> bool:
+    """Flags a confident, high-edit-distance answer on an Indic reference.
+
+    This is a conservative proxy for the "matra-blind confident hallucination"
+    hypothesis, not proof of a specific diacritic error. It requires an Indic
+    reference, a non-abstaining prediction, and failed ANLS. Causal claims about
+    matras still require the Matra Error Rate and manual inspection.
+    """
+    if abstained or not (prediction or "").strip() or not reference:
+        return False
+    has_indic = any(0x0900 <= ord(ch) <= 0x0D7F for ch in reference)
+    if not has_indic:
+        return False
+    return compute_anls(prediction, [reference], threshold=threshold) < threshold
 
 
 def compute_field_f1(prediction: str, ground_truths: List[str]) -> float:

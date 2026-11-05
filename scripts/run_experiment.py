@@ -140,14 +140,14 @@ def main() -> None:
     ocr_telescoping = decompose_telescoping_error(
         acc_degraded=float(ocr_summary.get("mean_anls_c_delta_degraded", 0.0)),
         acc_clean=float(ocr_summary.get("mean_anls_c0_clean", 0.0)),
-        acc_oracle_flat=float(ocr_summary.get("mean_anls_c2_oracle_layout", 0.0)),
-        acc_oracle_layout=float(ocr_summary.get("mean_anls_c3_oracle_text", 0.0)),
+        acc_oracle_layout=float(ocr_summary.get("mean_anls_c2_oracle_layout", 0.0)),
+        acc_oracle_text=float(ocr_summary.get("mean_anls_c3_oracle_text", 0.0)),
     )
     vlm_telescoping = decompose_telescoping_error(
         acc_degraded=float(vlm_summary.get("mean_anls_c_delta_degraded", 0.0)),
         acc_clean=float(vlm_summary.get("mean_anls_c0_clean", 0.0)),
-        acc_oracle_flat=float(vlm_summary.get("mean_anls_c2_oracle_layout", 0.0)),
-        acc_oracle_layout=float(vlm_summary.get("mean_anls_c3_oracle_text", 0.0)),
+        acc_oracle_layout=float(vlm_summary.get("mean_anls_c2_oracle_layout", 0.0)),
+        acc_oracle_text=float(vlm_summary.get("mean_anls_c3_oracle_text", 0.0)),
     )
 
     # Evaluate Adaptive OCR-VLM Router across samples
