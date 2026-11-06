@@ -52,7 +52,6 @@ from src.evaluation.attribution import (
     format_layout_aware_oracle_text,
     summarize_attributions,
 )
-from src.evaluation.metrics import compute_exact_match
 from src.evaluation.statistics import (
     bootstrap_ci,
     cohens_d_paired,
@@ -66,7 +65,11 @@ from src.models.ocr_pipeline import CascadedOCRPipeline
 from src.models.prompts import build_prompt
 from src.models.text_ops import shuffle_transcript, truncate_context
 from src.models.vlm_runner import OCRFreeVLMRunner
-from src.perturbations.degrade import apply_perturbation
+from src.perturbations.degrade import (
+    apply_perturbation,
+    crop_oracle_layout_region,
+    crop_placebo_region,
+)
 from src.routing.features import extract_routing_features
 from src.routing.router import AdaptiveDocQARouter
 from src.utils.prediction_cache import PredictionCache
@@ -220,6 +223,41 @@ def prompt_hash_for(
     return build_prompt(condition, sample.question).content_hash()
 
 
+def cache_image_hash(
+    condition: CounterfactualCondition,
+    sample: DocumentQASample,
+    image: Optional[object],
+    seed: int = 42,
+) -> Optional[str]:
+    """Hashes the actual model input, not the surrounding page.
+
+    Text-only conditions have no image; crop conditions must hash the crop,
+    otherwise every lookup misses because the stored record hashed the crop.
+    """
+    if condition in (
+        CounterfactualCondition.C3_ORACLE_TEXT,
+        CounterfactualCondition.C3B_SHUFFLED_TEXT,
+    ):
+        return None
+    if image is None:
+        return None
+    if condition in (
+        CounterfactualCondition.C2_ORACLE_LAYOUT,
+        CounterfactualCondition.C2B_PLACEBO_CROP,
+    ) and sample.answer_bbox is not None:
+        normalized = bool(sample.metadata.get("normalized_bbox", False))
+        if condition == CounterfactualCondition.C2_ORACLE_LAYOUT:
+            crop = crop_oracle_layout_region(
+                image, sample.answer_bbox, normalized_coords=normalized
+            )
+        else:
+            crop = crop_placebo_region(
+                image, sample.answer_bbox, normalized_coords=normalized, seed=seed
+            )
+        return sha256_image(crop)
+    return sha256_image(image)
+
+
 def evaluate_with_cache(
     runner: object,
     sample: DocumentQASample,
@@ -233,7 +271,7 @@ def evaluate_with_cache(
 ) -> PredictionRecord:
     """Evaluates a condition, reusing a cache entry only for identical provenance."""
     image = image_override if image_override is not None else sample.image_obj
-    image_hash = sha256_image(image)
+    image_hash = cache_image_hash(condition, sample, image, seed)
     if cache is not None and prompt_hash is not None:
         cached = cache.get(
             model_name=runner_model_name(runner),
