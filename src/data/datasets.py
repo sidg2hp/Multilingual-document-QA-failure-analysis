@@ -374,7 +374,18 @@ def _pair_entities(
 
 
 def _clean_field_label(text: str) -> str:
+    """Turns an entity span into a short field label.
+
+    FUNSD question entities sometimes include a colon plus a note
+    (e.g. ``Fax: NOTE``); using the whole string as the question makes the task
+    ambiguous and impossible to match against OCR. Keep the part before the
+    colon when it is a reasonable label.
+    """
     label = " ".join(text.split()).strip(" :;.-")
+    if ":" in label:
+        left = label.split(":", 1)[0].strip(" :;.-")
+        if 2 <= len(left) <= 60:
+            label = left
     return label or text.strip()
 
 
@@ -403,15 +414,23 @@ def samples_from_funsd_row(
     layout_blocks = [entity["bbox"] for entity in entities]  # type: ignore[misc]
 
     doc_id = str(row.get("id") or "funsd")
+    page_norm = " ".join(page_text.lower().split())
     samples: List[DocumentQASample] = []
     seen: set[Tuple[str, str]] = set()
     for index, (question_entity, answer_entity) in enumerate(pairs):
         answer_text = str(answer_entity["text"]).strip()
         label = _clean_field_label(str(question_entity["text"]))
-        if not answer_text or not label:
+        if not answer_text or not label or len(label) < 3:
             continue
         key = (label.lower(), answer_text.lower())
         if key in seen:
+            continue
+        # Ambiguous fields make the question unanswerable by construction (for
+        # a reader that cannot see the gold box). Keep only pairs whose label
+        # and answer each occur once in the page transcript.
+        label_norm = " ".join(label.lower().split())
+        answer_norm = " ".join(answer_text.lower().split())
+        if page_norm.count(label_norm) != 1 or page_norm.count(answer_norm) != 1:
             continue
         seen.add(key)
         question = f'What is the value of "{label}"?'

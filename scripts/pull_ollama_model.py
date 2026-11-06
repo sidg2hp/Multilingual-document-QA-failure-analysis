@@ -23,29 +23,50 @@ REGISTRY = "https://registry.ollama.ai"
 CHUNK = 1024 * 1024
 
 
+def split_model(model: str) -> tuple:
+    name, _, tag = model.partition(":")
+    tag = tag or "latest"
+    if "/" not in name:
+        name = f"library/{name}"
+    return name, tag
+
+
 def manifest_url(model: str) -> str:
-    if "/" not in model:
-        model = f"library/{model}"
-    return f"{REGISTRY}/v2/{model}/manifests/latest"
+    name, tag = split_model(model)
+    return f"{REGISTRY}/v2/{name}/manifests/{tag}"
 
 
 def blob_url(model: str, digest: str) -> str:
-    if "/" not in model:
-        model = f"library/{model}"
-    return f"{REGISTRY}/v2/{model}/blobs/{digest}"
+    name, _ = split_model(model)
+    return f"{REGISTRY}/v2/{name}/blobs/{digest}"
 
 
 def digest_hex(digest: str) -> str:
     return digest.split(":", 1)[1]
 
 
+def sha256_file(path: Path) -> str:
+    hasher = hashlib.sha256()
+    with open(path, "rb") as handle:
+        for chunk in iter(lambda: handle.read(CHUNK), b""):
+            hasher.update(chunk)
+    return hasher.hexdigest()
+
+
 def download_blob(
-    url: str, target: Path, expected_size: int, retries: int = 8
+    url: str,
+    target: Path,
+    expected_size: int,
+    expected_digest: str,
+    retries: int = 8,
 ) -> None:
     target.parent.mkdir(parents=True, exist_ok=True)
     if target.exists() and target.stat().st_size == expected_size:
-        print(f"  exists {target.name} ({expected_size} bytes)", flush=True)
-        return
+        if sha256_file(target) == expected_digest:
+            print(f"  exists {target.name} ({expected_size} bytes, hash OK)", flush=True)
+            return
+        print(f"  hash mismatch for {target.name}; redownloading", flush=True)
+        target.unlink()
     if target.exists() and target.stat().st_size == 0:
         target.unlink()
 
@@ -78,8 +99,12 @@ def download_blob(
                             )
                             last_report = time.time()
             if temp.stat().st_size == expected_size:
+                if sha256_file(temp) != expected_digest:
+                    print(f"  checksum mismatch for {target.name}; retrying", flush=True)
+                    temp.unlink()
+                    continue
                 temp.replace(target)
-                print(f"  done {target.name} ({expected_size} bytes)", flush=True)
+                print(f"  done {target.name} ({expected_size} bytes, hash OK)", flush=True)
                 return
             print(
                 f"  short read {target.name}: {temp.stat().st_size}/{expected_size}; retrying",
@@ -97,9 +122,10 @@ def pull(model: str, models_dir: Path) -> None:
     manifest: Dict[str, object] = response.json()
 
     blobs_dir = models_dir / "blobs"
-    manifest_path = models_dir / "manifests" / "registry.ollama.ai" / (
-        model if "/" in model else f"library/{model}"
-    ) / "latest"
+    name, tag = split_model(model)
+    manifest_path = (
+        models_dir / "manifests" / "registry.ollama.ai" / name / tag
+    )
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
 
     config = manifest["config"]  # type: ignore[index]
@@ -108,12 +134,14 @@ def pull(model: str, models_dir: Path) -> None:
         blob_url(model, config["digest"]),  # type: ignore[index]
         blobs_dir / f"sha256-{digest_hex(config['digest'])}",  # type: ignore[index]
         int(config["size"]),  # type: ignore[index]
+        digest_hex(config["digest"]),  # type: ignore[index]
     )
     for layer in manifest["layers"]:  # type: ignore[index]
         download_blob(
             blob_url(model, layer["digest"]),
             blobs_dir / f"sha256-{digest_hex(layer['digest'])}",
             int(layer["size"]),
+            digest_hex(layer["digest"]),
         )
 
     with open(manifest_path, "w", encoding="utf-8") as handle:

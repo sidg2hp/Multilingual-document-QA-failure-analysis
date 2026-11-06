@@ -1,0 +1,32 @@
+project:
+  name: "docqa-local-windows-ocr-rule-lower-bound"
+  backend: "windows_rule"
+  seed: 42
+  output_dir: "outputs/local_rule"
+  hardware_profile:
+    gpu: "NVIDIA GeForce RTX 3050 6GB Laptop GPU (not used)"
+    note: >
+      Windows.Media.Ocr (English only) plus a deterministic field reader. This
+      is an OCR-only lower bound for the cascade, not an LLM result.
+
+datasets:
+  funsd:
+    hf_repo: "nielsr/funsd"
+    revision: "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5"
+    split: "test"
+    cache_dir: "data/cache/funsd"
+    max_samples: 261
+
+models:
+  text_qa_reader:
+    model_id: "rule_reader"
+    quantization: "none"
+    max_new_tokens: 0
+  vlms:
+    primary_vlm:
+      model_id: "unused"
+      max_new_tokens: 0
+
+perturbations:
+  seed: 42
+  severities: ["level_1", "level_2", "level_3", "level_4", "level_5"]

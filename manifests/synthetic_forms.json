@@ -1,0 +1,1304 @@
+{
+  "schema_version": "1.0",
+  "name": "synthetic_forms",
+  "created_at_utc": "2026-11-06T17:16:30.613694+00:00",
+  "num_items": 40,
+  "num_documents": 10,
+  "counts": {
+    "by_dataset": {
+      "SyntheticForms": 40
+    },
+    "by_language": {
+      "en": 40
+    },
+    "by_script_type": {
+      "monolingual_latin": 40
+    },
+    "by_question_type": {
+      "synthetic_field_extraction": 40
+    }
+  },
+  "content_sha256": "c91fae8aae0a6b4fdc3de010640a970b34d74b910da039ac2f8e3fb07dee9427",
+  "items": [
+    {
+      "sample_id": "synth_000_q0",
+      "page_id": "synth_000",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Invoice No\"?",
+      "question_sha256": "61e2d57906403fc6bf67340fd85800ae37fbe37a52314b36fe768cafee5bf957",
+      "answers": [
+        "INV-2026-0001"
+      ],
+      "answer_sha256": "403af1972c5119c695cb25aecd58b9db124f0a05a4b6cf414eceafb6975eb317",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "4c82509d349d86bdf605ae6ecb413bda0821d4c5fe2d5e53a15c24ee7ab77428",
+      "image_sha256": "3fd0195d09fbec3d7f22b37b1d64e4d9275a01af730dfe83b9e2198c64c182cc",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        218,
+        513,
+        246
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Invoice No"
+      }
+    },
+    {
+      "sample_id": "synth_000_q1",
+      "page_id": "synth_000",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Date\"?",
+      "question_sha256": "e5d9ed3d3c3aef155ffc30ac3eb649ff2afff408277517ad1f7d5c715d0638e0",
+      "answers": [
+        "05/11/2026"
+      ],
+      "answer_sha256": "cc09d362635379df22b937e2cbae097bb9ac13909987b2b60a99bc9670cc797f",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "2061f06805b0190c9679af190a9137531f43a23e72b45d7a8fda0862d46d66c0",
+      "image_sha256": "403dc004b954d55e8de2c4df9e859e67f6ec3d67bf72b6a8a0867ccc4897f0a3",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        308,
+        474,
+        336
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Date"
+      }
+    },
+    {
+      "sample_id": "synth_000_q2",
+      "page_id": "synth_000",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Total\"?",
+      "question_sha256": "dfe811616de1ac6c4639a92cbf40b3057f204ed40591a1576af1b1777e4b6cc5",
+      "answers": [
+        "Rs. 12,450"
+      ],
+      "answer_sha256": "de00a31de06736fe125896f20c30d84bcefb66640f9a435daa0619bb34062366",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "b54a46ff51414589a835a33d41c08b8dedaa5df2e75c49145115b51531c02284",
+      "image_sha256": "284a9777ce1c1573acea8f219b97bed67c277e6bb239b6133132d12268a63b3a",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        398,
+        471,
+        429
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Total"
+      }
+    },
+    {
+      "sample_id": "synth_000_q3",
+      "page_id": "synth_000",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"GSTIN\"?",
+      "question_sha256": "bec26a947a48ee3a6d1e2b6a9cfad0097cdb46f104f7b56685a7c2f673b8d8b6",
+      "answers": [
+        "09ABCDE1234F1Z5"
+      ],
+      "answer_sha256": "993f4016af11492cd7c45237e1d9adf93a17a67d5e9d4ff604126abda78c670b",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "807c7b61bd57fcdfee1cf286252fdb3a51c6d4847595adf163889e75a8670dd3",
+      "image_sha256": "6ebb126085d117885f38a6ea311e4260fca69000277458dff535f82e7b7dc4b1",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        488,
+        565,
+        516
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "GSTIN"
+      }
+    },
+    {
+      "sample_id": "synth_001_q0",
+      "page_id": "synth_001",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Invoice No\"?",
+      "question_sha256": "61e2d57906403fc6bf67340fd85800ae37fbe37a52314b36fe768cafee5bf957",
+      "answers": [
+        "INV-2026-0002"
+      ],
+      "answer_sha256": "f868d3cca2e7613c17e71bd4fe5e5cc862e7f4502f97d985068adad6f65137cf",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "aece124773f2c10173481e94156d7e6cb2a8d22de6b499fc318bc72134774862",
+      "image_sha256": "96383a276a57cd30a7b0149aac972cc83b7d84d192f38815d898244c6736b915",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        218,
+        513,
+        246
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Invoice No"
+      }
+    },
+    {
+      "sample_id": "synth_001_q1",
+      "page_id": "synth_001",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Date\"?",
+      "question_sha256": "e5d9ed3d3c3aef155ffc30ac3eb649ff2afff408277517ad1f7d5c715d0638e0",
+      "answers": [
+        "05/11/2026"
+      ],
+      "answer_sha256": "cc09d362635379df22b937e2cbae097bb9ac13909987b2b60a99bc9670cc797f",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "8410c23e0b5b9dd6f18d818f56a7cc7e9fc8cb525ad7c099cc6420eec186bf14",
+      "image_sha256": "7341ec7f91329ebb5916309f131cbd47165070067f24be729bfce7e82b3ee8f0",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        308,
+        474,
+        336
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Date"
+      }
+    },
+    {
+      "sample_id": "synth_001_q2",
+      "page_id": "synth_001",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Total\"?",
+      "question_sha256": "dfe811616de1ac6c4639a92cbf40b3057f204ed40591a1576af1b1777e4b6cc5",
+      "answers": [
+        "Rs. 12,450"
+      ],
+      "answer_sha256": "de00a31de06736fe125896f20c30d84bcefb66640f9a435daa0619bb34062366",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "f1f6b741ed500708f0565efde81d19913fda496cbe0d6a9221f2e1cb3bd787af",
+      "image_sha256": "d257821c9c430b9e56ac4e31ca3c7157a48c4212fdbc07c958eab8f65c95961c",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        398,
+        471,
+        429
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Total"
+      }
+    },
+    {
+      "sample_id": "synth_001_q3",
+      "page_id": "synth_001",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"GSTIN\"?",
+      "question_sha256": "bec26a947a48ee3a6d1e2b6a9cfad0097cdb46f104f7b56685a7c2f673b8d8b6",
+      "answers": [
+        "09ABCDE1234F1Z5"
+      ],
+      "answer_sha256": "993f4016af11492cd7c45237e1d9adf93a17a67d5e9d4ff604126abda78c670b",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "fd60a9e150e5c4235859e38fa1122ccfc52f84834bdd36ba7d99af6a8f56d7be",
+      "image_sha256": "a403e0a5a65c6d1db04725b8732f699ab5fbb33715d9ca4dedfd49d85aad68d3",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        488,
+        565,
+        516
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "GSTIN"
+      }
+    },
+    {
+      "sample_id": "synth_002_q0",
+      "page_id": "synth_002",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Invoice No\"?",
+      "question_sha256": "61e2d57906403fc6bf67340fd85800ae37fbe37a52314b36fe768cafee5bf957",
+      "answers": [
+        "INV-2026-0003"
+      ],
+      "answer_sha256": "31b7354c40cf77b4e57a6d1e49953a1f9e1fc25297d1873a71aa02f21f326474",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "95b38a2f922307602e17b9371797870207315c61e6e94ffb5d70517287391814",
+      "image_sha256": "2e33e711ed92222dffdc7bc7e26306f0a783e04b17e3557d13afaadf67b478a5",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        218,
+        513,
+        246
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Invoice No"
+      }
+    },
+    {
+      "sample_id": "synth_002_q1",
+      "page_id": "synth_002",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Date\"?",
+      "question_sha256": "e5d9ed3d3c3aef155ffc30ac3eb649ff2afff408277517ad1f7d5c715d0638e0",
+      "answers": [
+        "05/11/2026"
+      ],
+      "answer_sha256": "cc09d362635379df22b937e2cbae097bb9ac13909987b2b60a99bc9670cc797f",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "f71318857deded5d6c1a5fbbc72ff65e6f702d596af1aaa429de4b138cda6a01",
+      "image_sha256": "a4e57d7045a5771b95d32aab447b7fa86df9798795a3fee475a4aacb6092f2f5",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        308,
+        474,
+        336
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Date"
+      }
+    },
+    {
+      "sample_id": "synth_002_q2",
+      "page_id": "synth_002",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Total\"?",
+      "question_sha256": "dfe811616de1ac6c4639a92cbf40b3057f204ed40591a1576af1b1777e4b6cc5",
+      "answers": [
+        "Rs. 12,450"
+      ],
+      "answer_sha256": "de00a31de06736fe125896f20c30d84bcefb66640f9a435daa0619bb34062366",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "5780d09052b512c580353f5e01cf7a2dea51e8bb2d3efc5097abce1b5f67825a",
+      "image_sha256": "0406eaaf0d3103094271b52fef904657cb337b7c561b75973eb824402c0ebb3b",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        398,
+        471,
+        429
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Total"
+      }
+    },
+    {
+      "sample_id": "synth_002_q3",
+      "page_id": "synth_002",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"GSTIN\"?",
+      "question_sha256": "bec26a947a48ee3a6d1e2b6a9cfad0097cdb46f104f7b56685a7c2f673b8d8b6",
+      "answers": [
+        "09ABCDE1234F1Z5"
+      ],
+      "answer_sha256": "993f4016af11492cd7c45237e1d9adf93a17a67d5e9d4ff604126abda78c670b",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "881b1a715378adde5a2bcafb4714e378ffee3716ae79b8e730ca895c0984ba0b",
+      "image_sha256": "99cd75cf7a49f5a98124fc5994a026c4a69aa6dbdd020c0956237b79f0b1cb05",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        488,
+        565,
+        516
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "GSTIN"
+      }
+    },
+    {
+      "sample_id": "synth_003_q0",
+      "page_id": "synth_003",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Invoice No\"?",
+      "question_sha256": "61e2d57906403fc6bf67340fd85800ae37fbe37a52314b36fe768cafee5bf957",
+      "answers": [
+        "INV-2026-0004"
+      ],
+      "answer_sha256": "10e1a5724d334c96c1198838f5ddd0822925ce584ebdf0b16541e549b761029a",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "671561cebc4b66e9df9d890d6029546754df489b558b6ed0d1c5ef782b2202c9",
+      "image_sha256": "a5a003ac358ee406ca599d3adece4ce77cad0fd2b9309266fbca6b88703d1e99",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        218,
+        513,
+        246
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Invoice No"
+      }
+    },
+    {
+      "sample_id": "synth_003_q1",
+      "page_id": "synth_003",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Date\"?",
+      "question_sha256": "e5d9ed3d3c3aef155ffc30ac3eb649ff2afff408277517ad1f7d5c715d0638e0",
+      "answers": [
+        "05/11/2026"
+      ],
+      "answer_sha256": "cc09d362635379df22b937e2cbae097bb9ac13909987b2b60a99bc9670cc797f",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "d6216532f8fc22a0aa3ce36cd608da1509a0e364ef3700ee8bdedc4211490245",
+      "image_sha256": "da2fbaf8c0f15cf678828c6ba895a814bac7b269dec7d4a1f5f0de43f9e9f52a",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        308,
+        474,
+        336
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Date"
+      }
+    },
+    {
+      "sample_id": "synth_003_q2",
+      "page_id": "synth_003",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Total\"?",
+      "question_sha256": "dfe811616de1ac6c4639a92cbf40b3057f204ed40591a1576af1b1777e4b6cc5",
+      "answers": [
+        "Rs. 12,450"
+      ],
+      "answer_sha256": "de00a31de06736fe125896f20c30d84bcefb66640f9a435daa0619bb34062366",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "bf7e595201910ada4f14c18777588b7b76944b1c6628386a43c91cf0dd1faf7b",
+      "image_sha256": "7c99f450f0bd567ab0176eef7063ee05fa7c12dfb5de7caef5518ddb4749506a",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        398,
+        471,
+        429
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Total"
+      }
+    },
+    {
+      "sample_id": "synth_003_q3",
+      "page_id": "synth_003",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"GSTIN\"?",
+      "question_sha256": "bec26a947a48ee3a6d1e2b6a9cfad0097cdb46f104f7b56685a7c2f673b8d8b6",
+      "answers": [
+        "09ABCDE1234F1Z5"
+      ],
+      "answer_sha256": "993f4016af11492cd7c45237e1d9adf93a17a67d5e9d4ff604126abda78c670b",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "44815cd8e3f84558b2f830d1df8e7d91a462e8895d15bf31a0d8e0f9603c1471",
+      "image_sha256": "61769ddc8d5e6aa48bdabbb5e0874d84465684ffdefec2036cd22beb478411c6",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        488,
+        565,
+        516
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "GSTIN"
+      }
+    },
+    {
+      "sample_id": "synth_004_q0",
+      "page_id": "synth_004",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Invoice No\"?",
+      "question_sha256": "61e2d57906403fc6bf67340fd85800ae37fbe37a52314b36fe768cafee5bf957",
+      "answers": [
+        "INV-2026-0005"
+      ],
+      "answer_sha256": "628037c2790dec38b90e8dc23c512345d8b873b9543ca3bf11db6f318e01df16",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "d3aec7ac9845f1a42e80588fd7e6bfe84c7ff30bad739c4037df1560da1241be",
+      "image_sha256": "fd12155eb27812e411912ca48c2506a00c0f5235470f45798897f92dc58834e4",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        218,
+        513,
+        246
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Invoice No"
+      }
+    },
+    {
+      "sample_id": "synth_004_q1",
+      "page_id": "synth_004",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Date\"?",
+      "question_sha256": "e5d9ed3d3c3aef155ffc30ac3eb649ff2afff408277517ad1f7d5c715d0638e0",
+      "answers": [
+        "05/11/2026"
+      ],
+      "answer_sha256": "cc09d362635379df22b937e2cbae097bb9ac13909987b2b60a99bc9670cc797f",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "4c466e0fa1b5cefb96524d1372ec3827b84e25dbd468dd2b2be49639ced18d63",
+      "image_sha256": "b386acf1d2915e5e8f39a050c0ae9f99749e54a0658608d47d37299aa9d78e56",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        308,
+        474,
+        336
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Date"
+      }
+    },
+    {
+      "sample_id": "synth_004_q2",
+      "page_id": "synth_004",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Total\"?",
+      "question_sha256": "dfe811616de1ac6c4639a92cbf40b3057f204ed40591a1576af1b1777e4b6cc5",
+      "answers": [
+        "Rs. 12,450"
+      ],
+      "answer_sha256": "de00a31de06736fe125896f20c30d84bcefb66640f9a435daa0619bb34062366",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "3f90da2d0e3923072637e26b6c412a58a10a94467c29cc32ebe99b83fcd63c6c",
+      "image_sha256": "4447ee47291e32b77b5038cfba236e1fa8dac0e92c91d8b4a890924911578bc0",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        398,
+        471,
+        429
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Total"
+      }
+    },
+    {
+      "sample_id": "synth_004_q3",
+      "page_id": "synth_004",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"GSTIN\"?",
+      "question_sha256": "bec26a947a48ee3a6d1e2b6a9cfad0097cdb46f104f7b56685a7c2f673b8d8b6",
+      "answers": [
+        "09ABCDE1234F1Z5"
+      ],
+      "answer_sha256": "993f4016af11492cd7c45237e1d9adf93a17a67d5e9d4ff604126abda78c670b",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "76c4d0d8d01474b941328be95b6b82f40c6bcf98b6a93f60e264a946908ccef3",
+      "image_sha256": "cfe6099db10f9d5a9cbfeeb86b6f433a869e85f8748366ac8d52c15f7f9a4ae2",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        488,
+        565,
+        516
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "GSTIN"
+      }
+    },
+    {
+      "sample_id": "synth_005_q0",
+      "page_id": "synth_005",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Invoice No\"?",
+      "question_sha256": "61e2d57906403fc6bf67340fd85800ae37fbe37a52314b36fe768cafee5bf957",
+      "answers": [
+        "INV-2026-0006"
+      ],
+      "answer_sha256": "bd28b2a05be15fbb4bbe752acf5e7f314187a4eb1a6a5b647da9cbb44ef9e08b",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "d7a29e5cd3e9c08446368b3efca3c093a9a7fa20e47593c24c0c5659a97a173c",
+      "image_sha256": "ddfd7a33aec7aca7f654209f2e16c3ee1e6c84e2cd0686977281482cb1645af4",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        218,
+        513,
+        246
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Invoice No"
+      }
+    },
+    {
+      "sample_id": "synth_005_q1",
+      "page_id": "synth_005",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Date\"?",
+      "question_sha256": "e5d9ed3d3c3aef155ffc30ac3eb649ff2afff408277517ad1f7d5c715d0638e0",
+      "answers": [
+        "05/11/2026"
+      ],
+      "answer_sha256": "cc09d362635379df22b937e2cbae097bb9ac13909987b2b60a99bc9670cc797f",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "0e42b79fa574e1d977175d341244653c83b67ddb22a50410f13c4e533a91c074",
+      "image_sha256": "5fa4141849f2e7ec1b817d0244f4dd2e043a6512eafb36983e5869d06d0a3506",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        308,
+        474,
+        336
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Date"
+      }
+    },
+    {
+      "sample_id": "synth_005_q2",
+      "page_id": "synth_005",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Total\"?",
+      "question_sha256": "dfe811616de1ac6c4639a92cbf40b3057f204ed40591a1576af1b1777e4b6cc5",
+      "answers": [
+        "Rs. 12,450"
+      ],
+      "answer_sha256": "de00a31de06736fe125896f20c30d84bcefb66640f9a435daa0619bb34062366",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "6881a15a955187d6e8206b55540d73f53967700ec5bd94a0a26deb12b018851c",
+      "image_sha256": "60e27714836de09423c8c3c4b9fc6830c6eec2c2c2f7a29b1f4b462a956177ca",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        398,
+        471,
+        429
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Total"
+      }
+    },
+    {
+      "sample_id": "synth_005_q3",
+      "page_id": "synth_005",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"GSTIN\"?",
+      "question_sha256": "bec26a947a48ee3a6d1e2b6a9cfad0097cdb46f104f7b56685a7c2f673b8d8b6",
+      "answers": [
+        "09ABCDE1234F1Z5"
+      ],
+      "answer_sha256": "993f4016af11492cd7c45237e1d9adf93a17a67d5e9d4ff604126abda78c670b",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "297a4cad20a762e1e08682e2c65375fe53836c31490dbbdb2ad90768afcdf5f8",
+      "image_sha256": "3dc88a7e29ac75324d87509109287672cae420e60b20a2773e2c4e2035d3856f",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        488,
+        565,
+        516
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "GSTIN"
+      }
+    },
+    {
+      "sample_id": "synth_006_q0",
+      "page_id": "synth_006",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Invoice No\"?",
+      "question_sha256": "61e2d57906403fc6bf67340fd85800ae37fbe37a52314b36fe768cafee5bf957",
+      "answers": [
+        "INV-2026-0007"
+      ],
+      "answer_sha256": "d4bcd9a847c620b10a4955e8624e1cd3b07f01ccf018e899911bdf95f8c6f309",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "cf86c8b0312e74de07f5787a5a54976e5d5a5fcfa4b1e877484a7cefe82f3f15",
+      "image_sha256": "84564323ff388366dbe8f6e53bdb2242f310c5a6f7493f44368801798e0c7e54",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        218,
+        513,
+        246
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Invoice No"
+      }
+    },
+    {
+      "sample_id": "synth_006_q1",
+      "page_id": "synth_006",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Date\"?",
+      "question_sha256": "e5d9ed3d3c3aef155ffc30ac3eb649ff2afff408277517ad1f7d5c715d0638e0",
+      "answers": [
+        "05/11/2026"
+      ],
+      "answer_sha256": "cc09d362635379df22b937e2cbae097bb9ac13909987b2b60a99bc9670cc797f",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "2019bdb7a3184f2d99eb638d4aaab88dc58ce7974209b8ef8f4fed42f751f23b",
+      "image_sha256": "2feace57846c0d692b50e07dbd41b8f1b57f0d35f71be4653187cfcc8314aebf",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        308,
+        474,
+        336
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Date"
+      }
+    },
+    {
+      "sample_id": "synth_006_q2",
+      "page_id": "synth_006",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Total\"?",
+      "question_sha256": "dfe811616de1ac6c4639a92cbf40b3057f204ed40591a1576af1b1777e4b6cc5",
+      "answers": [
+        "Rs. 12,450"
+      ],
+      "answer_sha256": "de00a31de06736fe125896f20c30d84bcefb66640f9a435daa0619bb34062366",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "475a10bd07d81eb23ce3801b78d1fa4d7982c9107ed2a6217bd4cb5837572f76",
+      "image_sha256": "c5b9aa72bed5c1ba56ded26481aca3452fc744b3d23460f493177942758902f1",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        398,
+        471,
+        429
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Total"
+      }
+    },
+    {
+      "sample_id": "synth_006_q3",
+      "page_id": "synth_006",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"GSTIN\"?",
+      "question_sha256": "bec26a947a48ee3a6d1e2b6a9cfad0097cdb46f104f7b56685a7c2f673b8d8b6",
+      "answers": [
+        "09ABCDE1234F1Z5"
+      ],
+      "answer_sha256": "993f4016af11492cd7c45237e1d9adf93a17a67d5e9d4ff604126abda78c670b",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "d43f6d5cfa071d4a745f5b0982b6d92fe332cd94b558cdc89821dd3ae7eb9ad3",
+      "image_sha256": "05c03adb3e2f73bfd77818231b9a5c3654658d95b778e4e7d46997821a47a151",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        488,
+        565,
+        516
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "GSTIN"
+      }
+    },
+    {
+      "sample_id": "synth_007_q0",
+      "page_id": "synth_007",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Invoice No\"?",
+      "question_sha256": "61e2d57906403fc6bf67340fd85800ae37fbe37a52314b36fe768cafee5bf957",
+      "answers": [
+        "INV-2026-0008"
+      ],
+      "answer_sha256": "a00a8629430c41fd117c54169d95373e05ebc4b54dce7678eb54b6fa9e84f8f9",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "ddef34133f3d1321f52c8805a7794f605f2be868900783fe67fae28d38dcf6af",
+      "image_sha256": "b7892dfe7b22aa8e7ca4ddfc564aef37950d9dd720b4d45ffe2d5809536dd808",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        218,
+        513,
+        246
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Invoice No"
+      }
+    },
+    {
+      "sample_id": "synth_007_q1",
+      "page_id": "synth_007",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Date\"?",
+      "question_sha256": "e5d9ed3d3c3aef155ffc30ac3eb649ff2afff408277517ad1f7d5c715d0638e0",
+      "answers": [
+        "05/11/2026"
+      ],
+      "answer_sha256": "cc09d362635379df22b937e2cbae097bb9ac13909987b2b60a99bc9670cc797f",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "ac33a14483c5b606c7e432b3b7202af9b2194065fd5112f3c621ae2dbbf84bab",
+      "image_sha256": "41e8d3f738089b38ec48becda1ab3f4c47b094a2ea47b3fc1db9c1bb562a9560",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        308,
+        474,
+        336
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Date"
+      }
+    },
+    {
+      "sample_id": "synth_007_q2",
+      "page_id": "synth_007",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Total\"?",
+      "question_sha256": "dfe811616de1ac6c4639a92cbf40b3057f204ed40591a1576af1b1777e4b6cc5",
+      "answers": [
+        "Rs. 12,450"
+      ],
+      "answer_sha256": "de00a31de06736fe125896f20c30d84bcefb66640f9a435daa0619bb34062366",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "a0a07c44c0e97663e37d8cfb21661ef1b1cdd3711af6ebf228b411e679540bc0",
+      "image_sha256": "0f01afa18322e842eab1cb4622a8e4643775d88abce6f76bf5b75f9b549292a2",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        398,
+        471,
+        429
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Total"
+      }
+    },
+    {
+      "sample_id": "synth_007_q3",
+      "page_id": "synth_007",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"GSTIN\"?",
+      "question_sha256": "bec26a947a48ee3a6d1e2b6a9cfad0097cdb46f104f7b56685a7c2f673b8d8b6",
+      "answers": [
+        "09ABCDE1234F1Z5"
+      ],
+      "answer_sha256": "993f4016af11492cd7c45237e1d9adf93a17a67d5e9d4ff604126abda78c670b",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "a4614dccd54447006a6eeaccc73e7d2f3a2bd1ae01b4cc1e95045870b71066a2",
+      "image_sha256": "c5b665263f788abb11bcdfba00305b1f087fcf3fbf2384b933da081f633f3e5a",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        488,
+        565,
+        516
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "GSTIN"
+      }
+    },
+    {
+      "sample_id": "synth_008_q0",
+      "page_id": "synth_008",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Invoice No\"?",
+      "question_sha256": "61e2d57906403fc6bf67340fd85800ae37fbe37a52314b36fe768cafee5bf957",
+      "answers": [
+        "INV-2026-0009"
+      ],
+      "answer_sha256": "308f03b375ffb21c7d348b6f4c3f8c7dc392e9f4845b0be4f2c590dafc05547e",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "85552f4826d9bad525704cb32c76c1adbd1081ca466c34edff7b935dc477cb7e",
+      "image_sha256": "1f09a2d9a3177a66cc52f7a6fdb265ce31a2b32a09dd11135add3fc0434af815",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        218,
+        513,
+        246
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Invoice No"
+      }
+    },
+    {
+      "sample_id": "synth_008_q1",
+      "page_id": "synth_008",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Date\"?",
+      "question_sha256": "e5d9ed3d3c3aef155ffc30ac3eb649ff2afff408277517ad1f7d5c715d0638e0",
+      "answers": [
+        "05/11/2026"
+      ],
+      "answer_sha256": "cc09d362635379df22b937e2cbae097bb9ac13909987b2b60a99bc9670cc797f",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "3830c590aca7a817262b38179bf212ced5bc275cfa03d0475af7c6b02497d893",
+      "image_sha256": "f814fe0082e045763173eea5f5bdce65ea6e8262843462649224afd9aaae9fba",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        308,
+        474,
+        336
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Date"
+      }
+    },
+    {
+      "sample_id": "synth_008_q2",
+      "page_id": "synth_008",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Total\"?",
+      "question_sha256": "dfe811616de1ac6c4639a92cbf40b3057f204ed40591a1576af1b1777e4b6cc5",
+      "answers": [
+        "Rs. 12,450"
+      ],
+      "answer_sha256": "de00a31de06736fe125896f20c30d84bcefb66640f9a435daa0619bb34062366",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "1486e33a75ea1aa13d6bda8910bac8cb10b4e650286fb3006ddcf219f3f8886f",
+      "image_sha256": "2c70b6c5d5d17bbe0632f808e33146547af912ba2c5b5268204ee1c91423a0e4",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        398,
+        471,
+        429
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Total"
+      }
+    },
+    {
+      "sample_id": "synth_008_q3",
+      "page_id": "synth_008",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"GSTIN\"?",
+      "question_sha256": "bec26a947a48ee3a6d1e2b6a9cfad0097cdb46f104f7b56685a7c2f673b8d8b6",
+      "answers": [
+        "09ABCDE1234F1Z5"
+      ],
+      "answer_sha256": "993f4016af11492cd7c45237e1d9adf93a17a67d5e9d4ff604126abda78c670b",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "96a63437e7809d3abc5b72347d2225bd63f6c2430ca395cfa952047b61468bac",
+      "image_sha256": "f3d05bf5d1f9567b10f77fd5d92e2132ffbbc2b37eae6699030cb2c7ab791a65",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        488,
+        565,
+        516
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "GSTIN"
+      }
+    },
+    {
+      "sample_id": "synth_009_q0",
+      "page_id": "synth_009",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Invoice No\"?",
+      "question_sha256": "61e2d57906403fc6bf67340fd85800ae37fbe37a52314b36fe768cafee5bf957",
+      "answers": [
+        "INV-2026-0010"
+      ],
+      "answer_sha256": "7d511e11068e6d5b2a3ac8626f7acdd07954179b11ebf6a43e8ab960019df016",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "a860350c307cc8a9566bf18d6595d7bca05523b30f7b32eced262c1b526bd22f",
+      "image_sha256": "02f260359b30c830a8d2d947d9d4074aefb19d0d86f0124a2cd27a95564cfbf3",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        218,
+        513,
+        246
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Invoice No"
+      }
+    },
+    {
+      "sample_id": "synth_009_q1",
+      "page_id": "synth_009",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Date\"?",
+      "question_sha256": "e5d9ed3d3c3aef155ffc30ac3eb649ff2afff408277517ad1f7d5c715d0638e0",
+      "answers": [
+        "05/11/2026"
+      ],
+      "answer_sha256": "cc09d362635379df22b937e2cbae097bb9ac13909987b2b60a99bc9670cc797f",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "349fe7141e1df28af7be6a33caf2fce2ea50a0932cd02a0abf0b46ed73d68e99",
+      "image_sha256": "c87daba8b720f2592faa5f67ab15984654e1adf28a73afd4744f8a7f9927511d",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        308,
+        474,
+        336
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Date"
+      }
+    },
+    {
+      "sample_id": "synth_009_q2",
+      "page_id": "synth_009",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"Total\"?",
+      "question_sha256": "dfe811616de1ac6c4639a92cbf40b3057f204ed40591a1576af1b1777e4b6cc5",
+      "answers": [
+        "Rs. 12,450"
+      ],
+      "answer_sha256": "de00a31de06736fe125896f20c30d84bcefb66640f9a435daa0619bb34062366",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "db2ff6d8af921cc1a4b18a9094182c2c5d8443a921cfb36e467b8a4d24d5af35",
+      "image_sha256": "5b8f64e2bfe065dfe7dda9643f243012727f5e0d87bf328002b5376e0b767d2d",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        398,
+        471,
+        429
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "Total"
+      }
+    },
+    {
+      "sample_id": "synth_009_q3",
+      "page_id": "synth_009",
+      "dataset_name": "SyntheticForms",
+      "dataset_revision": "synthetic_v1",
+      "split": "pilot",
+      "language": "en",
+      "language_code": "en",
+      "script_type": "monolingual_latin",
+      "question_type": "synthetic_field_extraction",
+      "question": "What is the value of \"GSTIN\"?",
+      "question_sha256": "bec26a947a48ee3a6d1e2b6a9cfad0097cdb46f104f7b56685a7c2f673b8d8b6",
+      "answers": [
+        "09ABCDE1234F1Z5"
+      ],
+      "answer_sha256": "993f4016af11492cd7c45237e1d9adf93a17a67d5e9d4ff604126abda78c670b",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "f80b2453f66ff81b08beab299ea253bcf225a046e81233974c7acba0fcdc95ce",
+      "image_sha256": "2085b31a433379603d5bb68b89f271d5ef6bb929c583e654de620efc0d5f98de",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": true,
+      "answer_bbox": [
+        354,
+        488,
+        565,
+        516
+      ],
+      "metadata": {
+        "synthetic": true,
+        "field_label": "GSTIN"
+      }
+    }
+  ]
+}

@@ -1,58 +1,25 @@
 {
   "schema_version": "1.0",
   "name": "local_funsd",
-  "created_at_utc": "2026-11-06T16:26:48.597463+00:00",
-  "num_items": 261,
-  "num_documents": 47,
+  "created_at_utc": "2026-11-06T16:59:53.131548+00:00",
+  "num_items": 192,
+  "num_documents": 45,
   "counts": {
     "by_dataset": {
-      "FUNSD": 261
+      "FUNSD": 192
     },
     "by_language": {
-      "en": 261
+      "en": 192
     },
     "by_script_type": {
-      "monolingual_latin": 261
+      "monolingual_latin": 192
     },
     "by_question_type": {
-      "field_extraction": 261
+      "field_extraction": 192
     }
   },
-  "content_sha256": "d35c147ba4deea5f35b65caa8970af36f2fea418b8c4d2efc3fdfb9da4091122",
+  "content_sha256": "9557f08dbc5b04d4fe70ac2272fe46f34f63feac71d1fce9a89f78513deea51d",
   "items": [
-    {
-      "sample_id": "0_q0",
-      "page_id": "0",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"Fax: NOTE\"?",
-      "question_sha256": "40c6faa58a55bd927032c0b5ae8078abef3f8c6eb7b14cbcad1ea521ac77a29c",
-      "answers": [
-        "614 -466 -5087"
-      ],
-      "answer_sha256": "e93cc50c1d983183290360454153f0e5b56d03eca61e1777f5449536dfefb62d",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "785d3d552928020d2548e493801cd13d498f759984b7f7a404327304691caa1e",
-      "image_sha256": "b204c09d1e4b5033b12643ca522acdc1db5943783e640fbb7aa584c25292c79f",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        364,
-        82,
-        469,
-        101
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "Fax: NOTE"
-      }
-    },
     {
       "sample_id": "0_q1",
       "page_id": "0",
@@ -87,39 +54,6 @@
       }
     },
     {
-      "sample_id": "0_q2",
-      "page_id": "0",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"TO: DATE\"?",
-      "question_sha256": "bf53ef7947d58911a741a96366aee666441a5a66005361edc2c7129af8bfc599",
-      "answers": [
-        "12 /10 /98"
-      ],
-      "answer_sha256": "cd2c7d6cd2882c821ef1695141eaaf66bf33251c9ccf1e3d04abd4400ade7014",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "785d3d552928020d2548e493801cd13d498f759984b7f7a404327304691caa1e",
-      "image_sha256": "b204c09d1e4b5033b12643ca522acdc1db5943783e640fbb7aa584c25292c79f",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        244,
-        405,
-        309,
-        423
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "TO: DATE"
-      }
-    },
-    {
       "sample_id": "0_q3",
       "page_id": "0",
       "dataset_name": "FUNSD",
@@ -129,8 +63,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"FAX NUMBER: PHONE NUMBER\"?",
-      "question_sha256": "e6bebe0254620a9470d6264033fb289522ce71bf8a989161b6b3ad9ef8086f21",
+      "question": "What is the value of \"FAX NUMBER\"?",
+      "question_sha256": "0159f2ea952dc569fa10521e21c0db281744abf842f5761c834b6066345d08a1",
       "answers": [
         "(336) 335- 7363"
       ],
@@ -149,40 +83,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "FAX NUMBER: PHONE NUMBER"
-      }
-    },
-    {
-      "sample_id": "0_q4",
-      "page_id": "0",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"NUMBER OF PAGES INCLUDING COVER SHEET\"?",
-      "question_sha256": "fe359d0ba6a053471e45291e5491b251339b3579669c3644da21a8f570a625d7",
-      "answers": [
-        "3"
-      ],
-      "answer_sha256": "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "785d3d552928020d2548e493801cd13d498f759984b7f7a404327304691caa1e",
-      "image_sha256": "b204c09d1e4b5033b12643ca522acdc1db5943783e640fbb7aa584c25292c79f",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        611,
-        440,
-        629,
-        455
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "NUMBER OF PAGES INCLUDING COVER SHEET"
+        "field_label": "FAX NUMBER"
       }
     },
     {
@@ -195,8 +96,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"SENDER /PHONE NUMBER: SPECIAL INSTRUCTIONS\"?",
-      "question_sha256": "2c0964652a033c2dae9da0d6f605b1463671818026787030c5f725bf1a6624bc",
+      "question": "What is the value of \"SENDER /PHONE NUMBER\"?",
+      "question_sha256": "b2ffb114b49d16ea3259e11069972fd60883e37e9f110b3b9f5e245dd84c411f",
       "answers": [
         "June Flynn for Eric Brown/ (614) 466- 8980"
       ],
@@ -215,7 +116,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "SENDER /PHONE NUMBER: SPECIAL INSTRUCTIONS"
+        "field_label": "SENDER /PHONE NUMBER"
       }
     },
     {
@@ -228,8 +129,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"CASE NAME: LORILLARD ENTITIES DATE FILED DATE SERVED CASE TYPE: PLAINTIEE'S COUNSEL: LORILLARD COUNSEL: TRIAL DATE\"?",
-      "question_sha256": "3935fdd0ae33412d2cd7f0e0f86c864736afbe5dddf5a644caffb4cf4277acd9",
+      "question": "What is the value of \"CASE NAME\"?",
+      "question_sha256": "956b34c73cacd0f2d9dc537f05e59842453d5a3464c84a37f84ef4f253dc7b0c",
       "answers": [
         "Asbestos"
       ],
@@ -248,73 +149,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "CASE NAME: LORILLARD ENTITIES DATE FILED DATE SERVED CASE TYPE: PLAINTIEE'S COUNSEL: LORILLARD COUNSEL: TRIAL DATE"
-      }
-    },
-    {
-      "sample_id": "10_q1",
-      "page_id": "10",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"COURT\"?",
-      "question_sha256": "3688ac5e8704694cad277e805fffb16ab613af499dba4ed14701159d989a1897",
-      "answers": [
-        "Wartnick Chaber, Harowitz, Smith& Tigerman StephenM. Tigerman 101 California Street Suite 2200 San Francisco California 94111 August 3, 1998 Lorillard Tobacco Company San Francisco Superior Court- No. 996382 Donald D. Sellers and Robin J. Sellers v. Raybestos Manhattan et al."
-      ],
-      "answer_sha256": "02c15f05f1c2c5d36006b6b3140ed25ebc21b7935120bb6d7c87090e8edcd87c",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "6c496f01908e95ea5439bc21c9107569a694c4fdee71e521244e1a20f7a987cf",
-      "image_sha256": "ca834c4999a2e265a0d260bae838d5e557e543de51b73b28f305a276375188df",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        318,
-        168,
-        785,
-        419
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "COURT"
-      }
-    },
-    {
-      "sample_id": "11_q0",
-      "page_id": "11",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"To: Fax: CC: Re: From: Date: Fax: Pages: Urgent\"?",
-      "question_sha256": "1e3a6ea397205bec3938e5bbfa1cd275af20d7699b360ced1683dafcd945c01e",
-      "answers": [
-        "4"
-      ],
-      "answer_sha256": "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "0b4956b9bd5bf8555de0bf9a82c6c1e4d0e43acd6ae709315bdbb990c168f8f7",
-      "image_sha256": "3c77645950a83bd14769adc7edd1b0d4c0c87da728c3695b260b029504e19f25",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        590,
-        414,
-        610,
-        431
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "To: Fax: CC: Re: From: Date: Fax: Pages: Urgent"
+        "field_label": "CASE NAME"
       }
     },
     {
@@ -360,8 +195,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"Comments: CONFIDENTIALITY NOTE Telephone\"?",
-      "question_sha256": "2efc9a6a160f8718ad3a86ebb333956b60e039cbddb43a4078da52a0210f7b91",
+      "question": "What is the value of \"Comments\"?",
+      "question_sha256": "a37c97f71f2cf1cd7c5e1c0f25ae2703c123ec0940f3c12eee8b34b412cb175a",
       "answers": [
         "Attached is the Iowa Department of Revenue and Finance Minimum Legal Prices on Cigarettes as of April 3, 2000. I am attempting to obtain a copy of the actual Fair Trade Law and will forward as soon as obtained. Rick"
       ],
@@ -380,7 +215,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "Comments: CONFIDENTIALITY NOTE Telephone"
+        "field_label": "Comments"
       }
     },
     {
@@ -393,8 +228,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"Date: To: From: Room: MESSAGE\"?",
-      "question_sha256": "dd07fb41349a0db6f978a5267bafd1aebdddb73c2806f75ea9b0a4d8c6a8f95e",
+      "question": "What is the value of \"Date\"?",
+      "question_sha256": "e5d9ed3d3c3aef155ffc30ac3eb649ff2afff408277517ad1f7d5c715d0638e0",
       "answers": [
         "December 9, 1999 Haney H. Bell, Esq. David H. Remes (202) 778 5212 - direct fax 803E // Pages (including cover)"
       ],
@@ -413,7 +248,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "Date: To: From: Room: MESSAGE"
+        "field_label": "Date"
       }
     },
     {
@@ -459,8 +294,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"DATE: TIME\"?",
-      "question_sha256": "c0b989f81171e6eca03c83c3301126241d3921253c9fcfa5edcf67546177dbdb",
+      "question": "What is the value of \"DATE\"?",
+      "question_sha256": "4ff6d9dba5d83106d3573541744afccb19d9df2aa42e6932d468a364d73fd488",
       "answers": [
         "HALL RODECAP, NOBLESVILLE, IN B & W VICEROY KING BOX AND VICEROY LIGHTS KING BOX"
       ],
@@ -479,7 +314,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "DATE: TIME"
+        "field_label": "DATE"
       }
     },
     {
@@ -525,8 +360,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"MANUFACTURER: cc\"?",
-      "question_sha256": "d6d576d0392a5aa58eaaf79d69cd0426a8eb8597df2149c308f1e14fd8a03873",
+      "question": "What is the value of \"MANUFACTURER\"?",
+      "question_sha256": "dbbc30de0cc2001ed99fa811333f7a0b5955e91b9bc846b5fb639618c630136b",
       "answers": [
         "G. Telford F. J. Schultz A. W. Spears N. P. Ruffalo T. Achey P. J. McCann A. J. Giacolo J. J. Tatulli L. H. Kersh J. R. Slater S. T. Jones R S. Goldbrenner E. R. Harrow A. H. Tisch R. H. Orcutt M. A. Peterson T. H. Mau L. Gordon J. P. Mastandrea"
       ],
@@ -545,7 +380,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "MANUFACTURER: cc"
+        "field_label": "MANUFACTURER"
       }
     },
     {
@@ -558,8 +393,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"DATE: COMPANY: PHONE: FROM: PHONE: MESSAGE: YES NO\"?",
-      "question_sha256": "ad2948b0fba5c5d05c464663d819d90564864da559496910c28e264574db28c7",
+      "question": "What is the value of \"DATE\"?",
+      "question_sha256": "4ff6d9dba5d83106d3573541744afccb19d9df2aa42e6932d468a364d73fd488",
       "answers": [
         "2 X"
       ],
@@ -578,7 +413,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "DATE: COMPANY: PHONE: FROM: PHONE: MESSAGE: YES NO"
+        "field_label": "DATE"
       }
     },
     {
@@ -591,8 +426,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"CLIENT NO.: MESSAGE TO: FAX NUMBER: PAGES (including Cover Sheet)\"?",
-      "question_sha256": "1b0447fbe316b04be970936c1adebb3a8dcad9b83ffa73aaa91bb38341e29163",
+      "question": "What is the value of \"CLIENT NO\"?",
+      "question_sha256": "09e5fe2820e8d4675304d0a1d605741f623a0c759479da3adbb38fb5ecd2a15a",
       "answers": [
         "JAN 1 2 1999 The following is for your review"
       ],
@@ -611,7 +446,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "CLIENT NO.: MESSAGE TO: FAX NUMBER: PAGES (including Cover Sheet)"
+        "field_label": "CLIENT NO"
       }
     },
     {
@@ -780,39 +615,6 @@
       }
     },
     {
-      "sample_id": "15_q5",
-      "page_id": "15",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"Message\"?",
-      "question_sha256": "f00d53b2b771d79bc065b617c695f1f7a1516f27f200fe024d688ebdf01885f3",
-      "answers": [
-        "This only for the person or entity may besi pavilegedal of otherwis protected from disclosos. Disscnlation, distribution popying of the facile the information herein by anyone other than the poupil, waployee responsible for delivering the message the prohibited. You thisfacsimile in error please notify as immediately by telephone and return the facsimile by mail."
-      ],
-      "answer_sha256": "bee520b3dd14bac9d53a98d73840a5642ce44d7b6a77f536fec9384fdf8b2949",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "3fb4de223b823f74a8dae8a218009ee5d5cbe51b9c6d7ce92b136710f9fe4707",
-      "image_sha256": "2c1069f5378afeab3867d79be518ea8aae180f96370f3602917cfc44c2abb44c",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        88,
-        895,
-        872,
-        940
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "Message"
-      }
-    },
-    {
       "sample_id": "15_q6",
       "page_id": "15",
       "dataset_name": "FUNSD",
@@ -855,8 +657,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"Date: From: Re: COMMENTS: Recipient(s): Company\"?",
-      "question_sha256": "22f5fe2b0751ab11d2d402f531725c70dee32bc3c6e2d2703826fa6070e1472a",
+      "question": "What is the value of \"Date\"?",
+      "question_sha256": "e5d9ed3d3c3aef155ffc30ac3eb649ff2afff408277517ad1f7d5c715d0638e0",
       "answers": [
         "37 (including this page) 1129. 01"
       ],
@@ -875,7 +677,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "Date: From: Re: COMMENTS: Recipient(s): Company"
+        "field_label": "Date"
       }
     },
     {
@@ -954,8 +756,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"Phone No.: Fax No\"?",
-      "question_sha256": "9dbc878ae9f2c12467f6f4be86e60b2e19f4443e73edc4753ad8a37ab12f0f97",
+      "question": "What is the value of \"Phone No\"?",
+      "question_sha256": "d066b272409272e38ae8d48e55ff3b89bb524606ef7cf51cbae36cd4b48a54e7",
       "answers": [
         "(212) 403- 2000 (212) 450- 4800 (917) 663- 5399 (502) 568- 7297 (336) 335- 7707 (336) 741- 2998 (312) 861- 2200 (312) 861- 2000 (212) 450- 4000 (212) 403- 1000 Wachtell, Lipton, Rosen & Katz Davis, Polk & Wardwell Philip Morris Inc. Brown & Williamson Tobacco Corp. Lorillard Tobacco Co. R. J. Reynolds Tobacco Co Kirkland & Ellis Mr. Stephen R. Patton Mr. Charles A. Blixt Mr. Ronald Milstein Mr. F. Anthony Burke Mr. Martin Barrington Mr. Arthur F. Golden Mr. Meyer G. Koplow"
       ],
@@ -974,7 +776,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "Phone No.: Fax No"
+        "field_label": "Phone No"
       }
     },
     {
@@ -987,8 +789,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"Date: To: Company: From\"?",
-      "question_sha256": "0bf8302543bdf8cd0efa794faa0d05213e905722df3d8b31f32bb4d063af3f51",
+      "question": "What is the value of \"Date\"?",
+      "question_sha256": "e5d9ed3d3c3aef155ffc30ac3eb649ff2afff408277517ad1f7d5c715d0638e0",
       "answers": [
         "\"JJ\" Klein"
       ],
@@ -1007,7 +809,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "Date: To: Company: From"
+        "field_label": "Date"
       }
     },
     {
@@ -1086,8 +888,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"TO DATE: COMPANY: PHONE: FROM: PHONE: MESSAGE: YES NO\"?",
-      "question_sha256": "bc2ac2a923ccd5de3eb0a87c57463f5c3327ce6c33a2bbdb4913692d31e8a6c4",
+      "question": "What is the value of \"TO DATE\"?",
+      "question_sha256": "09b56eeeb486a63b1952498704673e2a475c9ce6461f2262a803f15eec50b3fa",
       "answers": [
         "12"
       ],
@@ -1106,7 +908,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "TO DATE: COMPANY: PHONE: FROM: PHONE: MESSAGE: YES NO"
+        "field_label": "TO DATE"
       }
     },
     {
@@ -1119,8 +921,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"FAX NUMBER: MESSAGE TO: CLIENT NO.: PAGES (including Cover Sheet)\"?",
-      "question_sha256": "8a9d12aac8b41a6438cd69e6c8e8213c1d9ac7baa58d5012c945b019361f3506",
+      "question": "What is the value of \"FAX NUMBER\"?",
+      "question_sha256": "0159f2ea952dc569fa10521e21c0db281744abf842f5761c834b6066345d08a1",
       "answers": [
         "See attached fax from the Committee on Commerce just received in my office. Call me discuss."
       ],
@@ -1139,7 +941,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "FAX NUMBER: MESSAGE TO: CLIENT NO.: PAGES (including Cover Sheet)"
+        "field_label": "FAX NUMBER"
       }
     },
     {
@@ -1185,8 +987,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"DATE: TO: FROM\"?",
-      "question_sha256": "8588466c3ca029e65d55149005f0763ae67d02743e68163d704fcaf6f7aed260",
+      "question": "What is the value of \"DATE\"?",
+      "question_sha256": "4ff6d9dba5d83106d3573541744afccb19d9df2aa42e6932d468a364d73fd488",
       "answers": [
         "June 4, 1997 Dr. Spears/ A. J. Stevens/ R. Milstein Barry Hirsch"
       ],
@@ -1205,7 +1007,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "DATE: TO: FROM"
+        "field_label": "DATE"
       }
     },
     {
@@ -1242,72 +1044,6 @@
       }
     },
     {
-      "sample_id": "1_q0",
-      "page_id": "1",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"TO: FROM\"?",
-      "question_sha256": "341a9308c292dea2f2a8cec9b18fc380f96117ba9814789f80ea9fbe2ccdaab6",
-      "answers": [
-        "K. A. Sparrow T. D. Blachly"
-      ],
-      "answer_sha256": "4d03b636f3eeb5419086d12d7338d635f37dc37fe01782d03e217a5e3f6f963b",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "089f6594099a432f50dd36cc427ca103d80bd051c0c6cc0587deb63128e97936",
-      "image_sha256": "eab1902161c4bbff64d5a77a3f8a4658497b8335abea768f99eb27383996698b",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        298,
-        141,
-        387,
-        181
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "TO: FROM"
-      }
-    },
-    {
-      "sample_id": "1_q1",
-      "page_id": "1",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"AUG 4 SEP 15 MAY 12 JUN 23\"?",
-      "question_sha256": "934d6dc92e8b58bebd9a3661b432f42f150bfa02a3a027bbbe9073e081f4ac4c",
-      "answers": [
-        "x"
-      ],
-      "answer_sha256": "2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "089f6594099a432f50dd36cc427ca103d80bd051c0c6cc0587deb63128e97936",
-      "image_sha256": "eab1902161c4bbff64d5a77a3f8a4658497b8335abea768f99eb27383996698b",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        839,
-        198,
-        850,
-        208
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "AUG 4 SEP 15 MAY 12 JUN 23"
-      }
-    },
-    {
       "sample_id": "1_q2",
       "page_id": "1",
       "dataset_name": "FUNSD",
@@ -1341,39 +1077,6 @@
       }
     },
     {
-      "sample_id": "1_q3",
-      "page_id": "1",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"DIVISION: DIVISION: DIVISION: REGION: DIVISION: DIVISION: DIVISION\"?",
-      "question_sha256": "51e18b726003a12f6f7327d87c5b860c3928a6eddbba3255449069cd5f2bae93",
-      "answers": [
-        "225 27 15 31 18 19 20"
-      ],
-      "answer_sha256": "c2abd5e82ca1a4b34e3d1d2207e7503d87e2560908f325402e3ddfb038f6a400",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "089f6594099a432f50dd36cc427ca103d80bd051c0c6cc0587deb63128e97936",
-      "image_sha256": "eab1902161c4bbff64d5a77a3f8a4658497b8335abea768f99eb27383996698b",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        444,
-        587,
-        470,
-        708
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "DIVISION: DIVISION: DIVISION: REGION: DIVISION: DIVISION: DIVISION"
-      }
-    },
-    {
       "sample_id": "1_q4",
       "page_id": "1",
       "dataset_name": "FUNSD",
@@ -1404,39 +1107,6 @@
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
         "field_label": "NAME OF ACCOUNT VOLUME NO. OF STORES NAME OF ACCOUNT VOLUME NO. OF STORES"
-      }
-    },
-    {
-      "sample_id": "20_q0",
-      "page_id": "20",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"TO: FROM: SUBJECT\"?",
-      "question_sha256": "204ece8edb5b63c2cccc67bc581080dff44ca4798762de7326d4ff98b3281a0d",
-      "answers": [
-        "S. P. ZOLOT R. W. RICHARDSON"
-      ],
-      "answer_sha256": "099c3d644c264c1ab4e9c3f8b8b77643c71ec47ed289e26808174d3f7d625251",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "2a5655c518c88796aeb858bfba083d425ccc634e8733b033893c61f41e6afae1",
-      "image_sha256": "856b27e5e73631922412eeaf1b21b55719859dd2a7879fa0932b9ba4bbb98473",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        177,
-        119,
-        304,
-        160
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "TO: FROM: SUBJECT"
       }
     },
     {
@@ -1506,237 +1176,6 @@
       }
     },
     {
-      "sample_id": "20_q3",
-      "page_id": "20",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"FULL PARTIAL PARTIAL\"?",
-      "question_sha256": "885159ed02e89b77275b5f32aea961d91c9e481670cba00b3734f54710f29053",
-      "answers": [
-        "Flint"
-      ],
-      "answer_sha256": "4cbbe5b839033a5bbd72600a4c423c345e3ada2a8f77778ca8879c518be5f66a",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "2a5655c518c88796aeb858bfba083d425ccc634e8733b033893c61f41e6afae1",
-      "image_sha256": "856b27e5e73631922412eeaf1b21b55719859dd2a7879fa0932b9ba4bbb98473",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        480,
-        376,
-        507,
-        386
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "FULL PARTIAL PARTIAL"
-      }
-    },
-    {
-      "sample_id": "20_q4",
-      "page_id": "20",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"FULL\"?",
-      "question_sha256": "0162dd9594260626901bf2a0d63e0c2508bc5d5fd0264be2cf35205fa7e66282",
-      "answers": [
-        "Detroit North Detroit East Grand Rapids"
-      ],
-      "answer_sha256": "4e5cd4607427e7afaa00fb2135e027fc2106aa03c33f8090f18400a9d1ad4029",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "2a5655c518c88796aeb858bfba083d425ccc634e8733b033893c61f41e6afae1",
-      "image_sha256": "856b27e5e73631922412eeaf1b21b55719859dd2a7879fa0932b9ba4bbb98473",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        236,
-        332,
-        314,
-        385
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "FULL"
-      }
-    },
-    {
-      "sample_id": "20_q5",
-      "page_id": "20",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"DIVISION NAME: DIVISION NAME: DIVISION NAME\"?",
-      "question_sha256": "443ad38d7918936a40cbbea899e0e95b3b270e609fe7faac5bb6de23b1356586",
-      "answers": [
-        "31 1818 22 15 24 19 15 209 32 151/15 81/9 138/9 140/13 117/9 118/8 166/15 115/13 163/11"
-      ],
-      "answer_sha256": "323f4b1198622e358d7d2305a5830c572b270f692b90f8c55ed5eafc37fcd389",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "2a5655c518c88796aeb858bfba083d425ccc634e8733b033893c61f41e6afae1",
-      "image_sha256": "856b27e5e73631922412eeaf1b21b55719859dd2a7879fa0932b9ba4bbb98473",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        260,
-        492,
-        382,
-        649
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "DIVISION NAME: DIVISION NAME: DIVISION NAME"
-      }
-    },
-    {
-      "sample_id": "20_q6",
-      "page_id": "20",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"# REPS: # REPS: # REPS\"?",
-      "question_sha256": "b9b6adf4613c8ba43d3d488b5c65c80dde80739573f6d4de2a3ebefbde605801",
-      "answers": [
-        "Quality Dairy Bay Stations Schmuckal Dil Wilson Oil Quik Stop Forwards Phil Flint Arbor Rx Imperial Oil Speedy Q"
-      ],
-      "answer_sha256": "5496b19f6a50fe94d4d54b499ef1c962c6b05b0cca67053f9845886630e63a55",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "2a5655c518c88796aeb858bfba083d425ccc634e8733b033893c61f41e6afae1",
-      "image_sha256": "856b27e5e73631922412eeaf1b21b55719859dd2a7879fa0932b9ba4bbb98473",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        93,
-        492,
-        473,
-        651
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "# REPS: # REPS: # REPS"
-      }
-    },
-    {
-      "sample_id": "20_q7",
-      "page_id": "20",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"DIVISION NAME: DIVISION NAME: DIVISION NAME\"?",
-      "question_sha256": "443ad38d7918936a40cbbea899e0e95b3b270e609fe7faac5bb6de23b1356586",
-      "answers": [
-        "Clark Gas 7- Eleven Southland Ultra Diamond Dairy Mart Mobil Oil ACA Amoco"
-      ],
-      "answer_sha256": "d0cce9baca6b3af972e11bebd08f77289f5d227c678fa611bd8147203c9ec474",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "2a5655c518c88796aeb858bfba083d425ccc634e8733b033893c61f41e6afae1",
-      "image_sha256": "856b27e5e73631922412eeaf1b21b55719859dd2a7879fa0932b9ba4bbb98473",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        97,
-        732,
-        209,
-        869
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "DIVISION NAME: DIVISION NAME: DIVISION NAME"
-      }
-    },
-    {
-      "sample_id": "20_q8",
-      "page_id": "20",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"Name of Account Ind/Lor Volume Number of Stores Name of Account Ind/Lor Volume Number of Stores\"?",
-      "question_sha256": "6e61367481b5609ae0bccd5f70d5ea6a6f736c68f9a6ad06fdcdc57bcc7b6db5",
-      "answers": [
-        "OLD GOLD- LIGHT BOX 100'S PROGRESS REPORT"
-      ],
-      "answer_sha256": "b8ea5f591ac1b7078a29856ef3cff495a78ee1553585dd0a84d639cc97bc0943",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "2a5655c518c88796aeb858bfba083d425ccc634e8733b033893c61f41e6afae1",
-      "image_sha256": "856b27e5e73631922412eeaf1b21b55719859dd2a7879fa0932b9ba4bbb98473",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        180,
-        205,
-        514,
-        216
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "Name of Account Ind/Lor Volume Number of Stores Name of Account Ind/Lor Volume Number of Stores"
-      }
-    },
-    {
-      "sample_id": "20_q9",
-      "page_id": "20",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"Name of Account Ind/Lor Volume Number of Stores Name of Account Ind/Lor Volume Number of Stores\"?",
-      "question_sha256": "6e61367481b5609ae0bccd5f70d5ea6a6f736c68f9a6ad06fdcdc57bcc7b6db5",
-      "answers": [
-        "X 142 237 102 39 184 32 40 31 Emra Walmart"
-      ],
-      "answer_sha256": "59c7dfbf1f911de182799ba7a2fba620751c3a94917c56d2b5ec651303151382",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "2a5655c518c88796aeb858bfba083d425ccc634e8733b033893c61f41e6afae1",
-      "image_sha256": "856b27e5e73631922412eeaf1b21b55719859dd2a7879fa0932b9ba4bbb98473",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        96,
-        149,
-        735,
-        868
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "Name of Account Ind/Lor Volume Number of Stores Name of Account Ind/Lor Volume Number of Stores"
-      }
-    },
-    {
       "sample_id": "21_q0",
       "page_id": "21",
       "dataset_name": "FUNSD",
@@ -1746,8 +1185,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"P. #: TIME: TO: FROM: DATE\"?",
-      "question_sha256": "5b09426d7b9fb1b316de3e89b68f00a1feaf68733f0a6d22e71b6f083606771c",
+      "question": "What is the value of \"P. #\"?",
+      "question_sha256": "658190dab6d009b506f14525cb5bb58ac295b3135d75b13bb0f70ce426b3ceed",
       "answers": [
         "392"
       ],
@@ -1766,7 +1205,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "P. #: TIME: TO: FROM: DATE"
+        "field_label": "P. #"
       }
     },
     {
@@ -1812,8 +1251,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"Pages transmitted including cover sheet: SHB Client Matter No\"?",
-      "question_sha256": "4eb16b4ba6538278daffbb8b413b790cb07cd382508600120a80266930ecb205",
+      "question": "What is the value of \"Pages transmitted including cover sheet\"?",
+      "question_sha256": "8ee2cb77f47c5e03f4094b2f3c024c55215d662dcf01af79baeb24800aeab0df",
       "answers": [
         "JACK REILLY"
       ],
@@ -1832,7 +1271,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "Pages transmitted including cover sheet: SHB Client Matter No"
+        "field_label": "Pages transmitted including cover sheet"
       }
     },
     {
@@ -1845,8 +1284,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"COMMENTS/ MESSAGE: Special Instructions\"?",
-      "question_sha256": "dbd4722d3ef40265338a1b30a9dffa50848a3c9b816af367b4655d36f31f6e97",
+      "question": "What is the value of \"COMMENTS/ MESSAGE\"?",
+      "question_sha256": "af94c517e87a3a10f378bc659e15960a72e3972a51d53dec1a6b5b6eb108aa98",
       "answers": [
         "JANUARY 31, 1997 JIM DALEY If you experience any problems, please call extension 21000 Per your request, attached is a memo regarding the process of labeling reviewed diskettes for the purpose of later identification Please call me if you have any questions regret I cannot join you and the electronic document collection team for lunch today. I hope you agree they have done an outstanding job! I look forward to seeing you on February 5 for the Legal Edge presentation. Best Regards, Jim Daley"
       ],
@@ -1865,7 +1304,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "COMMENTS/ MESSAGE: Special Instructions"
+        "field_label": "COMMENTS/ MESSAGE"
       }
     },
     {
@@ -1899,39 +1338,6 @@
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
         "field_label": "Fax Transmittal"
-      }
-    },
-    {
-      "sample_id": "22_q1",
-      "page_id": "22",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"Date To\"?",
-      "question_sha256": "c10fe528ba4b97973030747341d4a25d7227ee06912a01a362a6ec9d2928ba12",
-      "answers": [
-        "2"
-      ],
-      "answer_sha256": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "2da386bb0930451764eec34899179f82af6e772bec15545400654e131fdbbd6e",
-      "image_sha256": "e758c138d7b10fe6f7f63dcca229034b26a459da714ebf2776b80a888a188d64",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        603,
-        335,
-        616,
-        352
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "Date To"
       }
     },
     {
@@ -2067,39 +1473,6 @@
       }
     },
     {
-      "sample_id": "23_q0",
-      "page_id": "23",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"TO: FROM: CC: PACK/CARTON REQUIREMENTS\"?",
-      "question_sha256": "ebca947175d0c5495d59740e7101b42e5562a5b10f704ab70540786f4f5a7df2",
-      "answers": [
-        "REDEMPTION RESULTS"
-      ],
-      "answer_sha256": "e7842bb0c03238fd556d9421471885c55803754764e990f11ee29ad6df3224c3",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "cb78216aa601d4ae13616eb84dcc88620ac39b7b3743e09a577b270155e16da6",
-      "image_sha256": "db8f0cb000decea04fa25205c03c6c1853d98602e2d1e4af67d6bceed8d95f43",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        363,
-        778,
-        530,
-        792
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "TO: FROM: CC: PACK/CARTON REQUIREMENTS"
-      }
-    },
-    {
       "sample_id": "23_q1",
       "page_id": "23",
       "dataset_name": "FUNSD",
@@ -2163,39 +1536,6 @@
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
         "field_label": "MEDIA TYPE MEDIA NAME ISSUE FREQUENCY YEAR SPACE/ COLOR"
-      }
-    },
-    {
-      "sample_id": "23_q3",
-      "page_id": "23",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"COUPON VALUE GEOGRAPHICAL AREA(S) CIRCULATION DATES CIRCULATION(#) COUPON EXPIRATION DATE COUPON ISSUE DATE\"?",
-      "question_sha256": "802666167877595cf8a0056daf7650d356e8713ac084f1755590b366cdc0cae2",
-      "answers": [
-        "PACK"
-      ],
-      "answer_sha256": "0a1f4adb6f560d2864be0441d942f0e08b283991b35f574673d715ed6769409d",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "cb78216aa601d4ae13616eb84dcc88620ac39b7b3743e09a577b270155e16da6",
-      "image_sha256": "db8f0cb000decea04fa25205c03c6c1853d98602e2d1e4af67d6bceed8d95f43",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        503,
-        649,
-        546,
-        664
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "COUPON VALUE GEOGRAPHICAL AREA(S) CIRCULATION DATES CIRCULATION(#) COUPON EXPIRATION DATE COUPON ISSUE DATE"
       }
     },
     {
@@ -2307,8 +1647,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"NAME: TITLE: COMPANY: ADDRESS: PHONE\"?",
-      "question_sha256": "83e1ece3edcfbfd34b348e7995cd029b90d95d6afd0badfe3e4ca1ac80943e6d",
+      "question": "What is the value of \"NAME\"?",
+      "question_sha256": "65a1c88676f00b86a8268bc799e76a9b51deb311acbee0aa02ada0e39c510072",
       "answers": [
         "Lorillard"
       ],
@@ -2327,7 +1667,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "NAME: TITLE: COMPANY: ADDRESS: PHONE"
+        "field_label": "NAME"
       }
     },
     {
@@ -2472,8 +1812,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"From: To: CC: Circulation(#)\"?",
-      "question_sha256": "49df20e921802040eb609c41a592e109aa67048752c09ac82fb6c574fbcf78c8",
+      "question": "What is the value of \"From\"?",
+      "question_sha256": "8268f8f895af33d729144ff373080c1d78317a7cac9c2c36caa5c2b127dfd350",
       "answers": [
         "Newport Parent, Lights. & 120's Direct Mail Competitive 21- 34 years 4/ 14/ 00 9 /30 00 APPROX 600. 000 AR. AZ.A K CA CO FL ID IA. CT, ME, MASS, MN, MT, NE, NV, NM, NY ND, DK, OR, RL, SD, WA, DC, WY $1. 50 OFF PACK 21- Jan 00"
       ],
@@ -2492,7 +1832,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "From: To: CC: Circulation(#)"
+        "field_label": "From"
       }
     },
     {
@@ -2571,8 +1911,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"Milestone Presentation Date: Estimated Creative Budget: Concept: Client Name: Matter Number: Project Title: Est. Production Budget\"?",
-      "question_sha256": "2759434b6a99db3c059a8702fed4b9ff09961c727b688a71a3951987b364f47e",
+      "question": "What is the value of \"Milestone Presentation Date\"?",
+      "question_sha256": "c678fdfd9cca64fdf93b37395aa7fb5597de3c44092c910a2fa550a20d19a317",
       "answers": [
         "10/30/98 1:46 PM"
       ],
@@ -2591,40 +1931,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "Milestone Presentation Date: Estimated Creative Budget: Concept: Client Name: Matter Number: Project Title: Est. Production Budget"
-      }
-    },
-    {
-      "sample_id": "2_q0",
-      "page_id": "2",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"TO: FROM: DATE: MANUFACTURER: BRAND: Oct. Dec. Jan. Nov\"?",
-      "question_sha256": "60439d320b1ac4a002ae079e3b2720cdb3fa713d7878724ac35b5c4775577cf6",
-      "answers": [
-        "Divisions 621 and 627 wisconsin"
-      ],
-      "answer_sha256": "7c0922f1bfa74fee93e3bafc5070a931ba131e8b404657347641f9c1cff38217",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "e2ee6c1052521bf9a4d59e443e85e575d481aac98c77abafdd66109a7846e0b7",
-      "image_sha256": "96fe4283ae47a5e155413ee37e63016ab58902bfca06acda025d4adc309d966f",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        415,
-        318,
-        720,
-        334
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "TO: FROM: DATE: MANUFACTURER: BRAND: Oct. Dec. Jan. Nov"
+        "field_label": "Milestone Presentation Date"
       }
     },
     {
@@ -2892,72 +2199,6 @@
       }
     },
     {
-      "sample_id": "30_q0",
-      "page_id": "30",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"To: Firm: FAX #: From: Date\"?",
-      "question_sha256": "4e73624aaa35335416f19eff01877e180391805c78b339ab9a757bfd13e7dfee",
-      "answers": [
-        "8/ 31/ 98 3 (including this cover page)"
-      ],
-      "answer_sha256": "4e9b6bbd427cf54502098b5454c412c1e94a3f8267a3b04ebb8d97b9ac5915fd",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "95fa224ea0289673f46f5532fcc3db3f85e286369d10cc13b05223deba615ab9",
-      "image_sha256": "8b70c514f74569b373ace3eb9ca5163958cd0821d090345cabb668ef31c6ffc8",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        355,
-        426,
-        616,
-        463
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "To: Firm: FAX #: From: Date"
-      }
-    },
-    {
-      "sample_id": "30_q1",
-      "page_id": "30",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"FAX #: Phone #\"?",
-      "question_sha256": "8733c1c9b0f6461435b8fe58624406a19d8345e949a4ca2f2a7ea0d4fb23a56b",
-      "answers": [
-        "Mike Mozina Susan Smith 335- 7733 335- 7150"
-      ],
-      "answer_sha256": "bd79d9dba2914daa80695d6c691cc398f8e26b6a346c55de2bee271db5f06523",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "95fa224ea0289673f46f5532fcc3db3f85e286369d10cc13b05223deba615ab9",
-      "image_sha256": "8b70c514f74569b373ace3eb9ca5163958cd0821d090345cabb668ef31c6ffc8",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        358,
-        260,
-        474,
-        403
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "FAX #: Phone #"
-      }
-    },
-    {
       "sample_id": "30_q2",
       "page_id": "30",
       "dataset_name": "FUNSD",
@@ -2991,138 +2232,6 @@
       }
     },
     {
-      "sample_id": "31_q0",
-      "page_id": "31",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"TO: FROM: SUBJECT\"?",
-      "question_sha256": "204ece8edb5b63c2cccc67bc581080dff44ca4798762de7326d4ff98b3281a0d",
-      "answers": [
-        "K. A. Sparrow F. Strickland MAVERICK SPECIALS- PROGRESS REPORT"
-      ],
-      "answer_sha256": "6d54c72514235dc89b114564b8d1ecff7656cbf8e10cd4788d8d5ea68ccd9c9a",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "904c7e81b927984fe9f131cfbff7cf418d513e4cb57c342c07bbea551b8886e2",
-      "image_sha256": "cf311de831035bab8e4cadbe989f18a9daa01e4128811a4198e31a02e56546d7",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        183,
-        138,
-        519,
-        249
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "TO: FROM: SUBJECT"
-      }
-    },
-    {
-      "sample_id": "31_q1",
-      "page_id": "31",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"DEC 13 JAN 25 FEB 24 APR 4 (ONLY IF PARTIAL REGION CONTINUE WITH DIVISION(S) SCOPE) DIVISION NAME: DIVISION NAME: DIVISION NAME: # REPS # REPS # REPS DIVISION: DIVISION NAME: DIVISION NAME\"?",
-      "question_sha256": "bc4e12a21c7167508bbfb6c4f5f87603ccf0ad2e83d1e3f6b69efbd3372e8332",
-      "answers": [
-        "X"
-      ],
-      "answer_sha256": "4b68ab3847feda7d6c62c1fbcbeebfa35eab7351ed5e78f4ddadea5df64b8015",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "904c7e81b927984fe9f131cfbff7cf418d513e4cb57c342c07bbea551b8886e2",
-      "image_sha256": "cf311de831035bab8e4cadbe989f18a9daa01e4128811a4198e31a02e56546d7",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        687,
-        162,
-        704,
-        172
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "DEC 13 JAN 25 FEB 24 APR 4 (ONLY IF PARTIAL REGION CONTINUE WITH DIVISION(S) SCOPE) DIVISION NAME: DIVISION NAME: DIVISION NAME: # REPS # REPS # REPS DIVISION: DIVISION NAME: DIVISION NAME"
-      }
-    },
-    {
-      "sample_id": "31_q2",
-      "page_id": "31",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"FULL PARTIAL\"?",
-      "question_sha256": "98eae96fa00140a3adf75f089f3028142b9b28c6c768cba7b209303cfa8dba51",
-      "answers": [
-        "x"
-      ],
-      "answer_sha256": "2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "904c7e81b927984fe9f131cfbff7cf418d513e4cb57c342c07bbea551b8886e2",
-      "image_sha256": "cf311de831035bab8e4cadbe989f18a9daa01e4128811a4198e31a02e56546d7",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        372,
-        329,
-        392,
-        339
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "FULL PARTIAL"
-      }
-    },
-    {
-      "sample_id": "31_q3",
-      "page_id": "31",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"FULL PARTIAL\"?",
-      "question_sha256": "98eae96fa00140a3adf75f089f3028142b9b28c6c768cba7b209303cfa8dba51",
-      "answers": [
-        "Seyle Dantzlen Econ 180 130 20 19 18 18 17 16 K&B Delchamps Litco 85 39 36 36 23 23 22"
-      ],
-      "answer_sha256": "b59f20f729ec2291b047e35f7f12a43e878e24f7b63fc6c5e3e8dafec99bd099",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "904c7e81b927984fe9f131cfbff7cf418d513e4cb57c342c07bbea551b8886e2",
-      "image_sha256": "cf311de831035bab8e4cadbe989f18a9daa01e4128811a4198e31a02e56546d7",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        96,
-        636,
-        879,
-        810
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "FULL PARTIAL"
-      }
-    },
-    {
       "sample_id": "31_q4",
       "page_id": "31",
       "dataset_name": "FUNSD",
@@ -3153,39 +2262,6 @@
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
         "field_label": "NAME OF ACCOUNT NO. OF STORES NAME OF ACCOUNT NO OF STORES"
-      }
-    },
-    {
-      "sample_id": "32_q0",
-      "page_id": "32",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"TO: FROM\"?",
-      "question_sha256": "341a9308c292dea2f2a8cec9b18fc380f96117ba9814789f80ea9fbe2ccdaab6",
-      "answers": [
-        "☑ Mrs. K. A. Sparrow R. G. Ryan"
-      ],
-      "answer_sha256": "f8855f3bf00655d82ae3cce2b120f081c55a0db2d4c0dea4f28c91c647a77412",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "43022d6829caae9cdf56474841c8c55550dc279957ee247d130be99ce4aec77b",
-      "image_sha256": "6904f5e65053150332242f976d9f0069531540b97ebeca5127d836df90e3668d",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        164,
-        102,
-        846,
-        158
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "TO: FROM"
       }
     },
     {
@@ -3255,39 +2331,6 @@
       }
     },
     {
-      "sample_id": "32_q3",
-      "page_id": "32",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"DIRECT ACCOUNT CHAINS\"?",
-      "question_sha256": "bfc3e7d250d7c1bc659fe1222b3ec982e46601a33f697dbc80cbe9b0fd9e1815",
-      "answers": [
-        "Eagle Foods is the only Void."
-      ],
-      "answer_sha256": "16b3614787f3a7c50a432f4b00d49c87e7a9c24df3e737311f039c17a6b3448c",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "43022d6829caae9cdf56474841c8c55550dc279957ee247d130be99ce4aec77b",
-      "image_sha256": "6904f5e65053150332242f976d9f0069531540b97ebeca5127d836df90e3668d",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        62,
-        457,
-        311,
-        477
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "DIRECT ACCOUNT CHAINS"
-      }
-    },
-    {
       "sample_id": "32_q4",
       "page_id": "32",
       "dataset_name": "FUNSD",
@@ -3354,39 +2397,6 @@
       }
     },
     {
-      "sample_id": "33_q0",
-      "page_id": "33",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"DIVISION: ACCOUNT: (STATE) DATES: BRAND NOTE\"?",
-      "question_sha256": "fa3cc53fc93d360f304f91cda2ff1b07c4a6eb4bb4ce4d9602b43f788b10b29a",
-      "answers": [
-        "STYLE LIGHT 100'S STYLE LIGHT MENTHOL 100'S STYLE LIGHT BOX 100'S STYLE MEN. LIGHT BOX 100'S STYLE SLIM LIGHT 100's STYLE SLIM MEN. LT. 100's REPORT STYLE INVENTORY ONLY. SUBMIT REPORT ONLY IF STYLE IS STILL ON HAND IN THIS ACCOUNT. REGIONAL SALES MANAGER, ALL DIVISIONS SERVICED BY THIS ACCOUNT."
-      ],
-      "answer_sha256": "3cebe74007f14e2369586952975a242f491fafa81db3065acc378442bac84957",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "fd7398b528125136a86154987a6dc63024fd80cc869acec86d6dc1ba5706a471",
-      "image_sha256": "7edc225c1d07f93d3ead214e10ece7862f438827acc75c9b63e451bb069883d7",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        50,
-        369,
-        746,
-        657
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "DIVISION: ACCOUNT: (STATE) DATES: BRAND NOTE"
-      }
-    },
-    {
       "sample_id": "34_q0",
       "page_id": "34",
       "dataset_name": "FUNSD",
@@ -3417,39 +2427,6 @@
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
         "field_label": "DEPARTMENT NAME"
-      }
-    },
-    {
-      "sample_id": "34_q1",
-      "page_id": "34",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"COST CENTER NUMBER INDEX BINDERS CONSOLIDATED BY\"?",
-      "question_sha256": "a09d7156afd29ff62b14c702d1fbb8e76a773d1ea8521443d9d54fd4dfdafb9d",
-      "answers": [
-        "N /A"
-      ],
-      "answer_sha256": "e68562a756f65a2598a750f99c9f98866a26f1d4245ffecb576202993dac68fa",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "93786f2f1884bff8710b32185ba72db1f0b18892dd0501da27c60a29e884dfff",
-      "image_sha256": "1c64d8c5cedc0f5f8288ebbf429734c66bb16886ce0cd1ed2fbb845453fc2a00",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        294,
-        286,
-        339,
-        305
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "COST CENTER NUMBER INDEX BINDERS CONSOLIDATED BY"
       }
     },
     {
@@ -3561,8 +2538,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"BOXES CREATED FOR HARD COPY PERMANENT RETENTION RECORDS BY: RECORDS TRANSFER INVENTORY FORMS UPDATED BY\"?",
-      "question_sha256": "a41a59eb20cf31799b5d618ddf08c9c9971f519e8abc1bb63e39cda96a827eae",
+      "question": "What is the value of \"BOXES CREATED FOR HARD COPY PERMANENT RETENTION RECORDS BY\"?",
+      "question_sha256": "65f7f3b1faa0e37c5e99d90a80cf82c737afaef551fdb99370b5cc4bc708ec0a",
       "answers": [
         "Wayne Baughan 7 /25 /90"
       ],
@@ -3581,7 +2558,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "BOXES CREATED FOR HARD COPY PERMANENT RETENTION RECORDS BY: RECORDS TRANSFER INVENTORY FORMS UPDATED BY"
+        "field_label": "BOXES CREATED FOR HARD COPY PERMANENT RETENTION RECORDS BY"
       }
     },
     {
@@ -3615,105 +2592,6 @@
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
         "field_label": "Telecopier Nos"
-      }
-    },
-    {
-      "sample_id": "35_q1",
-      "page_id": "35",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"TO: Name: Name: Name: Name: Name: Name: Name: Name: Name: Name: Name: Name: Name\"?",
-      "question_sha256": "1185177709f880a3cd6af32129d2fbe085a9c28b867ebf2eab94b9c10ba970fe",
-      "answers": [
-        "Ken Forrest 212- 403- 2211 Tom Frederick 312- 558- 5700 Tom Griffin 617- 523- 1231 Ever Hurwitz 202- 342- 5999 Barry Levin/ Curl Caton 415- 772- 6268 Barbara Robbins 212- 403- 2033 Greg Stone/Ron Olson 213- 687- 3702 Bill Allinder/Jeff Nelson 816- 421- 2708 Steve Krigbaum 917- 663- 5593 Tom Stoever 303- 832- 0428 Judy Bernstein- Gaeta 202- 942- 5999 Dal Burton 404- 581- 8330 Andy McGaan 312- 861- 2200 James Wilson 336- 335- 7707 Eric Sarner/ Doug Flemming/ Peter Mckenna 212- 735- 2000 Thomas McKim 336- 741- 0671 D. Scott Wise 212- 450- 4800"
-      ],
-      "answer_sha256": "2b6b0f190209177cd1725ef862f9894d1bd61dfcbe389daeb28f347d957a0dfa",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "6fb1664042859a67831e6d87ff92bc124e496c521c67e5d01ce5af142f6aa0ce",
-      "image_sha256": "4ece508e1a97ada4a445d8866b4b6a463547e0fc90eacc534e1b386da4f23583",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        303,
-        267,
-        533,
-        811
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "TO: Name: Name: Name: Name: Name: Name: Name: Name: Name: Name: Name: Name: Name"
-      }
-    },
-    {
-      "sample_id": "35_q2",
-      "page_id": "35",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"FAX NO: FAX NO: FAX NO.: FAX NO.: FAX NOc.: FAX NOv FAX NOv FAX NOv FAX NOv FAX NOv FAX NOv FAX NOv FAX NOv FAX NOv FAX NOv FAX NOv FAX NO.: Pages (Including Cover)\"?",
-      "question_sha256": "f580967080e2558bf328f2cfc44d19df6ed928615452e31859848038376d74c5",
-      "answers": [
-        "☑"
-      ],
-      "answer_sha256": "5e0282733b9362c2934e352365960847fbaf53510031df6c042b038077b6a7d5",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "6fb1664042859a67831e6d87ff92bc124e496c521c67e5d01ce5af142f6aa0ce",
-      "image_sha256": "4ece508e1a97ada4a445d8866b4b6a463547e0fc90eacc534e1b386da4f23583",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        588,
-        865,
-        606,
-        876
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "FAX NO: FAX NO: FAX NO.: FAX NO.: FAX NOc.: FAX NOv FAX NOv FAX NOv FAX NOv FAX NOv FAX NOv FAX NOv FAX NOv FAX NOv FAX NOv FAX NOv FAX NO.: Pages (Including Cover)"
-      }
-    },
-    {
-      "sample_id": "35_q3",
-      "page_id": "35",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"Name: Name: Name: Name\"?",
-      "question_sha256": "87e33d057019d9b036005a22509fc42d09b005c1524dad782a7ba8391b452eaf",
-      "answers": [
-        "4"
-      ],
-      "answer_sha256": "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "6fb1664042859a67831e6d87ff92bc124e496c521c67e5d01ce5af142f6aa0ce",
-      "image_sha256": "4ece508e1a97ada4a445d8866b4b6a463547e0fc90eacc534e1b386da4f23583",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        354,
-        820,
-        374,
-        841
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "Name: Name: Name: Name"
       }
     },
     {
@@ -3858,8 +2736,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"Date: on BLEND CASTING RECASING MENIHOL\"?",
-      "question_sha256": "2896b9c09464299ba380cba5a84573eb4af5d530f916709bf672b0cb767f049c",
+      "question": "What is the value of \"Date\"?",
+      "question_sha256": "e5d9ed3d3c3aef155ffc30ac3eb649ff2afff408277517ad1f7d5c715d0638e0",
       "answers": [
         "1194- 90 100 mm Filter 47.5 lbs."
       ],
@@ -3878,7 +2756,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "Date: on BLEND CASTING RECASING MENIHOL"
+        "field_label": "Date"
       }
     },
     {
@@ -4452,8 +3330,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"TA #: SPONSOR'S NAME: TEST ARTICLE IDENTIFICATION: LOT #: CONDITION OF SHIPMENT: SHIPPED VIA\"?",
-      "question_sha256": "63d007d3882c7be2b37d9a6b3376537f5899f093f34744895d75d6f58e1cda99",
+      "question": "What is the value of \"TA #\"?",
+      "question_sha256": "5a3ad606374f61287fb81db706acd6e274ac43fd3b4ee70ab08143dda5f546ac",
       "answers": [
         "Store refrigerated in dark."
       ],
@@ -4472,40 +3350,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "TA #: SPONSOR'S NAME: TEST ARTICLE IDENTIFICATION: LOT #: CONDITION OF SHIPMENT: SHIPPED VIA"
-      }
-    },
-    {
-      "sample_id": "39_q1",
-      "page_id": "39",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"DATE: DATES: BROKEN LEAKED\"?",
-      "question_sha256": "cc719a8032e55c4f801af3bbc5d7ee8611f1cacfb4341e3049fde852f7ad3b6c",
-      "answers": [
-        "03 /01 /90"
-      ],
-      "answer_sha256": "d4386b3f01e75f24423c1f382cf2b635d6b9c2f70517800957fd577fbfc7e5af",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "27a441b3a879a93172c3f2c9628898f334b1bd87e95af4d26370bb736bf6874f",
-      "image_sha256": "8a238260994ff8165f4abb0def2f63747a8b9aa91036f8324cabc0f4cea32c84",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        735,
-        619,
-        812,
-        639
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "DATE: DATES: BROKEN LEAKED"
+        "field_label": "TA #"
       }
     },
     {
@@ -4518,8 +3363,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"PHYSICAL DESCRIPTION: NO. OF CONTAINERS: GROSS WEIGHT\"?",
-      "question_sha256": "3376ab315f6f6d11e4c5e0fa7ff0f69ade68b7227fa6b76e68339f8fc95672d7",
+      "question": "What is the value of \"PHYSICAL DESCRIPTION\"?",
+      "question_sha256": "1439e0024438e90eb136a9d3d7d0beeac9ac47bd842c3a9ac0e4a721047db508",
       "answers": [
         "100 g Not provided"
       ],
@@ -4538,7 +3383,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "PHYSICAL DESCRIPTION: NO. OF CONTAINERS: GROSS WEIGHT"
+        "field_label": "PHYSICAL DESCRIPTION"
       }
     },
     {
@@ -4584,8 +3429,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"EXPIRATION DATE: SPECIAL HANDLING REQUIREMENTS\"?",
-      "question_sha256": "a373e66e2b790d8fd330727021e93460bfa3734872195618bc2de36a3e14ea3d",
+      "question": "What is the value of \"EXPIRATION DATE\"?",
+      "question_sha256": "fce4e0c33a6bbfb174abcaeb5e99ea2c561092f932880636df98c11aea8bb308",
       "answers": [
         "03 /02 /90"
       ],
@@ -4604,40 +3449,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "EXPIRATION DATE: SPECIAL HANDLING REQUIREMENTS"
-      }
-    },
-    {
-      "sample_id": "39_q5",
-      "page_id": "39",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"RECEIVED BY\"?",
-      "question_sha256": "dae37521357e995d5a207e111f67e74d91c207031b4a9bb4b8367eef4e18ef4e",
-      "answers": [
-        "Not provided"
-      ],
-      "answer_sha256": "d83b9ff3c07a8390e2ea0a2af45fba37595da25f31b85ba625363ee98c0c796f",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "27a441b3a879a93172c3f2c9628898f334b1bd87e95af4d26370bb736bf6874f",
-      "image_sha256": "8a238260994ff8165f4abb0def2f63747a8b9aa91036f8324cabc0f4cea32c84",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        322,
-        453,
-        440,
-        470
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "RECEIVED BY"
+        "field_label": "EXPIRATION DATE"
       }
     },
     {
@@ -4716,8 +3528,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"Submission for: Distribution by/ to\"?",
-      "question_sha256": "665a5afefbb1e1dd331f16d51055d22b3544c4d1370174cd08010935dc70edd9",
+      "question": "What is the value of \"Submission for\"?",
+      "question_sha256": "c2743ab410f62919b3b0c284abb5cbb6c12aa92a7e9295bf127bcbda6c54932d",
       "answers": [
         "17"
       ],
@@ -4736,73 +3548,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "Submission for: Distribution by/ to"
-      }
-    },
-    {
-      "sample_id": "3_q1",
-      "page_id": "3",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"July 31 August 29 September 30 October 31 November 28 December 30\"?",
-      "question_sha256": "ff8628e9e9ffe3469039d4f1701e8f516fec2caab3700f18d8e4ab8c2403b205",
-      "answers": [
-        "5"
-      ],
-      "answer_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "1b6cda8d95d0eb0a3b3de1828bd39009e60e52bea4183afa5e60c20c072a9ee2",
-      "image_sha256": "e1f7eb1bdc5c5e8cf6702d07a877d9a82ec53658e50692441438b087f151e543",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        381,
-        303,
-        396,
-        316
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "July 31 August 29 September 30 October 31 November 28 December 30"
-      }
-    },
-    {
-      "sample_id": "3_q2",
-      "page_id": "3",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"cc: : From: Area: Region\"?",
-      "question_sha256": "4f29459fa84060807935df89b7ca8f97cbe175af8a68100c75f6492d24bfdbf1",
-      "answers": [
-        "This program has been successful to date with chains where our \"Flex Payment\". was not place. The chains where were using the \"Flex Payment\" system we have not been las successful. The P. O. S. requirements of the P- 1 Plan with Oil Companies is difficult to obtain. Additional P. V. merchandising is being secured quickly,"
-      ],
-      "answer_sha256": "bf5220e6a04afee741c7304862174c3fead92c00bd4a0cbdd14549ba2752f579",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "1b6cda8d95d0eb0a3b3de1828bd39009e60e52bea4183afa5e60c20c072a9ee2",
-      "image_sha256": "e1f7eb1bdc5c5e8cf6702d07a877d9a82ec53658e50692441438b087f151e543",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        108,
-        369,
-        775,
-        510
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "cc: : From: Area: Region"
+        "field_label": "Submission for"
       }
     },
     {
@@ -4836,39 +3582,6 @@
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
         "field_label": "What is the retailers response to Lorillard's Excel Merchandising plan?"
-      }
-    },
-    {
-      "sample_id": "3_q4",
-      "page_id": "3",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"Chains: Independents\"?",
-      "question_sha256": "8cddf8e5d0844318b2f64a3e9edcbe229522bd4906787c9ea967975fcc6444b5",
-      "answers": [
-        "DM to RSM 1st of Month RSM to R W. C. 10th D. O. S. R. W. Caldarella Kent B. Mills"
-      ],
-      "answer_sha256": "06a540ff3f3ca3a7970ef9f5e4b33d509f2eefaf75dc59aa58bb95b10db496fb",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "1b6cda8d95d0eb0a3b3de1828bd39009e60e52bea4183afa5e60c20c072a9ee2",
-      "image_sha256": "e1f7eb1bdc5c5e8cf6702d07a877d9a82ec53658e50692441438b087f151e543",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        416,
-        221,
-        758,
-        282
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "Chains: Independents"
       }
     },
     {
@@ -5067,105 +3780,6 @@
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
         "field_label": "DATE WANTED SHIP TO (DEPT BRANCH)"
-      }
-    },
-    {
-      "sample_id": "41_q0",
-      "page_id": "41",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"Name: First Title Middle Last Institution: Street City State ZIP Code Country Telephone: TOTAL DATE TIME Arrival: Departure: CARRIER\"?",
-      "question_sha256": "05654de9888cc984d0b4b88e7570d288365277babad06e5ace199ecb211d056d",
-      "answers": [
-        "$135 00 $150 00 $ 30. 00"
-      ],
-      "answer_sha256": "de5ff17e1637cb5b19ed83fed4bc8113f19631e28ed02b5114a81e8fa34c39f3",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "98c3130b443458b413f2026b65319b2ad66c6e59525b21fe19e8e3b40baf1722",
-      "image_sha256": "70cf269b6f7024b01f55ae50d81aafece173f18b1da4a485259db9daa2b93440",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        566,
-        486,
-        629,
-        547
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "Name: First Title Middle Last Institution: Street City State ZIP Code Country Telephone: TOTAL DATE TIME Arrival: Departure: CARRIER"
-      }
-    },
-    {
-      "sample_id": "41_q1",
-      "page_id": "41",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"Telephone: FAX: Address\"?",
-      "question_sha256": "6a76f467c389db11d4b222983a89682ddf1be906f269098f715557504e1355b7",
-      "answers": [
-        "Dr. Phil P. Hunter U. T. Tobacco Experiment Station Route 5 Box 113 Greeneville, TN 37743 (615) ) 638- 5532 (615) ) 638- 6458"
-      ],
-      "answer_sha256": "0d2845eb82e36225f65751e91a4a6a457b28d826d9b238659ed46ec0b3bdbdae",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "98c3130b443458b413f2026b65319b2ad66c6e59525b21fe19e8e3b40baf1722",
-      "image_sha256": "70cf269b6f7024b01f55ae50d81aafece173f18b1da4a485259db9daa2b93440",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        220,
-        823,
-        828,
-        881
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "Telephone: FAX: Address"
-      }
-    },
-    {
-      "sample_id": "42_q0",
-      "page_id": "42",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"LRC FILE NUMBER LOT NUMBER PHYSICAL STATE\"?",
-      "question_sha256": "88a846a68ac1ab723bb45529d0aed49c7f1daa7ff65836eaffceedeadd656b03",
-      "answers": [
-        "A221"
-      ],
-      "answer_sha256": "7346dc0ae086eeb052e6e1d85ec3077bc2fb9ffed164da2290fac0b92271875b",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "a54d2a7cc781f2795630c4d852cd377ee4e8bb1aac5d2f615e0dfb4fc865570b",
-      "image_sha256": "14db1b0def4a0a2fa297a9d2c123e634d2af164c78fb53554a53923ef14a5250",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        164,
-        162,
-        205,
-        173
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "LRC FILE NUMBER LOT NUMBER PHYSICAL STATE"
       }
     },
     {
@@ -5466,39 +4080,6 @@
       }
     },
     {
-      "sample_id": "43_q5",
-      "page_id": "43",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"Spec Change Cost Reduction The current specifications for glass mat and slit glass mat can be made more accurate and complete with the following changes: Glass Mat: slit Glass Mat\"?",
-      "question_sha256": "47c9a924aec44f4a8ce698e539c29dad34ed0b41de20f5d8642a8d6f2c266ec5",
-      "answers": [
-        "8-17-88"
-      ],
-      "answer_sha256": "40b6575561b29e1c65c72244dc1ffae3f6cb85504bc7b267e43439682a267f66",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "7d453f1bbcb6bbe3c7465d831c94d3baf6d8e95536dc4d0ef3f8caa762565562",
-      "image_sha256": "c03ba2eac126f3150e0207e640b9187d9d0cd6affe7d13688b07ff08635c6895",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        858,
-        800,
-        967,
-        826
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "Spec Change Cost Reduction The current specifications for glass mat and slit glass mat can be made more accurate and complete with the following changes: Glass Mat: slit Glass Mat"
-      }
-    },
-    {
       "sample_id": "43_q6",
       "page_id": "43",
       "dataset_name": "FUNSD",
@@ -5607,8 +4188,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"FOR DATE TO ADDRESS CITY STATE Attn: ITEM\"?",
-      "question_sha256": "285a4d4d3d7647f44040f96cfb5f0f11eb25cde809dc956aa0af1432f994e608",
+      "question": "What is the value of \"FOR DATE TO ADDRESS CITY STATE Attn\"?",
+      "question_sha256": "8b7c1e0123953b2968fbc4843d7983e3f9c5e2766975b0b5f846635f24a25eae",
       "answers": [
         "@ $ 3,015.00 $ 1,045.00"
       ],
@@ -5627,7 +4208,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "FOR DATE TO ADDRESS CITY STATE Attn: ITEM"
+        "field_label": "FOR DATE TO ADDRESS CITY STATE Attn"
       }
     },
     {
@@ -5673,8 +4254,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"ALUMINUM SIZE: GAUGE COLORS\"?",
-      "question_sha256": "dcf759bab5dbe7be89a6f5283a5a1c261a68545820ed7edfac88e9f9a35217f8",
+      "question": "What is the value of \"ALUMINUM SIZE\"?",
+      "question_sha256": "8e6d34aec9215b4c07f63d06a09131229a3c12e21429ab90c5475f32d2a4cbf9",
       "answers": [
         "☑ Aluminum ☑ 4 ☑ ☑ ☑"
       ],
@@ -5693,7 +4274,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "ALUMINUM SIZE: GAUGE COLORS"
+        "field_label": "ALUMINUM SIZE"
       }
     },
     {
@@ -5730,39 +4311,6 @@
       }
     },
     {
-      "sample_id": "44_q4",
-      "page_id": "44",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"BASE COLOR SINGLE FACE DOUBLE FACE ☐ NO ☐ NUMBER OF ROUND ☐ ANGLE ☐ CUT TO SHAPE ☐ HEMMED ☐ STAMP FRAME BEADED BORDER ☐ BACK FRAME ☐ RIGHT ANGLE BEND ☐ CURLED ☐ PER CARTON PER CRATE PER BUNDLE\"?",
-      "question_sha256": "d9695021d86d1a7990ae8bf090e22b9ccd196c1783794cce20941e08aa4f8dac",
-      "answers": [
-        "☑ ☑"
-      ],
-      "answer_sha256": "2a89ccc1ee61df30588ecba74e9c651a12a643bb37a2f1285971e790e39a879c",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "c7032da710a1a1f076b3d842c5b6e908c1aaf790eb50c79edaa48ce6b5a31b83",
-      "image_sha256": "46848a293e0d06df09817f573a55a69f3ce2bc02f040c4391c5f4269d3e437cb",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        209,
-        679,
-        254,
-        715
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "BASE COLOR SINGLE FACE DOUBLE FACE ☐ NO ☐ NUMBER OF ROUND ☐ ANGLE ☐ CUT TO SHAPE ☐ HEMMED ☐ STAMP FRAME BEADED BORDER ☐ BACK FRAME ☐ RIGHT ANGLE BEND ☐ CURLED ☐ PER CARTON PER CRATE PER BUNDLE"
-      }
-    },
-    {
       "sample_id": "44_q5",
       "page_id": "44",
       "dataset_name": "FUNSD",
@@ -5793,105 +4341,6 @@
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
         "field_label": "YES EMBOSSED SQUARE"
-      }
-    },
-    {
-      "sample_id": "44_q6",
-      "page_id": "44",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"OTHER\"?",
-      "question_sha256": "c3839d1d1ad6bde09835261750b46a7a4055b2a10d8f2c947c339b5384d5266e",
-      "answers": [
-        "Mr. Robert Kennedy Harley Davidson Metal Plaque 171/4 x 231/2 \" .025\""
-      ],
-      "answer_sha256": "91801c9f91091e6e26a543ee3a168d4d97051e35433c4c154abe32d0d0da0788",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "c7032da710a1a1f076b3d842c5b6e908c1aaf790eb50c79edaa48ce6b5a31b83",
-      "image_sha256": "46848a293e0d06df09817f573a55a69f3ce2bc02f040c4391c5f4269d3e437cb",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        132,
-        270,
-        837,
-        368
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "OTHER"
-      }
-    },
-    {
-      "sample_id": "44_q7",
-      "page_id": "44",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"Tooling: QUANTITIES: PRICE\"?",
-      "question_sha256": "47d45662fb3b959df0a10e0c0479ad325c8d0aa108dab6b239d5d9aab94cc986",
-      "answers": [
-        "Lorillard Corporation 666 Fifth Avenue New York New York 10103 Metal \"Pack\" Plaque October 16, 1987 Mr. A. D. Steinberg"
-      ],
-      "answer_sha256": "5559dee1599c18ed8ac09ea049d1a4fabb84dc4d620e3abc5a89b2d0649c9a01",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "c7032da710a1a1f076b3d842c5b6e908c1aaf790eb50c79edaa48ce6b5a31b83",
-      "image_sha256": "46848a293e0d06df09817f573a55a69f3ce2bc02f040c4391c5f4269d3e437cb",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        135,
-        207,
-        840,
-        270
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "Tooling: QUANTITIES: PRICE"
-      }
-    },
-    {
-      "sample_id": "45_q0",
-      "page_id": "45",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"1. PRINCIPAL INVESTIGATOR NAME, TITLE, TELEPHONE # AND MAILING ADDRESS\"?",
-      "question_sha256": "f50c01281c2d0f7a1fedc3cdcae776149da11b952ad01a6e1a46344ea5ca0f50",
-      "answers": [
-        "21205"
-      ],
-      "answer_sha256": "7fcdf2314fb57649fb319a4859cfdd1864ef58d7fdeecedf83a92cb569cec026",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "cb8bf17df81dc3d291080dab9ba28338910cbeddab30eb527aae1b1e4b201385",
-      "image_sha256": "f91dfd6a7cc3841615c8b5c15fb2843ee01cd5898816ae1c1eb7c4a9adb8fad7",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        698,
-        243,
-        748,
-        260
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "1. PRINCIPAL INVESTIGATOR NAME, TITLE, TELEPHONE # AND MAILING ADDRESS"
       }
     },
     {
@@ -5937,8 +4386,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"2. PROJECT TITLE Mechanisms of Chronic Ozone Exposure: Role of Inflammation 3. KEY WORDS PLEASE PROVIDE THREE (3) KEY WORDS WHICH WILL BE USED AS REFERENCE HEADINGS Ozone, Inflammation, Mast Cell 4. INSTITUTION NAME AND ADDRESS OF INSTITUTION RESPONSIBLE AND ACCOUNTABLE FOR OF AWARDED ON THE OF DISPOSITION FUNDS BASIS THIS APPLICATION\"?",
-      "question_sha256": "2c730997fadfc791c6b2f6865e85288fbe6702b1d82ff684e945e26c206b290d",
+      "question": "What is the value of \"2. PROJECT TITLE Mechanisms of Chronic Ozone Exposure\"?",
+      "question_sha256": "6ce8cc39a927f5a076e1c671cb6171baaa2be47b5810b1281a8cfffb6c0d7883",
       "answers": [
         "01/01/94 01/01/95 01/01/96 12/31/94 12/31/95 12/31/96 5/26/93"
       ],
@@ -5957,40 +4406,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "2. PROJECT TITLE Mechanisms of Chronic Ozone Exposure: Role of Inflammation 3. KEY WORDS PLEASE PROVIDE THREE (3) KEY WORDS WHICH WILL BE USED AS REFERENCE HEADINGS Ozone, Inflammation, Mast Cell 4. INSTITUTION NAME AND ADDRESS OF INSTITUTION RESPONSIBLE AND ACCOUNTABLE FOR OF AWARDED ON THE OF DISPOSITION FUNDS BASIS THIS APPLICATION"
-      }
-    },
-    {
-      "sample_id": "45_q3",
-      "page_id": "45",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"ADDRESS\"?",
-      "question_sha256": "3341e20dbe1326f079ae5fd25b00c66f8cb9616407a07bf34a95f778f369599e",
-      "answers": [
-        "Baltimore"
-      ],
-      "answer_sha256": "3a361d05d29256d4de6f8bf82a732c5286c3882da6b11c6abe25567035e4cd62",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "cb8bf17df81dc3d291080dab9ba28338910cbeddab30eb527aae1b1e4b201385",
-      "image_sha256": "f91dfd6a7cc3841615c8b5c15fb2843ee01cd5898816ae1c1eb7c4a9adb8fad7",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        135,
-        384,
-        223,
-        399
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "ADDRESS"
+        "field_label": "2. PROJECT TITLE Mechanisms of Chronic Ozone Exposure"
       }
     },
     {
@@ -6267,8 +4683,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"Group Product Manager Product Manager Prepared by: Cost Estimate + - 10% Contingency Final Report Inc\"?",
-      "question_sha256": "736f1b24b099d43cd40d415b9bc53eafc750241668aeac434b8fc71961da3d8a",
+      "question": "What is the value of \"Group Product Manager Product Manager Prepared by\"?",
+      "question_sha256": "8a8403e9c80bb7e4f33b0f5092e7aeec370a0209fef08c29551a34c4e6684d1e",
       "answers": [
         "- 4 1"
       ],
@@ -6287,7 +4703,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "Group Product Manager Product Manager Prepared by: Cost Estimate + - 10% Contingency Final Report Inc"
+        "field_label": "Group Product Manager Product Manager Prepared by"
       }
     },
     {
@@ -6300,8 +4716,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"yes yes no no Approved by: Incidence\"?",
-      "question_sha256": "4cc862ed7bb1d84059911f7465bfa22b7f249995dfd4a3f2f659e9ebeb9a6c8f",
+      "question": "What is the value of \"yes yes no no Approved by\"?",
+      "question_sha256": "e37d3ce779495808f5eace65f1f3edefe2b10225f980084b2b16ee5e31ac6e8c",
       "answers": [
         "Due to sample size and experience we feel 25 respondents will presently be Triumph smokers. An action standard of 75% should be utilized for judgments on product negatives only among this group If 75% of Triumph smokers mention harshness we could consider it a 50- 75% problem If of Triumph smokers mention \"harshness\" we could it a look consider possible problem at other areas). If below 50% of Triumph smokers mention \"harshness\" we could consider it at a problem"
       ],
@@ -6320,40 +4736,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "yes yes no no Approved by: Incidence"
-      }
-    },
-    {
-      "sample_id": "46_q7",
-      "page_id": "46",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"Marketing Research Director\"?",
-      "question_sha256": "7fd1181b53dacd571b11c44765e4adb98ae9dff213b100d861987203252d6c8c",
-      "answers": [
-        "Triumph"
-      ],
-      "answer_sha256": "5a1be0c8fb1ef45514d678173562669cccb13a76e4d39b696fdda5c6a4d5c48c",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "11d5a2dac833e2dc4c03f8e8c87569d12a69308d04e3ce80650bdd0d8b10c9d7",
-      "image_sha256": "24a60d80b72feb2c3bd2c16cac90402641e10539eb5a0f6804e906003469bb57",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        248,
-        116,
-        310,
-        127
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "Marketing Research Director"
+        "field_label": "yes yes no no Approved by"
       }
     },
     {
@@ -6588,39 +4971,6 @@
       }
     },
     {
-      "sample_id": "47_q5",
-      "page_id": "47",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"(Describe question briefly) submitted to the voters on (Election Date) on the (Name of City/ Town of State)*\"?",
-      "question_sha256": "bfa955340247638c7ca947a7fbfce871c477e8706771a7cb29775bf36ec3602b",
-      "answers": [
-        "92"
-      ],
-      "answer_sha256": "8241649609f88ccd2a0a5b233a07a538ec313ff6adf695aa44a969dbca39f67d",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "94bf47938bee2d10f1035d6e0b3a466d22346dc94f6822ef7479b6e8e93e97d2",
-      "image_sha256": "69a608e2f1b6c11c209512df28af6215265d97b63c42584088417dd0dbfc27c5",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        607,
-        492,
-        634,
-        505
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "(Describe question briefly) submitted to the voters on (Election Date) on the (Name of City/ Town of State)*"
-      }
-    },
-    {
       "sample_id": "47_q6",
       "page_id": "47",
       "dataset_name": "FUNSD",
@@ -6630,8 +4980,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"ballot *Note: 19\"?",
-      "question_sha256": "6485d955b3b00deadd7f3470d956240cca98c3898f4f7cd5319b2d71ccf30a8b",
+      "question": "What is the value of \"ballot *Note\"?",
+      "question_sha256": "fb71db98453248b0327827ff652bbd4510ad57db3da4aa2ed4e496186b30c4c0",
       "answers": [
         "March 30, 1993"
       ],
@@ -6650,7 +5000,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "ballot *Note: 19"
+        "field_label": "ballot *Note"
       }
     },
     {
@@ -6696,8 +5046,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"Fil in Dates: Reporting Period Beginning\"?",
-      "question_sha256": "f54d6d068954994f9c11c13beee07900883702f86286789a2a3ea250fd939d20",
+      "question": "What is the value of \"Fil in Dates\"?",
+      "question_sha256": "b895b1bfc3ad2189d9e7e851caa50339fc2996968dee1c69d743ceec3f482eaf",
       "answers": [
         "10/ 26/ 92 10/ 30/ 92 Committee Against Unfair Taxes Committee Against Unfair Taxes P. O. B03 5979 Boston, MA 0212 P. O. Box 5979. Boston, MA 02114 Oppose Tax Increase Oppose Tax increas 28, 482. 00 19, 503 00"
       ],
@@ -6716,7 +5066,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "Fil in Dates: Reporting Period Beginning"
+        "field_label": "Fil in Dates"
       }
     },
     {
@@ -6750,39 +5100,6 @@
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
         "field_label": "Signed under the penalties of perjury"
-      }
-    },
-    {
-      "sample_id": "48_q0",
-      "page_id": "48",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"RECEIVED DATE: TO: ATTN: RE\"?",
-      "question_sha256": "94ae903d9bc305c1eae98194173d0a5aeaba9b2450a0e62643b5244c3fac3bda",
-      "answers": [
-        "12- 13- 89"
-      ],
-      "answer_sha256": "a1ec0595bfe5e2b4273b4b635daefba21145a23c5d1db57876030a677b5a8fc3",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "f7516b2dca99489ce2ae2c296aaf5ad3bf1f86297b816bc7aeee8897f1fcd107",
-      "image_sha256": "825388ce330e8d031fbdee3bab28141ad8590392aa9e6aa261f05fbf391667d9",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        451,
-        377,
-        524,
-        391
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "RECEIVED DATE: TO: ATTN: RE"
       }
     },
     {
@@ -6852,105 +5169,6 @@
       }
     },
     {
-      "sample_id": "48_q11",
-      "page_id": "48",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"COMMENTS: Phone Other\"?",
-      "question_sha256": "c26d0511a0c8a25311dcdf9bddd64b867a1697279faccf2019d4b31b78def44e",
-      "answers": [
-        "X"
-      ],
-      "answer_sha256": "4b68ab3847feda7d6c62c1fbcbeebfa35eab7351ed5e78f4ddadea5df64b8015",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "f7516b2dca99489ce2ae2c296aaf5ad3bf1f86297b816bc7aeee8897f1fcd107",
-      "image_sha256": "825388ce330e8d031fbdee3bab28141ad8590392aa9e6aa261f05fbf391667d9",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        122,
-        841,
-        139,
-        856
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "COMMENTS: Phone Other"
-      }
-    },
-    {
-      "sample_id": "48_q12",
-      "page_id": "48",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"Fed X Reg Mail FORM PREPARED BY\"?",
-      "question_sha256": "defe2d9005494fc8bf6c88cdaf69ce7aae1a21feb07f04ed11e03ce609270b5a",
-      "answers": [
-        "X"
-      ],
-      "answer_sha256": "4b68ab3847feda7d6c62c1fbcbeebfa35eab7351ed5e78f4ddadea5df64b8015",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "f7516b2dca99489ce2ae2c296aaf5ad3bf1f86297b816bc7aeee8897f1fcd107",
-      "image_sha256": "825388ce330e8d031fbdee3bab28141ad8590392aa9e6aa261f05fbf391667d9",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        61,
-        508,
-        77,
-        522
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "Fed X Reg Mail FORM PREPARED BY"
-      }
-    },
-    {
-      "sample_id": "48_q13",
-      "page_id": "48",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"Signed\"?",
-      "question_sha256": "a093ab475e45ff4a0b3e25c1e1b3e18fc4e2e9887929fee80ef39da9510ca36f",
-      "answers": [
-        "LORILLARD, INC."
-      ],
-      "answer_sha256": "2936d46bd578a2b842ba175185f204bb78ffe0ff8670fb55ac5bf5bd436d281f",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "f7516b2dca99489ce2ae2c296aaf5ad3bf1f86297b816bc7aeee8897f1fcd107",
-      "image_sha256": "825388ce330e8d031fbdee3bab28141ad8590392aa9e6aa261f05fbf391667d9",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        109,
-        275,
-        248,
-        292
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "Signed"
-      }
-    },
-    {
       "sample_id": "48_q14",
       "page_id": "48",
       "dataset_name": "FUNSD",
@@ -6981,39 +5199,6 @@
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
         "field_label": "Date Received"
-      }
-    },
-    {
-      "sample_id": "48_q2",
-      "page_id": "48",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"We enclose the following documents which were served upon\"?",
-      "question_sha256": "ee2dc640fe424d7c07361e13281c0ebc16b1411ab79e08052e26df0dd5439b32",
-      "answers": [
-        "x"
-      ],
-      "answer_sha256": "2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "f7516b2dca99489ce2ae2c296aaf5ad3bf1f86297b816bc7aeee8897f1fcd107",
-      "image_sha256": "825388ce330e8d031fbdee3bab28141ad8590392aa9e6aa261f05fbf391667d9",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        310,
-        401,
-        320,
-        414
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "We enclose the following documents which were served upon"
       }
     },
     {
@@ -7092,8 +5277,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"Personal Service Mail: Regular or Certified Certified # Duplicate copies of the Notice and Acknowledgement enclosed A self- addressed stamped envelope enclosed Notice of Attorney's Lien Notice of Mechanic's Lien Notice of Default Jucgment\"?",
-      "question_sha256": "69717bfe34b25a12dbf84bbf1a6511d201ab10612caec9ab7e47af3f87b091a8",
+      "question": "What is the value of \"Personal Service Mail\"?",
+      "question_sha256": "d8dda55d4747f956b30b6f610547b3730ad1f15a5d26e44413337bbb3f51ab61",
       "answers": [
         "PAT HIGGINS"
       ],
@@ -7112,7 +5297,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "Personal Service Mail: Regular or Certified Certified # Duplicate copies of the Notice and Acknowledgement enclosed A self- addressed stamped envelope enclosed Notice of Attorney's Lien Notice of Mechanic's Lien Notice of Default Jucgment"
+        "field_label": "Personal Service Mail"
       }
     },
     {
@@ -7248,39 +5433,6 @@
       }
     },
     {
-      "sample_id": "49_q0",
-      "page_id": "49",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"TO: ATTN: DATE: ADVERTISER: PRODUCT\"?",
-      "question_sha256": "17c95e11c41fff5f0ceaf02be22b1936f613f066e336d6fd606f7ab55dd9d778",
-      "answers": [
-        "LORILLARD NEWPORT"
-      ],
-      "answer_sha256": "984a0bf5637db5964704ba72fab429fa72f65a3bbd02098340c0431bf369f275",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "425006d8d5cce151f49bf21ec2ffd4847447263b97ef8af900849c69073989bb",
-      "image_sha256": "7ca7232d257fcbf6572d9fc338c2e7a2c48564909ddd79aafca0a0cace58dc5a",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        710,
-        223,
-        782,
-        267
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "TO: ATTN: DATE: ADVERTISER: PRODUCT"
-      }
-    },
-    {
       "sample_id": "49_q1",
       "page_id": "49",
       "dataset_name": "FUNSD",
@@ -7290,8 +5442,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"AD#: CAPTION: SPACE: DATE\"?",
-      "question_sha256": "1e0999c0737f574c393d803f35738af123ef107952608810b27a84c63c642c73",
+      "question": "What is the value of \"AD#\"?",
+      "question_sha256": "984fbe9acdb04d7d33bd4b1b56cd6cb5f16e883643497e947625f2f5f3612154",
       "answers": [
         "P5CE"
       ],
@@ -7310,40 +5462,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "AD#: CAPTION: SPACE: DATE"
-      }
-    },
-    {
-      "sample_id": "49_q2",
-      "page_id": "49",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"PO\"?",
-      "question_sha256": "a356ffb7c4896da1f9f99d21c5ce1c8c3653afa7835829092642467c46dfae59",
-      "answers": [
-        "#77219"
-      ],
-      "answer_sha256": "de744c9367715f80c3dbec07bf99eff75286ddf9b7c0da56f47162dd431b3f8d",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "425006d8d5cce151f49bf21ec2ffd4847447263b97ef8af900849c69073989bb",
-      "image_sha256": "7ca7232d257fcbf6572d9fc338c2e7a2c48564909ddd79aafca0a0cace58dc5a",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        152,
-        453,
-        190,
-        463
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "PO"
+        "field_label": "AD#"
       }
     },
     {
@@ -7413,39 +5532,6 @@
       }
     },
     {
-      "sample_id": "4_q0",
-      "page_id": "4",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"TO: FROM: SUBJECT\"?",
-      "question_sha256": "204ece8edb5b63c2cccc67bc581080dff44ca4798762de7326d4ff98b3281a0d",
-      "answers": [
-        "D. J. Landro OLD GOLD MENTHOL LIGHTS & ULTRA LIGHTS 100'S PROGRESS REPORT"
-      ],
-      "answer_sha256": "9265e85b4044b326e771f9766e20428506c7882a773e1bffa754bd003589a82d",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "a61dfb4408a4f917bb9112d20a50bac8591e000ff7dfbc561615b52748328040",
-      "image_sha256": "0ff5942126ebb61dfc9630b59e279f1deeaf35b3bf3d7d168e6dc18b8bb56ba6",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        251,
-        143,
-        827,
-        227
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "TO: FROM: SUBJECT"
-      }
-    },
-    {
       "sample_id": "4_q1",
       "page_id": "4",
       "dataset_name": "FUNSD",
@@ -7512,39 +5598,6 @@
       }
     },
     {
-      "sample_id": "4_q3",
-      "page_id": "4",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"DIVISION NAME: DIVISION NAME: DIVISION NAME: # REP # REP # REPS\"?",
-      "question_sha256": "1e4acee16b8b93b3bb10f6d424f935e243f8ef30dfe860c6821256c6f3045da1",
-      "answers": [
-        "Walgreen Drug"
-      ],
-      "answer_sha256": "d1af7751eb6ee2d83203351db3600c7a2ef270310dfaa972beef396a98dd00ab",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "a61dfb4408a4f917bb9112d20a50bac8591e000ff7dfbc561615b52748328040",
-      "image_sha256": "0ff5942126ebb61dfc9630b59e279f1deeaf35b3bf3d7d168e6dc18b8bb56ba6",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        49,
-        651,
-        164,
-        668
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "DIVISION NAME: DIVISION NAME: DIVISION NAME: # REP # REP # REPS"
-      }
-    },
-    {
       "sample_id": "4_q4",
       "page_id": "4",
       "dataset_name": "FUNSD",
@@ -7575,39 +5628,6 @@
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
         "field_label": "NAME OF ACCOUNT IND/LOR VOLUME NO. OF STORES NAME OF ACCOUNT IND/LOR VOLUME NO. OF TORES"
-      }
-    },
-    {
-      "sample_id": "5_q0",
-      "page_id": "5",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"TO: FROM: DATE: AUG SEPT OCT NOV MANUFACTURER BRAND\"?",
-      "question_sha256": "95e0dba97bea8568c8aaeb8c9e53b8aefbd108331d4b306953d81f194f453be5",
-      "answers": [
-        "X"
-      ],
-      "answer_sha256": "4b68ab3847feda7d6c62c1fbcbeebfa35eab7351ed5e78f4ddadea5df64b8015",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "f242053bce8a94f0c5f695aed1aafc07d063105fa2080fc5e29222e8cfb090c3",
-      "image_sha256": "c0ea25f2b423226daba05ebdb2eb2d557a354b5bb3ebf412ba9f399acefb8a91",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        844,
-        279,
-        864,
-        294
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "TO: FROM: DATE: AUG SEPT OCT NOV MANUFACTURER BRAND"
       }
     },
     {
@@ -7719,8 +5739,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"SALES FORCE INVOLVEMENT: DISTRIBUTORS - ACCEPTANCE/ INTRO TERMS/ INTRO DEALS\"?",
-      "question_sha256": "3a7e38b4ac7ba4b4f7c2515c13326f7a7fda2867a33550ec2e9da4d58942c800",
+      "question": "What is the value of \"SALES FORCE INVOLVEMENT\"?",
+      "question_sha256": "e359f2e287c6f3f906b4216de073f8a92d4eb7a0e655e6970b1a98f68ab53ab4",
       "answers": [
         "Assembly of promotional products and shipment to retail Indianapolis Direct Accounts are reported to be receiving B1G1F product."
       ],
@@ -7739,7 +5759,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "SALES FORCE INVOLVEMENT: DISTRIBUTORS - ACCEPTANCE/ INTRO TERMS/ INTRO DEALS"
+        "field_label": "SALES FORCE INVOLVEMENT"
       }
     },
     {
@@ -7842,72 +5862,6 @@
       }
     },
     {
-      "sample_id": "6_q0",
-      "page_id": "6",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"TO: FROM: SUBJECT\"?",
-      "question_sha256": "204ece8edb5b63c2cccc67bc581080dff44ca4798762de7326d4ff98b3281a0d",
-      "answers": [
-        "K. A. Sparrow R. E. Lane"
-      ],
-      "answer_sha256": "75b62e3e79c928ced9d75b1764b95c420d4b673af764361517081acbdd8e42c5",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "e152f6decabb7c5f321610ec93174d8b2094a5f2efd79e79ae2d2d30975a069b",
-      "image_sha256": "771f12006bc5cbbebf4f3bf457ac48834ebcfea4223cae1eb6c1101fa428b29f",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        241,
-        91,
-        335,
-        136
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "TO: FROM: SUBJECT"
-      }
-    },
-    {
-      "sample_id": "6_q1",
-      "page_id": "6",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"JUNE 30 AUG 11 SEP 22 NOV 10\"?",
-      "question_sha256": "3569563ee7c5b065def0827a68ae0ba87edeb8ed71a30b5d2ccac9ea8c7080d9",
-      "answers": [
-        "X"
-      ],
-      "answer_sha256": "4b68ab3847feda7d6c62c1fbcbeebfa35eab7351ed5e78f4ddadea5df64b8015",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "e152f6decabb7c5f321610ec93174d8b2094a5f2efd79e79ae2d2d30975a069b",
-      "image_sha256": "771f12006bc5cbbebf4f3bf457ac48834ebcfea4223cae1eb6c1101fa428b29f",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        663,
-        123,
-        679,
-        136
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "JUNE 30 AUG 11 SEP 22 NOV 10"
-      }
-    },
-    {
       "sample_id": "6_q2",
       "page_id": "6",
       "dataset_name": "FUNSD",
@@ -7917,8 +5871,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"EFFECTIVENESS OF: Transition Plan\"?",
-      "question_sha256": "3e265c593861432d4e0dfd90a54db024a775ac00d4911405824d8378b6cde0ef",
+      "question": "What is the value of \"EFFECTIVENESS OF\"?",
+      "question_sha256": "d9ff201f84c6edd7e9d38906d1a744da9443744848cac307631a7d00f4dc9bbc",
       "answers": [
         "Overall pre- sell efforts were successful Retail accounts that previously stocked Style Full Price accepted the introduction of the low price"
       ],
@@ -7937,7 +5891,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "EFFECTIVENESS OF: Transition Plan"
+        "field_label": "EFFECTIVENESS OF"
       }
     },
     {
@@ -8106,39 +6060,6 @@
       }
     },
     {
-      "sample_id": "7_q0",
-      "page_id": "7",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"TO: FROM: SUBJECT\"?",
-      "question_sha256": "204ece8edb5b63c2cccc67bc581080dff44ca4798762de7326d4ff98b3281a0d",
-      "answers": [
-        "K. A. Sparrow"
-      ],
-      "answer_sha256": "75453de5fa40603462c5dc87f72aa669e04603711e19a920bdb7861e455bfb4f",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "32e4415efb1fb39c6a9b406ab48b4a79278706eaed616b5479ca118d7201f491",
-      "image_sha256": "5e964b96e7691d51aee17768f7469f84943436f6782718dfa0cf921a0823d6d7",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        233,
-        89,
-        312,
-        102
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "TO: FROM: SUBJECT"
-      }
-    },
-    {
       "sample_id": "7_q1",
       "page_id": "7",
       "dataset_name": "FUNSD",
@@ -8169,105 +6090,6 @@
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
         "field_label": "MAY 19 ☐ JUN 30 ☐ AUG 11 ☐ SEP 22"
-      }
-    },
-    {
-      "sample_id": "7_q2",
-      "page_id": "7",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"FULL PARTIAL PARTIAL\"?",
-      "question_sha256": "885159ed02e89b77275b5f32aea961d91c9e481670cba00b3734f54710f29053",
-      "answers": [
-        "X"
-      ],
-      "answer_sha256": "4b68ab3847feda7d6c62c1fbcbeebfa35eab7351ed5e78f4ddadea5df64b8015",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "32e4415efb1fb39c6a9b406ab48b4a79278706eaed616b5479ca118d7201f491",
-      "image_sha256": "5e964b96e7691d51aee17768f7469f84943436f6782718dfa0cf921a0823d6d7",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        374,
-        212,
-        388,
-        222
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "FULL PARTIAL PARTIAL"
-      }
-    },
-    {
-      "sample_id": "7_q3",
-      "page_id": "7",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"FULL\"?",
-      "question_sha256": "0162dd9594260626901bf2a0d63e0c2508bc5d5fd0264be2cf35205fa7e66282",
-      "answers": [
-        "Sac N Pac ACO Texaco Lone Star 75/ 2 95/ 3 76/ 3 26/ 2 42/ 2 106 /4 62/ 2 78/ 4 319/ 16 65/ 3 69/ 3 80/ 4 Shopper Mart Neal One Stop Mini Mart Albertson's -Houston Valley Shamrock Get Go Speedy Stop Western Beverage Don & Bens"
-      ],
-      "answer_sha256": "5f744f02806bfc64efde6a394ebd9ebe944e1b7a31b193fb8d09c0f1b883c683",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "32e4415efb1fb39c6a9b406ab48b4a79278706eaed616b5479ca118d7201f491",
-      "image_sha256": "5e964b96e7691d51aee17768f7469f84943436f6782718dfa0cf921a0823d6d7",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        78,
-        436,
-        652,
-        590
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "FULL"
-      }
-    },
-    {
-      "sample_id": "7_q4",
-      "page_id": "7",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"DIVISION NAME: DIVISION NAME: DIVISION NAME: DIVISION NAME: DIVISION NAME: DIVISION NAME: # REPS # REPS # REPS\"?",
-      "question_sha256": "2dceb808de6737f8d0fc840a9f803c9e0d21df1b74dc2355fd98186448c73b34",
-      "answers": [
-        "20 15 29 44 17 34 15 20 22 27 15 37 Chevron Exxon Walgreen's ? ? ? ? ? ? ? 115 38 217 38 27 70 177"
-      ],
-      "answer_sha256": "2ae0c55fc025332259634c9fac759a4cb4b4de5a9221195fa3fef077ba3fc7a6",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "32e4415efb1fb39c6a9b406ab48b4a79278706eaed616b5479ca118d7201f491",
-      "image_sha256": "5e964b96e7691d51aee17768f7469f84943436f6782718dfa0cf921a0823d6d7",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        78,
-        436,
-        729,
-        784
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "DIVISION NAME: DIVISION NAME: DIVISION NAME: DIVISION NAME: DIVISION NAME: DIVISION NAME: # REPS # REPS # REPS"
       }
     },
     {
@@ -8334,39 +6156,6 @@
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
         "field_label": "NAME OF ACCOUNT IND/ LOR VOLUME NO. OF STORES NAME OF ACCOUNTS IND/ LOR VOLUME NO. OF STORES"
-      }
-    },
-    {
-      "sample_id": "8_q0",
-      "page_id": "8",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"TO: FROM\"?",
-      "question_sha256": "341a9308c292dea2f2a8cec9b18fc380f96117ba9814789f80ea9fbe2ccdaab6",
-      "answers": [
-        "S. Reindel Nassau/ 107"
-      ],
-      "answer_sha256": "12cc0b075ff4bbd71ca6fe4bf42dd3c965b1b3be0c8424384c08b95418ae29ee",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "e5bb4a8a3a4cedbe6c514be498f50b8569b308b67dcce721a6bf9c1a2e83813a",
-      "image_sha256": "41ce11a3f6da744d9751f0c9983776846ab95892e2d3e5e7f2dbc3d47e0b9c5c",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        286,
-        149,
-        423,
-        194
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "TO: FROM"
       }
     },
     {
@@ -8445,8 +6234,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"NAME OF EVENT: \"DATE OF EVENT\"?",
-      "question_sha256": "7776b3b1c8cb06aaf6a7ef6d9fea1edb967785562aea7dd0c48bba7d592ba8cd",
+      "question": "What is the value of \"NAME OF EVENT\"?",
+      "question_sha256": "8a6affef770cc15540b6e770c5214643dcf0d84425c324584da1885af148d9a0",
       "answers": [
         "BASEBALL CAP WATER BOTTLES"
       ],
@@ -8465,7 +6254,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "NAME OF EVENT: \"DATE OF EVENT"
+        "field_label": "NAME OF EVENT"
       }
     },
     {
@@ -8478,8 +6267,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"SAMPLES/ ITEMS REQUIRED: NEWPORT K. S. NEWPORT 100's NEWPORT LTS K. S. NEWPORT LTS. 100 KENT III K. S\"?",
-      "question_sha256": "677abedd95f8e9ae326ddfd3a1cb4df218b89281d3eaf1b124986144857b2c90",
+      "question": "What is the value of \"SAMPLES/ ITEMS REQUIRED\"?",
+      "question_sha256": "7b61144ec08399e4200c7d1e0493fb57a6cbe6a7cd8b564d08a4304bb355ac49",
       "answers": [
         "198- 1160006"
       ],
@@ -8498,7 +6287,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "SAMPLES/ ITEMS REQUIRED: NEWPORT K. S. NEWPORT 100's NEWPORT LTS K. S. NEWPORT LTS. 100 KENT III K. S"
+        "field_label": "SAMPLES/ ITEMS REQUIRED"
       }
     },
     {
@@ -8535,39 +6324,6 @@
       }
     },
     {
-      "sample_id": "8_q6",
-      "page_id": "8",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"ITEMS\"?",
-      "question_sha256": "1029f13329a2cafcb704048e337bf6aa6e72ea3689d2da7e9def637f982e9301",
-      "answers": [
-        "1500 500 K. A. SPARROW"
-      ],
-      "answer_sha256": "b5a641cdd7becabb217571ab5e263a3fb5b620aefe5a248a17e490994db4bae2",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "e5bb4a8a3a4cedbe6c514be498f50b8569b308b67dcce721a6bf9c1a2e83813a",
-      "image_sha256": "41ce11a3f6da744d9751f0c9983776846ab95892e2d3e5e7f2dbc3d47e0b9c5c",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        285,
-        124,
-        763,
-        630
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "ITEMS"
-      }
-    },
-    {
       "sample_id": "9_q0",
       "page_id": "9",
       "dataset_name": "FUNSD",
@@ -8577,8 +6333,8 @@
       "language_code": "en",
       "script_type": "monolingual_latin",
       "question_type": "field_extraction",
-      "question": "What is the value of \"CASE NAME: LORILLARD ENTITIES: DATE FILED: DATE SERVED: CASE TYPE: PLAINTIFF COUNSEL: LORILLARD COUNSEL: TRIAL DATE\"?",
-      "question_sha256": "329065778b047d08766d0ce721883a6e12a96680901c966a4ca362f832042e17",
+      "question": "What is the value of \"CASE NAME\"?",
+      "question_sha256": "956b34c73cacd0f2d9dc537f05e59842453d5a3464c84a37f84ef4f253dc7b0c",
       "answers": [
         "Wartnick, Chaber, Harowitz, Smith & Tigerman Madelyn J. Chaber 101 California Street, Suite 2200 San Francisco, California 94111 415 986- 5566 August 3, 1998 July 23, 1998 Lorillard Tobacco Company San Francisco Superior Court - No. 996378 Wanda G. Robinson and Carroll Robinson v Raybestos- Manhattan, et al."
       ],
@@ -8597,40 +6353,7 @@
       "metadata": {
         "smi": 0.0,
         "pairing": "derived_spatial_heuristic",
-        "field_label": "CASE NAME: LORILLARD ENTITIES: DATE FILED: DATE SERVED: CASE TYPE: PLAINTIFF COUNSEL: LORILLARD COUNSEL: TRIAL DATE"
-      }
-    },
-    {
-      "sample_id": "9_q1",
-      "page_id": "9",
-      "dataset_name": "FUNSD",
-      "dataset_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
-      "split": "test",
-      "language": "en",
-      "language_code": "en",
-      "script_type": "monolingual_latin",
-      "question_type": "field_extraction",
-      "question": "What is the value of \"COURT: JUDGE\"?",
-      "question_sha256": "87f86e8bc64f1820504e59026f966f6bd803cea349fc36ebbf6ae34170732fcb",
-      "answers": [
-        "Asbestos"
-      ],
-      "answer_sha256": "6b210ed7077c2ff578b1dde1a4078123e262932220e508053ea0a91086b2cf4c",
-      "is_unanswerable": false,
-      "oracle_text_sha256": "270f84d72e52d2d6c313bb22ddb9862d26f3dab1ccfbb2b657e13a2115499603",
-      "image_sha256": "af9841ab117cca573f5c36e348b7cb6361be21675233b3e4b3fd728b01126d34",
-      "supports_text_oracle": true,
-      "supports_layout_oracle": true,
-      "answer_bbox": [
-        309,
-        320,
-        370,
-        335
-      ],
-      "metadata": {
-        "smi": 0.0,
-        "pairing": "derived_spatial_heuristic",
-        "field_label": "COURT: JUDGE"
+        "field_label": "CASE NAME"
       }
     }
   ]

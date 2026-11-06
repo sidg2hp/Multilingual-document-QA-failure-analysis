@@ -1,4 +1,4 @@
-﻿# Where Does Document Understanding Break?
+# Where Does Document Understanding Break?
 
 **A counterfactual error-propagation harness for OCR-based and OCR-free document QA on multilingual documents.**
 
@@ -147,8 +147,34 @@ src/
   models/                  # OCR cascade, VLM runner, prompts, parsing
   routing/                 # text-free features, cost-aware router
   evaluation/              # metrics, attribution, statistics
-tests/                     # 50 offline tests
+tests/                     # 54 offline tests
 ```
+
+## Local pilot on the RTX 3050 (not paper evidence)
+
+Until PARAM Ganga access arrives, the repository includes a hardware-constrained
+pilot path:
+
+- **Windows OCR** (`Windows.Media.Ocr`, English en-GB/en-US only) + **Qwen2.5-1.5B
+  Q4_K_M** via Ollama for a cascaded pipeline.
+- **Real FUNSD** forms via a local rows/images cache (no `datasets`/PyArrow).
+- **Controlled synthetic forms** for pipeline validation only.
+- An **OCR-only degradation pilot** that measures CER/WER under the five
+  perturbation families.
+
+```bash
+python scripts/prepare_local_data.py --dataset funsd --max-rows 50
+python scripts/prepare_local_data.py --dataset indic_ocr --per-language 3
+python scripts/run_experiment.py --config configs/local_cascade.yaml \
+  --mode funsd_local --models ocr --max-samples 60 \
+  --manifest manifests/local_funsd.json --resume
+python scripts/run_ocr_degradation_pilot.py --max-docs 20
+```
+
+Caveats are not optional: Windows OCR has no Indic recognizers, Qwen-1.5B is not
+a paper-scale reader, and the synthetic forms are never evidence. The pilot
+results and their limitations are in
+[`results/local_pilot/README.md`](results/local_pilot/README.md).
 
 ## What still must happen before a paper
 

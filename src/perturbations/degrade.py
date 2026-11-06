@@ -220,9 +220,11 @@ def crop_placebo_region(
     # Deterministic fallback: slide the crop away from the answer horizontally.
     cx0 = 0.0 if x0 > w / 2 else max(0.0, w - box_w)
     cy0 = max(0.0, min(h - box_h, y0 - box_h))
-    return image.convert("RGB").crop(
-        (int(cx0), int(cy0), int(cx0 + box_w), int(cy0 + box_h))
-    )
+    left = max(0, min(w - 1, int(cx0)))
+    top = max(0, min(h - 1, int(cy0)))
+    right = max(left + 1, min(w, int(cx0 + box_w)))
+    bottom = max(top + 1, min(h, int(cy0 + box_h)))
+    return image.convert("RGB").crop((left, top, right, bottom))
 
 
 def crop_oracle_layout_region(
@@ -248,10 +250,8 @@ def crop_oracle_layout_region(
     pad_x = box_w * padding_ratio
     pad_y = box_h * padding_ratio
 
-    crop_box: Tuple[int, int, int, int] = (
-        max(0, int(x0 - pad_x)),
-        max(0, int(y0 - pad_y)),
-        min(w, int(x1 + pad_x)),
-        min(h, int(y1 + pad_y)),
-    )
-    return image.convert("RGB").crop(crop_box)
+    left = max(0, min(w - 1, int(x0 - pad_x)))
+    top = max(0, min(h - 1, int(y0 - pad_y)))
+    right = max(left + 1, min(w, int(x1 + pad_x)))
+    bottom = max(top + 1, min(h, int(y1 + pad_y)))
+    return image.convert("RGB").crop((left, top, right, bottom))
