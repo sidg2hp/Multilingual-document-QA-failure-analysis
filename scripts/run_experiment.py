@@ -381,15 +381,19 @@ def run_model_across_conditions(
     return attributions, records_by_sample
 
 
-def run_condition_sweep(
+def run_condition_sweep_with_records(
     runner: object,
     samples: List[DocumentQASample],
     perturbation_types: List[str],
     severities: List[str],
     cache: Optional[PredictionCache] = None,
     seed: int = 42,
-) -> Tuple[List[Dict[str, object]], Dict[str, List[SampleAttribution]]]:
-    """Sweeps perturbations while computing perturbation-independent conditions once."""
+) -> Tuple[
+    List[Dict[str, object]],
+    Dict[str, List[SampleAttribution]],
+    Dict[str, Dict[str, Dict[CounterfactualCondition, PredictionRecord]]],
+]:
+    """Sweeps perturbations and returns rows, attributions, and raw records."""
     architecture = (
         "ocr_free_vlm" if isinstance(runner, OCRFreeVLMRunner) else "cascaded_ocr"
     )
@@ -411,9 +415,15 @@ def run_condition_sweep(
 
     rows: List[Dict[str, object]] = []
     attributions_by_setting: Dict[str, List[SampleAttribution]] = {}
+    records_by_setting: Dict[
+        str, Dict[str, Dict[CounterfactualCondition, PredictionRecord]]
+    ] = {}
     for perturbation_type in perturbation_types:
         for severity in severities:
             setting_attributions: List[SampleAttribution] = []
+            setting_records: Dict[
+                str, Dict[CounterfactualCondition, PredictionRecord]
+            ] = {}
             for sample in samples:
                 image_override = None
                 if sample.image_obj is not None:
@@ -438,6 +448,7 @@ def run_condition_sweep(
                 )
                 records = dict(baseline[sample.sample_id])
                 records[CounterfactualCondition.C_DELTA_DEGRADED] = delta_record
+                setting_records[sample.sample_id] = records
                 setting_attributions.append(
                     attribute_sample_errors(sample, records, architecture=architecture)
                 )
@@ -449,6 +460,7 @@ def run_condition_sweep(
             delta_ci = bootstrap_ci(delta_values, cluster_ids=clusters, seed=seed)
             setting_key = f"{perturbation_type}|{severity}"
             attributions_by_setting[setting_key] = setting_attributions
+            records_by_setting[setting_key] = setting_records
             rows.append(
                 {
                     "model": runner_model_name(runner),
@@ -476,7 +488,22 @@ def run_condition_sweep(
                     "ci_high_c_delta_degraded": delta_ci.get("ci_high"),
                 }
             )
-    return rows, attributions_by_setting
+    return rows, attributions_by_setting, records_by_setting
+
+
+def run_condition_sweep(
+    runner: object,
+    samples: List[DocumentQASample],
+    perturbation_types: List[str],
+    severities: List[str],
+    cache: Optional[PredictionCache] = None,
+    seed: int = 42,
+) -> Tuple[List[Dict[str, object]], Dict[str, List[SampleAttribution]]]:
+    """Backwards-compatible wrapper returning rows and attributions."""
+    rows, attributions, _ = run_condition_sweep_with_records(
+        runner, samples, perturbation_types, severities, cache, seed
+    )
+    return rows, attributions
 
 
 # ---------------------------------------------------------------------------
@@ -785,8 +812,12 @@ def main() -> None:
 
     for key, runner in runners:
         representative_setting: Optional[str] = None
+        records_for_report: Dict[
+            str, Dict[CounterfactualCondition, PredictionRecord]
+        ] = {}
+        records_to_write: List[PredictionRecord] = []
         if args.sweep:
-            rows, by_setting = run_condition_sweep(
+            rows, by_setting, by_setting_records = run_condition_sweep_with_records(
                 runner,
                 samples,
                 ["gaussian_blur", "salt_and_pepper", "jpeg_artifacts", "resolution_downscale", "perspective_skew"],
@@ -805,9 +836,12 @@ def main() -> None:
                 representative = sorted(by_setting)[0] if by_setting else ""
             representative_setting = representative
             attributions = by_setting.get(representative, [])
-            records_by_sample: Dict[str, Dict[CounterfactualCondition, PredictionRecord]] = {}
+            records_for_report = by_setting_records.get(representative, {})
+            for setting_records in by_setting_records.values():
+                for condition_records in setting_records.values():
+                    records_to_write.extend(condition_records.values())
         else:
-            attributions, records_by_sample = run_model_across_conditions(
+            attributions, records_for_report = run_model_across_conditions(
                 runner,
                 samples,
                 perturbation_type=args.perturbation_type,
@@ -815,12 +849,13 @@ def main() -> None:
                 cache=cache,
                 seed=args.seed,
             )
+            for condition_records in records_for_report.values():
+                records_to_write.extend(condition_records.values())
         all_attributions[key] = attributions
-        all_records[key] = records_by_sample
+        all_records[key] = records_for_report
         with open(predictions_path, "a", encoding="utf-8") as handle:
-            for condition_records in records_by_sample.values():
-                for record in condition_records.values():
-                    handle.write(json.dumps(asdict(record), ensure_ascii=False) + "\n")
+            for record in records_to_write:
+                handle.write(json.dumps(asdict(record), ensure_ascii=False) + "\n")
 
         architecture = "ocr_free_vlm" if key == "ocr_free_vlm" else "cascaded_ocr"
         model_reports[key] = {

@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 
 from scripts.analyze_results import (
+    condition_table_rows,
     grouped_condition_metrics,
     is_synthetic,
     load_items,
@@ -79,6 +80,14 @@ def test_analysis_scores_and_pairs(tmp_path: Path) -> None:
     assert key in comparisons
     assert comparisons[key]["mean_difference"] == 1.0
     assert comparisons[key]["mcnemar_p_value"] is not None
+
+    # A sweep file repeats C0 once per setting; the condition table must count
+    # each item once and select a single C_delta setting.
+    repeated = []
+    for _ in range(3):
+        repeated.extend(rows)
+    selected = condition_table_rows(repeated, "gaussian_blur", "level_3")
+    assert len(selected) == 4
 
 
 def test_synthetic_predictions_are_detected(tmp_path: Path) -> None:

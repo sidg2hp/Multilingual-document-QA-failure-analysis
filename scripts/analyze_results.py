@@ -30,6 +30,7 @@ from src.evaluation.metrics import (
 from src.evaluation.statistics import (
     bootstrap_ci,
     cohens_d_paired,
+    holm_bonferroni,
     mcnemar_test,
     paired_bootstrap_difference,
     paired_permutation_test,
@@ -110,11 +111,43 @@ def model_key(row: dict) -> str:
     return f"{row.get('model_name', 'unknown')}|{row.get('quantization', 'none')}"
 
 
+def condition_table_rows(
+    scored: Sequence[dict], perturbation_type: str, severity: str
+) -> List[dict]:
+    """Selects one perturbation setting and deduplicates repeated baselines.
+
+    A sweep file contains the baseline conditions once per perturbation setting.
+    The condition table must count each item once, and C_delta must come from a
+    single named setting; the degradation table uses all settings separately.
+    """
+    selected: List[dict] = []
+    seen: set = set()
+    for row in scored:
+        is_delta = row["condition"] == "C_delta_degraded_end2end"
+        if is_delta:
+            if (
+                row.get("perturbation_type") != perturbation_type
+                or row.get("perturbation_severity") != severity
+            ):
+                continue
+        key = (model_key(row), row["condition"], str(row["sample_id"]))
+        if key in seen:
+            continue
+        seen.add(key)
+        selected.append(row)
+    return selected
+
+
 def grouped_condition_metrics(
     scored: Sequence[dict], n_boot: int, seed: int
 ) -> Dict[str, dict]:
     grouped: Dict[str, Dict[str, List[dict]]] = {}
+    seen: set = set()
     for row in scored:
+        key = (model_key(row), row["condition"], str(row["sample_id"]))
+        if key in seen:
+            continue
+        seen.add(key)
         grouped.setdefault(model_key(row), {}).setdefault(row["condition"], []).append(row)
 
     metrics: Dict[str, dict] = {}
@@ -197,6 +230,21 @@ def paired_models(
                 "cohens_d_paired": cohens_d_paired(a_values, b_values),
                 "mcnemar_p_value": mcnemar_test(a_correct, b_correct).get("p_value"),
             }
+
+    keys = [
+        key
+        for key, entry in comparisons.items()
+        if entry.get("paired_permutation_p_value") is not None
+    ]
+    if keys:
+        adjusted = holm_bonferroni(
+            [float(comparisons[key]["paired_permutation_p_value"]) for key in keys]
+        )
+        for key, value in zip(keys, adjusted):
+            comparisons[key]["holm_adjusted_p_value"] = value
+    comparisons["_note"] = (  # type: ignore[assignment]
+        "Holm adjustment is over all pairwise comparisons in this table."
+    )
     return comparisons
 
 
@@ -234,6 +282,10 @@ def degradation_rows(scored: Sequence[dict], n_boot: int, seed: int) -> List[dic
     return rows
 
 
+def _cell(value: object) -> str:
+    return str(value).replace("|", "/")
+
+
 def render_markdown(metrics: Dict[str, dict], comparisons: Dict[str, dict]) -> str:
     lines = ["# Result tables", "", "## Model x condition (mean ANLS, 95% cluster bootstrap CI)", ""]
     header = "| Model | Condition | n | Documents | Mean ANLS | 95% CI |"
@@ -244,7 +296,7 @@ def render_markdown(metrics: Dict[str, dict], comparisons: Dict[str, dict]) -> s
         ):
             entry = metrics[model][condition]
             lines.append(
-                f"| {model} | {condition} | {entry['n']} | {entry['n_clusters']} | "
+                f"| {_cell(model)} | {_cell(condition)} | {entry['n']} | {entry['n_clusters']} | "
                 f"{entry['mean']} | [{entry['ci_low']}, {entry['ci_high']}] |"
             )
     if comparisons:
@@ -258,9 +310,11 @@ def render_markdown(metrics: Dict[str, dict], comparisons: Dict[str, dict]) -> s
             ]
         )
         for key in sorted(comparisons):
+            if key.startswith("_"):
+                continue
             entry = comparisons[key]
             lines.append(
-                f"| {key} | {entry.get('n')} | {entry.get('mean_difference')} | "
+                f"| {_cell(key)} | {entry.get('n')} | {entry.get('mean_difference')} | "
                 f"[{entry.get('ci_low')}, {entry.get('ci_high')}] | "
                 f"{entry.get('paired_permutation_p_value')} | "
                 f"{entry.get('holm_adjusted_p_value', '')} |"
@@ -275,6 +329,8 @@ def main() -> None:
     parser.add_argument("--out-dir", default="outputs/analysis")
     parser.add_argument("--n-boot", type=int, default=2000)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--perturbation-type", default="gaussian_blur")
+    parser.add_argument("--severity", default="level_3")
     parser.add_argument("--allow-synthetic", action="store_true")
     args = parser.parse_args()
 
@@ -289,8 +345,11 @@ def main() -> None:
         )
 
     scored = score_rows(rows, items)
-    metrics = grouped_condition_metrics(scored, args.n_boot, args.seed)
-    comparisons = paired_models(scored, args.n_boot, args.seed)
+    condition_rows = condition_table_rows(
+        scored, args.perturbation_type, args.severity
+    )
+    metrics = grouped_condition_metrics(condition_rows, args.n_boot, args.seed)
+    comparisons = paired_models(condition_rows, args.n_boot, args.seed)
     degradation = degradation_rows(scored, args.n_boot, args.seed)
 
     out_dir = Path(args.out_dir)
