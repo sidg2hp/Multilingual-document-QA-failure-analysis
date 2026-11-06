@@ -1,6 +1,5 @@
 """Offline tests for the verified dataset adapters, QA generator, and manifest."""
 
-import json
 from pathlib import Path
 
 import pytest
