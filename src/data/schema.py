@@ -106,7 +106,10 @@ class PredictionRecord:
     abstained: bool = False
     raw_output: Optional[str] = None
     prompt_id: Optional[str] = None
+    prompt_hash: Optional[str] = None
     model_revision: Optional[str] = None
+    dataset_revision: Optional[str] = None
+    image_sha256: Optional[str] = None
     input_tokens: Optional[int] = None
     output_tokens: Optional[int] = None
     parsed: bool = True

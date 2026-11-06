@@ -180,6 +180,51 @@ def apply_perturbation(
     raise ValueError(f"Unhandled perturbation_type: {perturbation_type}")
 
 
+def crop_placebo_region(
+    image: Image.Image,
+    bbox: BoundingBox,
+    padding_ratio: float = 0.08,
+    normalized_coords: bool = False,
+    seed: int = 42,
+    max_attempts: int = 32,
+) -> Image.Image:
+    """C2b: a same-size crop that does **not** contain the gold answer region.
+
+    This is the negative control for C2. Comparing C2 against this crop separates
+    "the gold region helps" from "removing page clutter helps".
+    """
+    w, h = image.size
+    if normalized_coords:
+        x0, y0, x1, y1 = bbox.x0 * w, bbox.y0 * h, bbox.x1 * w, bbox.y1 * h
+    else:
+        x0, y0, x1, y1 = bbox.x0, bbox.y0, bbox.x1, bbox.y1
+
+    box_w = max(1.0, x1 - x0) * (1.0 + 2 * padding_ratio)
+    box_h = max(1.0, y1 - y0) * (1.0 + 2 * padding_ratio)
+    box_w = min(box_w, w)
+    box_h = min(box_h, h)
+    rng = np.random.default_rng(seed)
+
+    def overlaps(cx0: float, cy0: float) -> bool:
+        cx1, cy1 = cx0 + box_w, cy0 + box_h
+        return not (cx1 <= x0 or cx0 >= x1 or cy1 <= y0 or cy0 >= y1)
+
+    for _ in range(max_attempts):
+        cx0 = float(rng.uniform(0, max(0.0, w - box_w)))
+        cy0 = float(rng.uniform(0, max(0.0, h - box_h)))
+        if not overlaps(cx0, cy0):
+            return image.convert("RGB").crop(
+                (int(cx0), int(cy0), int(cx0 + box_w), int(cy0 + box_h))
+            )
+
+    # Deterministic fallback: slide the crop away from the answer horizontally.
+    cx0 = 0.0 if x0 > w / 2 else max(0.0, w - box_w)
+    cy0 = max(0.0, min(h - box_h, y0 - box_h))
+    return image.convert("RGB").crop(
+        (int(cx0), int(cy0), int(cx0 + box_w), int(cy0 + box_h))
+    )
+
+
 def crop_oracle_layout_region(
     image: Image.Image,
     bbox: BoundingBox,
