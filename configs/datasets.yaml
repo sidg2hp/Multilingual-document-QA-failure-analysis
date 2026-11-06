@@ -1,0 +1,86 @@
+# Verified dataset registry (access date 2026-11-06).
+# `status` is one of: verified, unavailable, local_export_required.
+# `supports_text_oracle` and `supports_layout_oracle` gate which counterfactual
+# conditions are legal for a dataset. A loader must refuse an unsupported
+# condition rather than substituting the gold answer.
+
+schema_version: "1.0"
+
+datasets:
+  indic_vision_bench_ocr:
+    repo: "krutrim-ai-labs/IndicVisionBench"
+    revision: "45269760b15938c6a345f74373f56c7a5ab7ecc8"
+    config: "ocr"
+    split: "test"
+    num_rows: 876
+    license: "See IndicVisionBench LICENSE.md"
+    status: "verified"
+    is_document_qa: false
+    supports_text_oracle: true
+    supports_layout_oracle: false
+    notes: >
+      Real Indic document pages with gold transcripts. No QA pairs and no
+      bounding boxes. Questions must be generated with
+      src/data/qa_generation.py; layout conditions are not available.
+
+  indic_vision_bench_vqa_indic:
+    repo: "krutrim-ai-labs/IndicVisionBench"
+    revision: "45269760b15938c6a345f74373f56c7a5ab7ecc8"
+    config: "vqa_indic"
+    split: "test"
+    num_rows: 1007
+    license: "See IndicVisionBench LICENSE.md"
+    status: "verified"
+    is_document_qa: false
+    supports_text_oracle: false
+    supports_layout_oracle: false
+    notes: >
+      Cultural VQA over natural images (festivals, food, monuments). This is a
+      multilingual visual-reasoning control, NOT document QA. It has no page
+      transcript, so C3 must be refused.
+
+  funsd:
+    repo: "nielsr/funsd"
+    revision: "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5"
+    config: null
+    split: "test"
+    num_rows: 50
+    license: "FUNSD research terms; cite Jaume et al., ICDARW 2019"
+    status: "verified"
+    is_document_qa: false
+    supports_text_oracle: true
+    supports_layout_oracle: true
+    notes: >
+      English/Latin layout control. Question/answer pairs are derived from the
+      BIO entity tags with a documented spatial heuristic (the released HF
+      version has no `linking` column).
+
+  patram_bench:
+    repo: "bharatgenai/Patram-Bench"
+    revision: "unreleased"
+    config: null
+    split: "test"
+    num_rows: null
+    license: "Contact authors"
+    status: "unavailable"
+    is_document_qa: true
+    supports_text_oracle: true
+    supports_layout_oracle: true
+    notes: >
+      ICDAR 2026 paper. The Hugging Face datasets-server returns 401 and the HF
+      dataset search returns no result as of 2026-11-06. Do not cite a run.
+      Obtain a release and use load_patram_bench_local(path).
+
+question_generation:
+  version: "2026-11-06.1"
+  language: "en"          # English questions over multilingual documents
+  max_items_per_page: 1
+  include_unanswerable: false
+  note: >
+    Derived probe set, not a natural benchmark. Report generation templates,
+    template IDs, and human verification of a sample.
+
+manifest:
+  schema_version: "1.0"
+  require_unique_page_ids: true
+  cluster_key: "page_id"

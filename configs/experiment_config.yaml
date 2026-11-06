@@ -9,20 +9,29 @@ project:
     clear_cuda_cache_every_n: 5
 
 datasets:
+  # Verified 2026-11-06: this Hugging Face ID is NOT accessible. The paper is
+  # ICDAR 2026; obtain a local release from the authors and set local_path.
+  # See docs/data_provenance.md. Do not run experiments that assume this repo.
   patram_bench:
     hf_repo: "bharatgenai/Patram-Bench"
+    status: "unavailable_public_release"
+    local_path: null
     languages: ["hi", "bn", "ta", "te", "mr", "gu", "kn", "ml", "pa", "or", "en"]
     include_code_mixed: true
     max_samples_per_language: 50
-    streaming: true
+    streaming: false
   indic_vision_bench:
     hf_repo: "krutrim-ai-labs/IndicVisionBench"
-    configs: ["ocr", "vqa_indic", "vqa_en"]
+    revision: "45269760b15938c6a345f74373f56c7a5ab7ecc8"
+    # `ocr` has transcripts (no QA); `vqa_indic` is cultural VQA, not DocQA.
+    ocr_config: "ocr"
+    vqa_config: "vqa_indic"
     languages: ["Hindi", "Bengali", "Tamil", "Telugu", "Marathi", "Gujarati"]
     max_samples_per_language: 50
     streaming: true
   funsd:
     hf_repo: "nielsr/funsd"
+    revision: "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5"
     split: "test"
     max_samples: 100
 
@@ -97,7 +106,8 @@ models:
       max_new_tokens: 128
       temperature: 0.0
     secondary_vlm:
-      model_id: "HuggingFaceTB/SmolVLM-Instruct"
+      model_id: "HuggingFaceTB/SmolVLM2-2.2B-Instruct"
+      revision: "482adb537c021c86670beed01cd58990d01e72e4"
       quantization_modes: ["nf4", "fp16"]
       max_new_tokens: 128
       temperature: 0.0
