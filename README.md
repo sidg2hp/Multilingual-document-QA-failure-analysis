@@ -1,4 +1,4 @@
-# Where Does Document Understanding Break?
+﻿# Where Does Document Understanding Break?
 
 **A counterfactual error-propagation harness for OCR-based and OCR-free document QA on multilingual documents.**
 
@@ -25,7 +25,7 @@ how often:
 
 It implements an **architecture-specific counterfactual ladder** for both
 cascaded OCR+LLM pipelines and OCR-free VLMs, with explicit negative controls, a
-transcript-scored readÃ¢â‚¬â€œreason probe, matra-aware metrics, clustered statistics,
+transcript-scored readÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“reason probe, matra-aware metrics, clustered statistics,
 a leakage-guarded router, and a provenance-aware prediction cache.
 
 ## What this is not
@@ -40,9 +40,9 @@ a leakage-guarded router, and a provenance-aware prediction cache.
 
 | Dataset | What it actually contains | Status | Use here |
 | :--- | :--- | :--- | :--- |
-| **IndicVisionBench `ocr`** | 876 Indic document pages with gold transcripts, 10 languages; **no QA, no boxes** | Public, revision `45269760Ã¢â‚¬Â¦` | Transcript-grounded generated QA; CER/MER and readÃ¢â‚¬â€œreason conditions |
+| **IndicVisionBench `ocr`** | 876 Indic document pages with gold transcripts, 10 languages; **no QA, no boxes** | Public, revision `45269760ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦` | Transcript-grounded generated QA; CER/MER and readÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“reason conditions |
 | **IndicVisionBench `vqa_indic`** | 1,007 cultural VQA rows over **natural images**, no transcript | Public, same revision | Multilingual visual-reasoning control only; **not DocQA** |
-| **FUNSD** | 50 test forms, word boxes, BIO entity tags | Public, revision `7e7eeeeeÃ¢â‚¬Â¦` | English/Latin layout control; field-value QA derived from entities |
+| **FUNSD** | 50 test forms, word boxes, BIO entity tags | Public, revision `7e7eeeeeÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦` | English/Latin layout control; field-value QA derived from entities |
 | **Patram-Bench** | ICDAR 2026 paper; no public HF dataset at the configured ID (HTTP 401 on 2026-11-06) | **Blocked** | Not used until the authors release it |
 
 The audit is reproducible:
@@ -61,8 +61,8 @@ Details, licenses, and model revisions are in
 | Condition | Input | Identifies |
 | :--- | :--- | :--- |
 | `C0` | clean image + question | baseline |
-| `C_ÃŽÂ´` | perturbed image + question | degradation sensitivity |
-| `C1` | transcribe, then answer from own transcript (transcript scored) | readÃ¢â‚¬â€œreason dissociation |
+| `C_ÃƒÅ½Ã‚Â´` | perturbed image + question | degradation sensitivity |
+| `C1` | transcribe, then answer from own transcript (transcript scored) | readÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“reason dissociation |
 | `C2` | gold answer-region crop | localization + clutter removal |
 | `C2b` | placebo crop of the same size | crop/context control |
 | `C3` | gold transcript | recognition oracle |
@@ -71,7 +71,7 @@ Details, licenses, and model revisions are in
 Identified decomposition:
 
 ```text
-E_total = (C0 Ã¢Ë†â€™ CÃŽÂ´) + (C2 Ã¢Ë†â€™ C0) + (C3 Ã¢Ë†â€™ C2) + (1 Ã¢Ë†â€™ C3)
+E_total = (C0 ÃƒÂ¢Ã‹â€ Ã¢â‚¬â„¢ CÃƒÅ½Ã‚Â´) + (C2 ÃƒÂ¢Ã‹â€ Ã¢â‚¬â„¢ C0) + (C3 ÃƒÂ¢Ã‹â€ Ã¢â‚¬â„¢ C2) + (1 ÃƒÂ¢Ã‹â€ Ã¢â‚¬â„¢ C3)
 ```
 
 ### Cascaded OCR + text LLM
@@ -80,11 +80,11 @@ E_total = (C0 Ã¢Ë†â€™ CÃŽÂ´) + (C2 Ã¢Ë†â€™ C0) + (C3 Ã�
 text**, not an image crop. The identified decomposition is:
 
 ```text
-E_total = (C0 Ã¢Ë†â€™ CÃŽÂ´) + (C3 Ã¢Ë†â€™ C0) + (1 Ã¢Ë†â€™ C3)
+E_total = (C0 ÃƒÂ¢Ã‹â€ Ã¢â‚¬â„¢ CÃƒÅ½Ã‚Â´) + (C3 ÃƒÂ¢Ã‹â€ Ã¢â‚¬â„¢ C0) + (1 ÃƒÂ¢Ã‹â€ Ã¢â‚¬â„¢ C3)
 ```
 
 The middle term is **joint extraction** (recognition + reading order); it is not
-split. `C2_coord Ã¢Ë†â€™ C3_flat` is reported separately as a layout-representation
+split. `C2_coord ÃƒÂ¢Ã‹â€ Ã¢â‚¬â„¢ C3_flat` is reported separately as a layout-representation
 diagnostic. Missing conditions are `None`, never zero and never the gold answer.
 
 ## What is implemented
@@ -94,7 +94,7 @@ diagnostic. Missing conditions are `None`, never zero and never the gold answer.
 - CER, WER, base-character CER, Matra Error Rate (Indic-only marks), ANLS, EM,
   field F1, failure modes, and HAR with counts/saturation.
 - Document-clustered bootstrap, paired permutation, McNemar, Wilcoxon, Cohen's d,
-  HolmÃ¢â‚¬â€œBonferroni, Wilson intervals, ECE, riskÃ¢â‚¬â€œcoverage/AURC, and MDE.
+  HolmÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Bonferroni, Wilson intervals, ECE, riskÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“coverage/AURC, and MDE.
 - Versioned prompts and answer parsing; cache keys include prompt hash, model
   revision, dataset revision, and image hash.
 - Capability-checked runners that raise on unsupported conditions instead of
@@ -149,7 +149,7 @@ src/
   models/                  # OCR cascade, VLM runner, prompts, parsing
   routing/                 # text-free features, cost-aware router
   evaluation/              # metrics, attribution, statistics
-tests/                     # 55 offline tests
+tests/                     # 58 offline tests
 ```
 
 ## Local pilot on the RTX 3050 (not paper evidence)
@@ -181,11 +181,11 @@ results and their limitations are in
 ## What still must happen before a paper
 
 1. Obtain Patram-Bench or finalize the public-data scope; freeze the manifest.
-2. Run real inference on Ã¢â€°Â¥600 items, both pipelines, all supported conditions,
+2. Run real inference on ÃƒÂ¢Ã¢â‚¬Â°Ã‚Â¥600 items, both pipelines, all supported conditions,
    with calibrated perturbations and a 7B FP16 scale check.
 3. Add human validation of 100 failure cases and report agreement.
 4. Replace every placeholder with numbers generated by `scripts/analyze_results.py`.
-5. Write around **one** mechanistic claim (readÃ¢â‚¬â€œreason dissociation, matra
+5. Write around **one** mechanistic claim (readÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“reason dissociation, matra
    vulnerability, or routing), not around the framework.
 
 The honest assessment is in [`docs/peer_review.md`](docs/peer_review.md):

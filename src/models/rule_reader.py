@@ -75,8 +75,8 @@ class RuleBasedFieldReader:
             return "UNANSWERABLE"
         text = " ".join((context or "").split())
         tokens = text.split()
-        lower_tokens = [token.lower() for token in tokens]
-        label_tokens = label.lower().split()
+        lower_tokens = [_clean(token).lower() for token in tokens]
+        label_tokens = [_clean(token).lower() for token in label.split()]
         numeric = self._expected_numeric(label)
 
         best_score = -1e9
@@ -85,8 +85,20 @@ class RuleBasedFieldReader:
         while True:
             window = lower_tokens[start : start + len(label_tokens)]
             if window == label_tokens:
-                before = tokens[max(0, start - 5) : start]
-                after = tokens[start + len(label_tokens) : start + len(label_tokens) + 5]
+                before_tokens = tokens[max(0, start - 5) : start]
+                before: List[str] = []
+                for token in reversed(before_tokens):
+                    if token.endswith(":") and before:
+                        break
+                    before.append(token)
+                before.reverse()
+                after = []
+                for token in tokens[
+                    start + len(label_tokens) : start + len(label_tokens) + 6
+                ]:
+                    if token.endswith(":") and after:
+                        break
+                    after.append(token)
                 # Prefer the direction with the stronger value-like sequence.
                 after_score = self._score_candidate(after, numeric)
                 before_score = self._score_candidate(before, numeric)
