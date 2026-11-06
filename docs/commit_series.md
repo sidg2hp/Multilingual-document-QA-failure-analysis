@@ -56,7 +56,17 @@ of the series.
 | `chore(repro): add packaging, CI, license, and a runnable PARAM Ganga profile` | Package, CI, MIT license, HPC template. |
 | `docs(paper): align the README, review response, and paper plan with the actual evidence` | README, response-to-review, paper outline. |
 
-## Phase 6 — Laptop pilot
+## Phase 6 — CI hardening
+
+| Commit | Purpose |
+| :--- | :--- |
+| `ci: make scripts importable in the installed test environment` | Add `scripts/__init__.py`, package `scripts*`, and set pytest `pythonpath` so Actions can import the CLI modules. |
+| `fix(stats): avoid eager np.trapz lookup on NumPy 2` | Resolve `np.trapezoid` first; `getattr`'s default argument evaluated the removed `np.trapz` on NumPy 2. |
+
+Both Python 3.10 and 3.11 jobs now pass, including the 58-test suite and the
+smoke-pipeline gating check.
+
+## Phase 7 — Laptop pilot
 
 | Commit | Purpose |
 | :--- | :--- |
