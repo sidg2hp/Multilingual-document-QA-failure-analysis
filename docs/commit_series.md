@@ -4,9 +4,10 @@ This repository was changed in small, reviewable steps. The series below is the
 actual local history; the table records the intent of each commit so the
 progression is auditable even before the branch is pushed.
 
-**Current state:** 26 commits on local `main` after the original scaffolding
-commit `8f18b0c`. The GitHub remote was not updated because this session has no
-GitHub credentials; see the final section.
+**Current state:** the phase series below is published on both local `main` and
+`origin/main`, after the original scaffolding commit `8f18b0c`. The exact count
+is whatever `git rev-list --count 8f18b0c..HEAD` reports; this document is part
+of the series.
 
 ## Phase 0 — Evidence and review
 
