@@ -9,7 +9,7 @@ recognition jointly and is therefore not used here. Unsupported conditions raise
 
 import gc
 import time
-from typing import Dict, Iterable, List, Optional
+from typing import Dict, List, Optional
 
 from PIL import Image
 
@@ -282,6 +282,7 @@ class CascadedOCRPipeline:
             _, context = format_layout_aware_oracle_text(
                 sample.oracle_text, sample.layout_blocks
             )
+            context = truncate_context(context, self.max_context_chars)
             extracted_text = context
         elif condition == CounterfactualCondition.C1_SELF_OCR_PROBE:
             raise ConditionNotSupported(

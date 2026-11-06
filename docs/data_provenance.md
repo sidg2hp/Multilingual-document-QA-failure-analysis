@@ -105,9 +105,11 @@ Patram-Bench access fails. Verify each schema and license before use.
 | Model ID | Status | Revision | License | Loading notes |
 | :--- | :--- | :--- | :--- | :--- |
 | `Qwen/Qwen2.5-VL-3B-Instruct` | Public, verified | `66285546d2b821cf421d4f5eb2576359d3770cd3` | Qwen research license | `Qwen2_5_VLForConditionalGeneration`; use `process_vision_info`; dynamic pixels. |
-| `Qwen/Qwen2.5-3B-Instruct` | Public (assumed; verify revision at run time) | pin at run time | Qwen research license | Use `apply_chat_template`; quantize with bitsandbytes. |
-| `bharatgenai/patram-7b-instruct` | **Gated** (auto-approval), custom code | `6a31983daa739b18ba029c767c65d3f68d9be06c` | Apache-2.0 | `trust_remote_code=True`, custom `Patram1_1ForCausalLM`, non-ChatML `User:/Assistant:` template. The current `AutoModelForImageTextToText` path will not work. |
-| `HuggingFaceTB/SmolVLM-Instruct` | **Stale ID**, verify | — | — | Use an exact SmolVLM/SmolVLM2 checkpoint and test processor behavior; do not assume Qwen-style `images=[image]`. |
+| `Qwen/Qwen2.5-3B-Instruct` | Public, verified | `aa8e72537993ba99e69dfaafa59ed015b17504d1` | Qwen research license | Use `apply_chat_template`; quantize with bitsandbytes. |
+| `Qwen/Qwen2.5-7B-Instruct` | Public, verified | `a09a35458c702b33eeacc393d103063234e8bc28` | Apache-2.0 | FP16 on 2×V100; same prompt path. |
+| `Qwen/Qwen2.5-VL-7B-Instruct` | Public, verified | `cc594898137f460bfe9f0759e9844b3ce807cfb5` | Apache-2.0 | FP16 on 2×V100. |
+| `bharatgenai/patram-7b-instruct` | **Gated** (auto-approval), custom code | `6a31983daa739b18ba029c767c65d3f68d9be06c` | Apache-2.0 | `trust_remote_code=True`, custom `Patram1_1ForCausalLM`, non-ChatML `User:/Assistant:` template. The runner selects `AutoModelForCausalLM` for this model, but the adapter is untested. |
+| `HuggingFaceTB/SmolVLM2-2.2B-Instruct` | Public, verified | `482adb537c021c86670beed01cd58990d01e72e4` | Apache-2.0 | Processor expects list-valued content and an `<image>` token; test before reporting. |
 | `OpenGVLab/InternVL2_5-8B` | Public, but custom preprocessing | pin at run time | verify | Requires InternVL-specific image tiling/`trust_remote_code`; not supported by the current runner. |
 
 **Rule:** every model reported in the paper must have an exact revision, a

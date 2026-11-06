@@ -12,6 +12,7 @@ from src.models.prompts import build_prompt
 from src.models.text_ops import shuffle_transcript
 from src.models.vlm_runner import OCRFreeVLMRunner
 from src.utils.prediction_cache import PredictionCache
+from scripts.run_experiment import cache_image_hash
 
 
 def test_prompt_variants_have_distinct_ids_and_stable_hashes() -> None:
@@ -78,6 +79,23 @@ def test_cache_key_distinguishes_prompt_and_revision(tmp_path: Path) -> None:
         prompt_hash="prompt-b", model_revision="rev-1",
         dataset_revision="data-1", image_sha256="img-1",
     ) is None
+
+
+def test_cache_image_hash_matches_the_actual_input() -> None:
+    sample = build_pipeline_smoke_samples()[0]
+    full = cache_image_hash(
+        CounterfactualCondition.C0_CLEAN, sample, sample.image_obj
+    )
+    text_only = cache_image_hash(
+        CounterfactualCondition.C3_ORACLE_TEXT, sample, sample.image_obj
+    )
+    crop = cache_image_hash(
+        CounterfactualCondition.C2_ORACLE_LAYOUT, sample, sample.image_obj
+    )
+    assert full is not None
+    assert text_only is None
+    assert crop is not None
+    assert crop != full
 
 
 def test_cascade_refuses_undefined_conditions() -> None:

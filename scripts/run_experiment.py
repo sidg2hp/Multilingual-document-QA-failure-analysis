@@ -208,6 +208,7 @@ def prompt_hash_for(
             _, context = format_layout_aware_oracle_text(
                 sample.oracle_text, sample.layout_blocks
             )
+            context = truncate_context(context)
             return build_prompt(condition, sample.question, context=context).content_hash()
         return build_prompt(condition, sample.question).content_hash()
     if condition in (
