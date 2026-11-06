@@ -8,7 +8,7 @@ from src.data.datasets import build_pipeline_smoke_samples
 from src.data.schema import CounterfactualCondition, DocumentQASample, PredictionRecord, ScriptType
 from src.models.ocr_pipeline import CascadedOCRPipeline, ConditionNotSupported
 from src.models.parsing import parse_answer, parse_transcript
-from src.models.prompts import build_prompt
+from src.models.prompts import build_ocr_context_prompt, build_prompt
 from src.models.text_ops import shuffle_transcript
 from src.models.vlm_runner import OCRFreeVLMRunner
 from src.utils.prediction_cache import PredictionCache
@@ -27,6 +27,17 @@ def test_prompt_variants_have_distinct_ids_and_stable_hashes() -> None:
     assert changed.content_hash() != build_prompt(
         CounterfactualCondition.C3_ORACLE_TEXT, q, context="x"
     ).content_hash()
+
+
+def test_cascade_ocr_prompt_injects_the_extracted_text() -> None:
+    spec = build_ocr_context_prompt(
+        CounterfactualCondition.C0_CLEAN,
+        "What is the total?",
+        "Invoice Total: Rs. 500",
+    )
+    assert "Rs. 500" in spec.user
+    assert "image attached" not in spec.user
+    assert spec.prompt_id.endswith(":ocr_text@2026-11-06.1")
 
 
 def test_parse_answer_handles_common_wrappers() -> None:

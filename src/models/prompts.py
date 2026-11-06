@@ -119,6 +119,23 @@ def build_prompt(
     raise ValueError(f"Unsupported condition: {condition}")
 
 
+def build_ocr_context_prompt(
+    condition: CounterfactualCondition, question: str, context: str
+) -> PromptSpec:
+    """Prompt for a cascaded OCR reader, where the input is extracted text.
+
+    The OCR-free conditions say "document image attached"; a cascade must not use
+    that prompt, because it has no image input at the text-reader stage. Using the
+    image prompt was a silent confound that made the cascade's C0 ignore OCR text.
+    """
+    return _spec(
+        condition,
+        "Document text extracted by OCR:\n"
+        f"{context}\n\nQuestion: {question}\n\n{ANSWER_RULE}",
+        variant=":ocr_text",
+    )
+
+
 def build_self_ocr_answer_prompt(question: str, transcript: str) -> PromptSpec:
     """Second stage of C1: answer from the model's own transcript, text only."""
     return PromptSpec(

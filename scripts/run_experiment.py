@@ -45,6 +45,7 @@ from src.data.manifest import (
 from src.data.local_cache import load_cached_samples
 from src.data.qa_generation import generate_qa_items
 from src.data.schema import CounterfactualCondition, DocumentQASample, PredictionRecord
+from src.data.synthetic_forms import build_synthetic_form_samples
 from src.evaluation.attribution import (
     SampleAttribution,
     attribute_sample_errors,
@@ -63,10 +64,11 @@ from src.evaluation.statistics import (
     wilcoxon_signed_rank,
 )
 from src.models.ocr_pipeline import CascadedOCRPipeline
-from src.models.ollama_runner import OllamaVLMRunner
+from src.models.ollama_runner import OllamaCascadedRunner, OllamaVLMRunner
 from src.models.prompts import build_prompt
 from src.models.text_ops import shuffle_transcript, truncate_context
 from src.models.vlm_runner import OCRFreeVLMRunner
+from src.models.windows_ocr import WindowsRuleCascade
 from src.perturbations.degrade import (
     apply_perturbation,
     crop_oracle_layout_region,
@@ -114,6 +116,7 @@ SINGLE_SETTINGS = (
     "patram_local",
     "funsd_local",
     "indic_ocr_local",
+    "synthetic",
 )
 
 
@@ -192,6 +195,23 @@ def build_runner(
     backend: str = "transformers",
 ):
     hardware = cfg.get("project", {}).get("hardware_profile", {})
+    if backend == "windows_rule":
+        if kind != "ocr":
+            raise RuntimeError("windows_rule provides the OCR cascade only")
+        return WindowsRuleCascade()
+    if backend == "windows_ollama":
+        if kind != "ocr":
+            raise RuntimeError(
+                "windows_ollama provides the cascaded OCR path only; use "
+                "--models ocr, or the ollama backend for the VLM."
+            )
+        reader_cfg = cfg["models"]["text_qa_reader"]
+        return OllamaCascadedRunner(
+            reader_model_id=reader_cfg.get("ollama_model") or reader_cfg["model_id"],
+            host=str(cfg.get("project", {}).get("ollama_host", "http://127.0.0.1:11434")),
+            max_new_tokens=int(reader_cfg.get("max_new_tokens", 96)),
+            dry_run=dry_run,
+        )
     if backend == "ollama":
         if kind == "ocr":
             raise RuntimeError(
@@ -247,6 +267,12 @@ def prompt_hash_for(
     intentionally not cached by a pre-computed hash.
     """
     if condition == CounterfactualCondition.C1_SELF_OCR_PROBE:
+        return None
+    if architecture == "cascaded_ocr" and condition in (
+        CounterfactualCondition.C0_CLEAN,
+        CounterfactualCondition.C_DELTA_DEGRADED,
+    ):
+        # The prompt includes the OCR text, which does not exist before OCR.
         return None
     if condition == CounterfactualCondition.C2_ORACLE_LAYOUT:
         if architecture == "cascaded_ocr":
@@ -357,6 +383,10 @@ def evaluate_with_cache(
 def load_samples(mode: str, cfg: dict, max_samples: int) -> List[DocumentQASample]:
     if mode == "smoke":
         return build_pipeline_smoke_samples()[:max_samples]
+    if mode == "synthetic":
+        return build_synthetic_form_samples(num_pages=max(1, max_samples // 4))[
+            :max_samples
+        ]
     if mode == "funsd":
         return list(stream_funsd_samples(max_samples=max_samples))
     if mode in ("funsd_local", "indic_ocr_local"):
@@ -860,7 +890,9 @@ def main() -> None:
         "--models", choices=["both", "ocr", "vlm"], default="both"
     )
     parser.add_argument(
-        "--backend", choices=["transformers", "ollama"], default=None,
+        "--backend",
+        choices=["transformers", "ollama", "windows_ollama", "windows_rule"],
+        default=None,
         help="Override project.backend.",
     )
     parser.add_argument("--output-dir", default=None)
@@ -1007,6 +1039,7 @@ def main() -> None:
         "patram_local",
         "funsd_local",
         "indic_ocr_local",
+        "synthetic",
     }
     if args.mode == "indic_vqa":
         is_document_qa = False
@@ -1048,7 +1081,14 @@ def main() -> None:
                 else "",
                 "Local Ollama Q4 pilot: model tags are mutable and this is not "
                 "the pinned HF paper path."
-                if backend == "ollama"
+                if backend in ("ollama", "windows_ollama")
+                else "",
+                "Windows OCR exposes only English recognizers here; this is a "
+                "Latin-script control, not an Indic OCR baseline."
+                if backend in ("windows_ollama", "windows_rule")
+                else "",
+                "Synthetic rendered forms: pipeline validation only, never a paper result."
+                if args.mode == "synthetic"
                 else "",
             ]
             if warning

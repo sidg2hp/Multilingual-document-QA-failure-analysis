@@ -26,6 +26,7 @@ from src.models.ocr_pipeline import ConditionNotSupported
 from src.models.parsing import PARSER_VERSION, parse_answer, parse_transcript
 from src.models.prompts import (
     PromptSpec,
+    build_ocr_context_prompt,
     build_prompt,
     build_self_ocr_answer_prompt,
 )
@@ -37,6 +38,152 @@ def _image_b64(image: Image.Image) -> str:
     buffer = io.BytesIO()
     image.convert("RGB").save(buffer, format="JPEG", quality=92)
     return base64.b64encode(buffer.getvalue()).decode("ascii")
+
+
+class OllamaCascadedRunner:
+    """Cascaded Windows-OCR -> Ollama text-LLM pipeline for the local pilot.
+
+    The OCR engine is Windows.Media.Ocr (English only on this machine), not
+    Tesseract/Paddle. This is a hardware-constrained baseline; record the engine
+    and recognizer language in the report.
+    """
+
+    architecture = "cascaded_ocr"
+
+    def __init__(
+        self,
+        reader_model_id: str = "qwen2.5:1.5b",
+        host: str = "http://127.0.0.1:11434",
+        max_new_tokens: int = 96,
+        max_context_chars: int = 8000,
+        dry_run: bool = False,
+    ) -> None:
+        from src.models.windows_ocr import WindowsOCREngine
+
+        self.reader_model_id = reader_model_id
+        self.model_name = f"windows_ocr+{reader_model_id}"
+        self.ocr_engine = WindowsOCREngine()
+        self._llm = OllamaVLMRunner(
+            model_id=reader_model_id,
+            host=host,
+            max_new_tokens=max_new_tokens,
+            max_context_chars=max_context_chars,
+            dry_run=dry_run,
+        )
+        self.model_revision = self._llm.model_revision
+        self.quantization = self._llm.quantization
+        self.max_context_chars = max_context_chars
+        self.dry_run = dry_run
+
+    def supported_conditions(self, sample: DocumentQASample) -> List[CounterfactualCondition]:
+        conditions: List[CounterfactualCondition] = []
+        if sample.image_obj is not None:
+            conditions.extend(
+                [
+                    CounterfactualCondition.C0_CLEAN,
+                    CounterfactualCondition.C_DELTA_DEGRADED,
+                ]
+            )
+        if sample.supports_text_oracle and sample.oracle_text:
+            conditions.append(CounterfactualCondition.C3_ORACLE_TEXT)
+            if shuffle_transcript(sample.oracle_text) != sample.oracle_text:
+                conditions.append(CounterfactualCondition.C3B_SHUFFLED_TEXT)
+        if sample.supports_layout_oracle and sample.oracle_text and sample.layout_blocks:
+            conditions.append(CounterfactualCondition.C2_ORACLE_LAYOUT)
+        return conditions
+
+    def _require_supported(
+        self, condition: CounterfactualCondition, sample: DocumentQASample
+    ) -> None:
+        if condition not in self.supported_conditions(sample):
+            raise ConditionNotSupported(
+                f"{condition.value} is not supported for sample {sample.sample_id}"
+            )
+
+    def unload(self) -> None:
+        self._llm.unload()
+
+    def evaluate_sample(
+        self,
+        sample: DocumentQASample,
+        condition: CounterfactualCondition,
+        image_override: Optional[Image.Image] = None,
+        perturbation_type: Optional[str] = None,
+        perturbation_severity: Optional[str] = None,
+        seed: int = 42,
+    ) -> PredictionRecord:
+        from src.evaluation.attribution import format_layout_aware_oracle_text
+
+        t0 = time.perf_counter()
+        self._require_supported(condition, sample)
+        image = image_override if image_override is not None else sample.image_obj
+        context = ""
+        extracted: Optional[str] = None
+
+        if condition in (
+            CounterfactualCondition.C0_CLEAN,
+            CounterfactualCondition.C_DELTA_DEGRADED,
+        ):
+            if image is None:
+                raise ConditionNotSupported("Image condition without an image")
+            extracted, ocr_meta = self.ocr_engine.extract_text(image, sample.language)
+            context = truncate_context(extracted, self.max_context_chars)
+        elif condition == CounterfactualCondition.C3_ORACLE_TEXT:
+            context = truncate_context(sample.oracle_text or "", self.max_context_chars)
+            extracted = context
+            ocr_meta = {"engine": "oracle"}
+        elif condition == CounterfactualCondition.C3B_SHUFFLED_TEXT:
+            context = truncate_context(
+                shuffle_transcript(sample.oracle_text or "", seed=seed),
+                self.max_context_chars,
+            )
+            extracted = context
+            ocr_meta = {"engine": "oracle_shuffled"}
+        elif condition == CounterfactualCondition.C2_ORACLE_LAYOUT:
+            _, context = format_layout_aware_oracle_text(
+                sample.oracle_text, sample.layout_blocks
+            )
+            context = truncate_context(context, self.max_context_chars)
+            extracted = context
+            ocr_meta = {"engine": "oracle_layout"}
+        else:
+            raise ConditionNotSupported(f"Unhandled condition: {condition}")
+
+        if condition in (
+            CounterfactualCondition.C0_CLEAN,
+            CounterfactualCondition.C_DELTA_DEGRADED,
+        ):
+            spec = build_ocr_context_prompt(condition, sample.question, context)
+        else:
+            spec = build_prompt(condition, sample.question, context=context)
+        raw, metrics = self._llm._chat(spec, None)
+        prediction = parse_answer(raw)
+        latency_ms = (time.perf_counter() - t0) * 1000.0
+        return PredictionRecord(
+            sample_id=sample.sample_id,
+            model_name=self.model_name,
+            quantization=str(self.quantization),
+            condition=condition,
+            perturbation_type=perturbation_type,
+            perturbation_severity=perturbation_severity,
+            predicted_answer=prediction,
+            extracted_ocr_text=extracted,
+            latency_ms=round(latency_ms, 2),
+            abstained=detect_abstention(prediction),
+            raw_output=raw,
+            prompt_id=spec.prompt_id,
+            prompt_hash=spec.content_hash(),
+            model_revision=self.model_revision,
+            dataset_revision=sample.dataset_revision,
+            image_sha256=sha256_image(image),
+            parsed=True,
+            raw_metadata={
+                "parser_version": PARSER_VERSION,
+                "backend": "ollama_cascade",
+                "ocr": ocr_meta,
+                "ollama": metrics,
+            },
+        )
 
 
 class OllamaVLMRunner:

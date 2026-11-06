@@ -18,7 +18,11 @@ from src.data.schema import CounterfactualCondition, DocumentQASample, Predictio
 from src.evaluation.attribution import format_layout_aware_oracle_text
 from src.evaluation.metrics import detect_abstention
 from src.models.parsing import PARSER_VERSION, parse_answer
-from src.models.prompts import PromptSpec, build_prompt
+from src.models.prompts import (
+    PromptSpec,
+    build_ocr_context_prompt,
+    build_prompt,
+)
 from src.models.text_ops import shuffle_transcript, truncate_context
 
 
@@ -218,7 +222,13 @@ class CascadedOCRPipeline:
 
         Returns ``(parsed_answer, raw_output, prompt_spec)``.
         """
-        spec = build_prompt(condition, question, context=context_text)
+        if condition in (
+            CounterfactualCondition.C0_CLEAN,
+            CounterfactualCondition.C_DELTA_DEGRADED,
+        ):
+            spec = build_ocr_context_prompt(condition, question, context_text)
+        else:
+            spec = build_prompt(condition, question, context=context_text)
         if self.dry_run:
             return "UNANSWERABLE", "[SMOKE]", spec
 
