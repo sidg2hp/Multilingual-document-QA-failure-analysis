@@ -106,6 +106,15 @@ Expected: `analysis.json`, `tables.md`, `condition_metrics.csv`, and
 `degradation_curves.csv`. Every number in the paper should come from this
 script.
 
+Figures (optional, requires `matplotlib`):
+
+```bash
+python scripts/plot_results.py \
+  --analysis outputs/analysis_funsd/analysis.json \
+  --report outputs/attribution_report_funsd.json \
+  --out-dir outputs/figures
+```
+
 ## 8. PARAM Ganga
 
 `slurm/run_param_ganga.sh` is a template. Before submitting:

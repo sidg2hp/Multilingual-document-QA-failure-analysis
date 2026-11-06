@@ -1,4 +1,4 @@
-.PHONY: test smoke sweep audit manifest analyze clean
+.PHONY: test smoke sweep audit manifest analyze figures clean
 
 test:
 	python -m pytest -q
@@ -17,6 +17,9 @@ manifest:
 
 analyze:
 	python scripts/analyze_results.py --predictions outputs/predictions_funsd.jsonl --manifest manifests/probe_set_funsd.json
+
+figures:
+	python scripts/plot_results.py --analysis outputs/analysis_funsd/analysis.json --out-dir outputs/figures
 
 clean:
 	python -c "import shutil; [shutil.rmtree(p, ignore_errors=True) for p in ('outputs/analysis', 'outputs/analysis_smoke')]"
