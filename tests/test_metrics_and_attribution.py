@@ -1,5 +1,6 @@
 """Unit tests for OCR/QA metrics, script-mixing index, perturbations, and error attribution."""
 
+import pytest
 from PIL import Image
 
 from src.data.datasets import compute_script_mixing_stats
@@ -13,10 +14,15 @@ from src.data.schema import (
 from src.evaluation.attribution import attribute_sample_errors, summarize_attributions
 from src.evaluation.metrics import (
     compute_anls,
+    compute_base_cer,
     compute_cer,
+    compute_character_error_breakdown,
     compute_field_f1,
     compute_matra_error_rate,
     compute_wer,
+    detect_abstention,
+    normalize_numeric_answer,
+    summarize_hallucination_abstention,
 )
 from src.perturbations.degrade import apply_perturbation, crop_oracle_layout_region
 
@@ -35,6 +41,28 @@ def test_indic_matra_error_rate() -> None:
     pred_missing_matras = "अवदन शल्क"
     assert compute_matra_error_rate(ref, ref) == 0.0
     assert compute_matra_error_rate(pred_missing_matras, ref) > 0.5
+
+    # Latin combining diacritics must not contaminate the Indic mark sequence.
+    assert compute_matra_error_rate("café", "cafe") == 0.0
+    breakdown = compute_character_error_breakdown(pred_missing_matras, ref)
+    assert breakdown["matra_error_rate"] == pytest.approx(
+        compute_matra_error_rate(pred_missing_matras, ref), abs=1e-4
+    )
+    assert compute_base_cer(ref, ref) == 0.0
+
+
+def test_answer_normalization_and_abstention() -> None:
+    assert normalize_numeric_answer("Rs. 12,450") == "12450"
+    assert normalize_numeric_answer("₹ 12,450") == "12450"
+    assert detect_abstention("UNANSWERABLE")
+    assert detect_abstention("यह जानकारी नहीं है")
+    assert detect_abstention("")
+    assert not detect_abstention("Rs. 12,450")
+
+    har = summarize_hallucination_abstention(3, 0)
+    assert har.ratio is None
+    assert har.saturated is True
+    assert har.num_hallucinated == 3
 
 
 def test_script_mixing_index() -> None:

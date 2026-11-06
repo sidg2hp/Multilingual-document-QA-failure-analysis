@@ -11,9 +11,15 @@ from src.evaluation.metrics import (
 from src.evaluation.statistics import (
     bootstrap_ci,
     cohens_d_paired,
+    expected_calibration_error,
     holm_bonferroni,
+    mcnemar_test,
+    minimum_detectable_effect_paired,
     paired_bootstrap_difference,
+    paired_permutation_test,
+    risk_coverage_curve,
     wilcoxon_signed_rank,
+    wilson_interval,
 )
 
 
@@ -53,9 +59,18 @@ def test_holm_bonferroni_preserves_order() -> None:
 def test_har_and_failure_modes() -> None:
     assert compute_hallucination_to_abstention_ratio(4, 2) == 2.0
     assert compute_hallucination_to_abstention_ratio(0, 0) is None
-    assert compute_hallucination_to_abstention_ratio(3, 0) == 3.0
+    # No abstentions means the ratio is undefined, not equal to the count.
+    assert compute_hallucination_to_abstention_ratio(3, 0) is None
 
     assert classify_answer_failure("500", ["500"]) == "correct"
+    assert (
+        classify_answer_failure("500", [], abstained=True, unanswerable=True)
+        == "correct"
+    )
+    assert (
+        classify_answer_failure("500", [], unanswerable=True)
+        == "confident_hallucination"
+    )
     assert classify_answer_failure("UNANSWERABLE", ["500"], abstained=True) == "abstained"
     assert classify_answer_failure("", ["500"]) == "abstained"
     assert classify_answer_failure("999", ["500"]) == "confident_hallucination"
@@ -105,3 +120,41 @@ def test_summary_reports_har_and_groupings() -> None:
     assert "by_script_type" in summary
     assert summary["by_script_type"]["monolingual_indic"]["num_samples"] == 3
     assert "by_language" in summary
+
+
+def test_clustered_bootstrap_reports_document_count() -> None:
+    values = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4]
+    clusters = ["doc_a", "doc_a", "doc_b", "doc_b", "doc_c", "doc_c"]
+    ci = bootstrap_ci(values, n_boot=500, seed=11, cluster_ids=clusters)
+    assert ci["n"] == 6
+    assert ci["n_clusters"] == 3
+    assert ci["ci_low"] <= ci["mean"] <= ci["ci_high"]
+
+
+def test_permutation_and_mcnemar_tests() -> None:
+    treatment = [0.9, 0.8, 0.85, 0.95, 0.7, 0.88, 0.6, 0.75]
+    baseline = [0.2, 0.3, 0.25, 0.1, 0.4, 0.35, 0.3, 0.2]
+    perm = paired_permutation_test(treatment, baseline, n_permutations=2000, seed=5)
+    assert perm["p_value"] < 0.05
+
+    # b01=10, b10=2 -> exact two-sided binomial p ~= 0.0386
+    a = [True] * 10 + [False] * 2
+    b = [False] * 10 + [True] * 2
+    result = mcnemar_test(a, b)
+    assert result["treatment_only_correct"] == 10
+    assert result["baseline_only_correct"] == 2
+    assert result["p_value"] < 0.05
+
+
+def test_calibration_risk_coverage_and_power() -> None:
+    ece = expected_calibration_error([0.9, 0.9, 0.9, 0.1], [True, True, False, False])
+    assert ece["n"] == 4
+    assert ece["ece"] is not None
+
+    curve = risk_coverage_curve([0.9, 0.8, 0.7, 0.6], [True, True, False, False])
+    assert curve["aurc"] is not None
+    assert 0.0 <= curve["aurc"] <= 1.0
+
+    interval = wilson_interval(8, 10)
+    assert interval["low"] < interval["p"] < interval["high"]
+    assert minimum_detectable_effect_paired(600) is not None

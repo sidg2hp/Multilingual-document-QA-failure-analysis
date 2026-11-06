@@ -45,9 +45,9 @@ from src.evaluation.metrics import (
     classify_answer_failure,
     compute_anls,
     compute_cer,
-    compute_hallucination_to_abstention_ratio,
     compute_matra_error_rate,
     is_indic_confident_hallucination,
+    summarize_hallucination_abstention,
 )
 
 #: A transcript is treated as "read correctly" when its CER against the gold
@@ -510,15 +510,16 @@ def _aggregate_subset(attributions: List[SampleAttribution]) -> Dict[str, object
             1 for a in attributions if getattr(a, field_name, None) is not None
         )
 
+    har = summarize_hallucination_abstention(num_hallucinated, num_abstained)
     summary: Dict[str, object] = {
         "num_samples": len(attributions),
         "num_documents": len({a.page_id for a in attributions if a.page_id}),
         "num_abstained_degraded": num_abstained,
         "num_confident_hallucination_degraded": num_hallucinated,
         "num_indic_confident_hallucination": num_indic_hallucinated,
-        "hallucination_to_abstention_ratio": compute_hallucination_to_abstention_ratio(
-            num_hallucinated, num_abstained
-        ),
+        "hallucination_to_abstention_ratio": har.ratio,
+        "hallucination_to_abstention_saturated": har.saturated,
+        "hallucination_to_abstention_note": har.note,
         "primary_failure_stage_distribution": _distribution(stage_counts),
         "degraded_failure_mode_distribution": _distribution(mode_counts),
         "condition_coverage": {
