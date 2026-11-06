@@ -135,12 +135,9 @@ class CascadedOCRPipeline:
         if sample.image_obj is not None:
             conditions.append(CounterfactualCondition.C_DELTA_DEGRADED)
         if sample.supports_text_oracle and sample.oracle_text:
-            conditions.extend(
-                [
-                    CounterfactualCondition.C3_ORACLE_TEXT,
-                    CounterfactualCondition.C3B_SHUFFLED_TEXT,
-                ]
-            )
+            conditions.append(CounterfactualCondition.C3_ORACLE_TEXT)
+            if shuffle_transcript(sample.oracle_text) != sample.oracle_text:
+                conditions.append(CounterfactualCondition.C3B_SHUFFLED_TEXT)
         if sample.supports_layout_oracle and sample.oracle_text and sample.layout_blocks:
             conditions.append(CounterfactualCondition.C2_ORACLE_LAYOUT)
         return conditions

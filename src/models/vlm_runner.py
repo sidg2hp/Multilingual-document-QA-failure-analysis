@@ -23,7 +23,7 @@ from src.data.manifest import sha256_image
 from src.data.schema import CounterfactualCondition, DocumentQASample, PredictionRecord
 from src.evaluation.metrics import detect_abstention
 from src.models.ocr_pipeline import ConditionNotSupported
-from src.models.parsing import PARSER_VERSION, parse_answer
+from src.models.parsing import PARSER_VERSION, parse_answer, parse_transcript
 from src.models.prompts import (
     PromptSpec,
     build_prompt,
@@ -130,11 +130,13 @@ class OCRFreeVLMRunner:
             )
 
         model_cls, trust_remote_code = self._resolve_model_class()
-        dtype = (
-            torch.bfloat16
-            if self.torch_dtype == "bfloat16"
-            else torch.float16
-        )
+        dtype_name = self.torch_dtype.lower()
+        if dtype_name in ("bfloat16", "bf16"):
+            dtype = torch.bfloat16
+        elif dtype_name in ("float32", "fp32"):
+            dtype = torch.float32
+        else:
+            dtype = torch.float16
         kwargs = {
             "revision": self.model_revision,
             "quantization_config": bnb_config,
@@ -207,9 +209,14 @@ class OCRFreeVLMRunner:
     def _format_chat(self, spec: PromptSpec) -> str:
         messages = spec.messages()
         if getattr(self._processor, "chat_template", None):
-            return self._processor.apply_chat_template(
-                messages, tokenize=False, add_generation_prompt=True
-            )
+            try:
+                return self._processor.apply_chat_template(
+                    messages, tokenize=False, add_generation_prompt=True
+                )
+            except (TypeError, ValueError):
+                # Some processors (e.g. SmolVLM) expect list-valued content even
+                # for text-only turns; fall back to a plain instruction.
+                pass
         return f"{spec.system}\n\n{spec.user}"
 
     def _generate_multimodal(self, image: Optional[Image.Image], spec: PromptSpec) -> str:
@@ -229,9 +236,12 @@ class OCRFreeVLMRunner:
                     ],
                 },
             ]
-            text_input = self._processor.apply_chat_template(
-                messages, tokenize=False, add_generation_prompt=True
-            )
+            try:
+                text_input = self._processor.apply_chat_template(
+                    messages, tokenize=False, add_generation_prompt=True
+                )
+            except (TypeError, ValueError):
+                text_input = f"{spec.system}\n\n<image>\n{spec.user}"
             image_inputs = None
             if "qwen" in self.model_id.lower():
                 try:
@@ -306,7 +316,9 @@ class OCRFreeVLMRunner:
                 if self.dry_run
                 else self._generate_multimodal(image, read_spec)
             )
-            transcript = read_raw if self.dry_run else parse_answer(read_raw, max_chars=4000)
+            transcript = (
+                read_raw if self.dry_run else parse_transcript(read_raw, max_chars=8000)
+            )
             answer_spec = build_self_ocr_answer_prompt(sample.question, transcript or "")
             answer_raw = (
                 "[SMOKE]"

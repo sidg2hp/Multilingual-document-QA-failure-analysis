@@ -7,7 +7,7 @@ import pytest
 from src.data.datasets import build_pipeline_smoke_samples
 from src.data.schema import CounterfactualCondition, DocumentQASample, PredictionRecord, ScriptType
 from src.models.ocr_pipeline import CascadedOCRPipeline, ConditionNotSupported
-from src.models.parsing import parse_answer
+from src.models.parsing import parse_answer, parse_transcript
 from src.models.prompts import build_prompt
 from src.models.text_ops import shuffle_transcript
 from src.models.vlm_runner import OCRFreeVLMRunner
@@ -34,6 +34,14 @@ def test_parse_answer_handles_common_wrappers() -> None:
     assert parse_answer('"UNANSWERABLE"') == "UNANSWERABLE"
     assert parse_answer("The answer is 42.\nBecause ...") == "42"
     assert parse_answer("") == ""
+
+
+def test_parse_transcript_preserves_lines() -> None:
+    raw = "Transcription:\nLine one\nLine two\nLine three"
+    parsed = parse_transcript(raw)
+    assert parsed.splitlines() == ["Line one", "Line two", "Line three"]
+    # parse_answer deliberately keeps one line, so it must not be used for C1.
+    assert "\n" not in parse_answer(raw)
 
 
 def test_shuffle_transcript_preserves_units() -> None:

@@ -83,6 +83,23 @@ def parse_answer(raw_output: str, max_chars: int = 200) -> str:
     return answer
 
 
+def parse_transcript(raw_output: str, max_chars: int = 8000) -> str:
+    """Cleans a transcription without collapsing it to one line.
+
+    ``parse_answer`` intentionally keeps only the first line; a transcript must
+    preserve line breaks because the C1/CER analysis depends on the full page
+    text.
+    """
+    text = _strip_markdown(raw_output or "")
+    text = re.sub(
+        r"^\s*(transcription|transcript|text|ocr)\s*:\s*",
+        "",
+        text,
+        flags=re.IGNORECASE,
+    )
+    return text.strip()[:max_chars].rstrip()
+
+
 def is_abstention(answer: str) -> bool:
     return _ABSTENTION_PATTERN.match((answer or "").strip()) is not None
 
