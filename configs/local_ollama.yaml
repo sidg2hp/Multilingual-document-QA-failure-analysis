@@ -1,0 +1,49 @@
+project:
+  name: "docqa-local-ollama-pilot"
+  backend: "ollama"
+  ollama_host: "http://127.0.0.1:11434"
+  seed: 42
+  output_dir: "outputs/local"
+  hardware_profile:
+    gpu: "NVIDIA GeForce RTX 3050 6GB Laptop GPU"
+    vram_limit_mb: 5800
+    note: >
+      Ollama Q4 vision model; the HF FP16/NF4 runner is the paper path once
+      PARAM Ganga access is available. Record the Ollama version and model
+      digest; tags are mutable.
+
+datasets:
+  funsd:
+    hf_repo: "nielsr/funsd"
+    revision: "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5"
+    split: "test"
+    cache_dir: "data/cache/funsd"
+    max_samples: 261
+  indic_ocr:
+    hf_repo: "krutrim-ai-labs/IndicVisionBench"
+    revision: "45269760b15938c6a345f74373f56c7a5ab7ecc8"
+    config: "ocr"
+    split: "test"
+    cache_dir: "data/cache/indic_ocr"
+    max_samples: 30
+
+models:
+  text_qa_reader:
+    model_id: "qwen2.5:3b"
+    quantization: "ollama"
+    max_new_tokens: 128
+  vlms:
+    primary_vlm:
+      model_id: "moondream"
+      ollama_model: "moondream"
+      max_new_tokens: 160
+      temperature: 0.0
+
+perturbations:
+  seed: 42
+  severities: ["level_1", "level_2", "level_3", "level_4", "level_5"]
+
+routing:
+  ocr_relative_cost: 0.22
+  vlm_relative_cost: 1.00
+  lambdas: [0.0, 0.05, 0.10, 0.20, 0.35, 0.50]

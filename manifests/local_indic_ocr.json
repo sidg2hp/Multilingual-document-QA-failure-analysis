@@ -1,0 +1,935 @@
+{
+  "schema_version": "1.0",
+  "name": "local_indic_ocr",
+  "created_at_utc": "2026-11-06T16:33:31.093677+00:00",
+  "num_items": 30,
+  "num_documents": 30,
+  "counts": {
+    "by_dataset": {
+      "IndicVisionBench:ocr": 30
+    },
+    "by_language": {
+      "Bengali": 3,
+      "Gujarati": 3,
+      "Hindi": 3,
+      "Kannada": 3,
+      "Malayalam": 3,
+      "Marathi": 3,
+      "Odia": 3,
+      "Punjabi": 3,
+      "Tamil": 3,
+      "Telugu": 3
+    },
+    "by_script_type": {
+      "code_mixed": 4,
+      "monolingual_indic": 26
+    },
+    "by_question_type": {
+      "generated_cloze": 25,
+      "generated_extractive": 5
+    }
+  },
+  "content_sha256": "5614657539058ed554f980b67733ed937bdd0d6c29beadf40cc79f1463209f54",
+  "items": [
+    {
+      "sample_id": "ocr_0001_cloze0",
+      "page_id": "ocr_0001",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Bengali",
+      "language_code": "bn",
+      "script_type": "code_mixed",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"ইংরাজি না _____, বেদব্যাসী না প্রতাপরায়ী?\"",
+      "question_sha256": "d3b7a867d9345bc7fa371b739634d28be5ee54bd29c888849329ea38728c1277",
+      "answers": [
+        "বাঙ্গালা"
+      ],
+      "answer_sha256": "03b21f0934c9cbcef3ef9dca210608253350a3914d464c252607317a13ed0596",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "6cd3d8e65a53f18b19feff7ed7b8c09d2379149dbadcc68224bd92c102afdd50",
+      "image_sha256": "8e94b1151661bdbfbd610504deb34fcb79e2ff5b81b89e866e5a9f4404cdba76",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.2607,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0001"
+      }
+    },
+    {
+      "sample_id": "ocr_0002_cloze0",
+      "page_id": "ocr_0002",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Bengali",
+      "language_code": "bn",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"ছিল, “_____ in a scientific journal is not a process of receiving a seal of approval.” অর্থাৎ, বিজ্ঞান-বিষয়ক পত্রিকায় কোনও কিছু প্রকাশিত হওয়ার অর্থ এই নয় যে, স্বীকৃতি পাওয়া গেল।\"",
+      "question_sha256": "2bcec24209a262e30e45ef1152fab0fa125887e55a96736ed5787a71bb411cf1",
+      "answers": [
+        "Publishing"
+      ],
+      "answer_sha256": "26c81739396ded64cabd5481d0302c3529a2e34eff31057461fc02dbcc936ec1",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "ba438bbbd9fe478ba6822f0efdb04ec9a0c2f7bf9b9377df63dd3719f8c92784",
+      "image_sha256": "ae4d53ff23b2be185d38b5a2ca866ba05764272805a66304765a2df2fd249049",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0552,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0002"
+      }
+    },
+    {
+      "sample_id": "ocr_0003_cloze0",
+      "page_id": "ocr_0003",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Bengali",
+      "language_code": "bn",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"“My _____ Land, Good night!”—\"",
+      "question_sha256": "73e16243e2e758d36f87d88fd08beac8d8b4fef9d6a0c8bb978e43653f587a5f",
+      "answers": [
+        "native"
+      ],
+      "answer_sha256": "bef32d2c315a289576f2a6828d27edb16bb316a4d85c271f2d794045f3ea668d",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "72241dd4fd5ac2d719ca85e4262aab190aa11f7b5d2d64c0b9fa5bb22d8f0be7",
+      "image_sha256": "c7a3ae7f3a8bf6edf651751a0f5e3f38fabb8d48442788fd25965c37893b7fba",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0528,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0003"
+      }
+    },
+    {
+      "sample_id": "ocr_0090_cloze0",
+      "page_id": "ocr_0090",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Gujarati",
+      "language_code": "gu",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"ગુજરાતની _____ રાજધાની ગિરિનગર.\"",
+      "question_sha256": "3ec7603c98db6baba63f8541d4e40ffcfd7e69f49fcf2ecdb7b835039ba011e2",
+      "answers": [
+        "પહેલી"
+      ],
+      "answer_sha256": "25d790950748e589a59192055fa50c5f67e5e1f3e464956a959cfa64789be792",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "2ee1ff0377cd541520565a7d2760b76df0d3d3404b71e8522aa0439d295c65a6",
+      "image_sha256": "1170244d9d798b1251a6500dd2961e9cc819242fbfc36654df122de63decd8fa",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0090"
+      }
+    },
+    {
+      "sample_id": "ocr_0091_gen0",
+      "page_id": "ocr_0091",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Gujarati",
+      "language_code": "gu",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_extractive",
+      "question": "Which name is mentioned in the document?",
+      "question_sha256": "d35c356df5567ad0a6e36a4762b634723967d01fffddcd2283beba7aa25e5d2c",
+      "answers": [
+        "New Year"
+      ],
+      "answer_sha256": "1353c72b85cf5694303eb3a147c0eaeea353650e0c7041208d2807c2fba1f854",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "a539405614890cc942d2497548634b0170ca4dbc72d808976d902098bf64562c",
+      "image_sha256": "08a0e1a9dd3892f256aae651042bd92bcb0e4f4ff0dbdaf64d5ec221f8d20f95",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0719,
+        "question_template_id": "name_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "name",
+        "source_page_id": "ocr_0091"
+      }
+    },
+    {
+      "sample_id": "ocr_0092_cloze0",
+      "page_id": "ocr_0092",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Gujarati",
+      "language_code": "gu",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"_____ કેવો સુનો થઇ જાય – મ્હારા ચતુર વિના તે કેમ જીવાય ?\"",
+      "question_sha256": "4667301ff817861a071b22697f2a7368a4bbc295c81c675655b956373bf83a93",
+      "answers": [
+        "સંસાર"
+      ],
+      "answer_sha256": "0fcd695d882056993b65f0cc5e51519a71f435ddea50bdbf23b6ec045e2aae61",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "b602575e49015cc43c190eaeff03a31e48f3f318179879348ab788479f8d3c74",
+      "image_sha256": "0d6bd62e4c0c32cc81c2e721c89972bb25fd671b450a004b0bda3a617cafdc01",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0092"
+      }
+    },
+    {
+      "sample_id": "ocr_0180_cloze0",
+      "page_id": "ocr_0180",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Hindi",
+      "language_code": "hi",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"_____ रेलको रद कर दिया, वकीलोंकी निन्दा की, डॉक्टरोंको दबा दिया।\"",
+      "question_sha256": "63abdd7af39f4e42debdcc129b694d50ff5b3c57afd5f61318772d5837b2bc76",
+      "answers": [
+        "आपने"
+      ],
+      "answer_sha256": "fd11bd0976635aff972bfb1c60a41eea1603e5a148f73e656e14eadb96f99971",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "bbdb3c05ebde30a4b56045c97157d1571d186fb918fb9a9f7b5b42a37fa2b104",
+      "image_sha256": "67d6720c94fc2c4e2987e857b66938a3fbea96982ea7815ba6621dda90e4427b",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0180"
+      }
+    },
+    {
+      "sample_id": "ocr_0181_cloze0",
+      "page_id": "ocr_0181",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Hindi",
+      "language_code": "hi",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"झुनिया को अब यह शंका होने लगी कि वह _____ है, इसी से उसका यह अपमान हो\"",
+      "question_sha256": "5589a95eea212657e70075574f16f970d28d6530b5261d0c0ced7006ed5b099a",
+      "answers": [
+        "रखेली"
+      ],
+      "answer_sha256": "e8341122b30d5ff2ad4cdbda62102c5bfbbac90deaa789faec08e3f103c8a22c",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "00993f624527d2b5532494e7e6d31d113716d33172246473f58e3040484b1399",
+      "image_sha256": "c4169e69b344464e989c3c9d9e6831676485e4b26a94fdfcec2859acb813d478",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0181"
+      }
+    },
+    {
+      "sample_id": "ocr_0182_cloze0",
+      "page_id": "ocr_0182",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Hindi",
+      "language_code": "hi",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"_____ न आता तो कुदरत अपना काम करती, मेरा मन मजबूत बनता और अन्तमें निर्विषयी\"",
+      "question_sha256": "be8836e812b21a47e8747f3c503efe3cafb00cc31e699120c3848a07684bec6d",
+      "answers": [
+        "बीचमें"
+      ],
+      "answer_sha256": "e9b85f8aa98e7d8a777aa4da254a46f3256fbe5c6175d554d7fc19122b9bba60",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "4be9aed65a605d7a45840b555b6a556081261353326826ef4c3e06fb7de2ccd9",
+      "image_sha256": "d41cf81c94e531f741aefd621949ab7fc2c7a0c5a3b39fc9c4b8ac6d0b2062f1",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0182"
+      }
+    },
+    {
+      "sample_id": "ocr_0265_cloze0",
+      "page_id": "ocr_0265",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Kannada",
+      "language_code": "kn",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"\"_____ ಹೋಗುತ್ತಮ್ಮ ನಿನಗೆ ಉತ್ತರ ಕೊಟ್ಟು,\" ಎಂದು ರಂಗಮ್ಮ\"",
+      "question_sha256": "6546e3aaf789093c8f91b9197284f7368fee075340c2b2fd2e27b64b6d262b56",
+      "answers": [
+        "ಸಾಕುಸಾಕಾಗಿ"
+      ],
+      "answer_sha256": "3d5021bc9cf1e210fae8ba764a000559a3c3cb6864ed115cee85980f5eadf625",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "cb51b8a5f7180adf3c982c2d0f36089e59f1212e2ad11ad8a97d826fcd8941cf",
+      "image_sha256": "faebe572950a7ff0eb31d9d896dd518b4cce3ae713c982506bf3d9226da63de2",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0265"
+      }
+    },
+    {
+      "sample_id": "ocr_0266_cloze0",
+      "page_id": "ocr_0266",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Kannada",
+      "language_code": "kn",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"ಮುಖಗಳನ್ನು ನೋಡಿ ನೋಡಿ _____ ಬೇಸರವಾಗಿದೆ.\"",
+      "question_sha256": "b890b6c455cb918949e10455a93ed86825d841ab1fb392e44b2b30c3b22ff9cc",
+      "answers": [
+        "ನನಗೆ"
+      ],
+      "answer_sha256": "f128c06b72cb667f7b960bc5ffb9e56555493a2efe61c1bb253bd69230af7f37",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "5139de00c6b6bc3c1d61645de42a78ec2f507cf83cb125e9e37e65e7efb19c7d",
+      "image_sha256": "3f94ada0bba356eb72a6cf8a722608d09bc40b321f1ea0fe7411d474259ee4b4",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0266"
+      }
+    },
+    {
+      "sample_id": "ocr_0267_cloze0",
+      "page_id": "ocr_0267",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Kannada",
+      "language_code": "kn",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"_____ ಪ್ರಯತ್ನಿಸಿದರೂ ಸಫಲಳಾಗಲಿಲ್ಲ.\"",
+      "question_sha256": "16f25026bc1bb69e0014b5a90e1fb20f133af4fcecfc18c79bedc5134d8137e9",
+      "answers": [
+        "ಲೆಷ್ಟು"
+      ],
+      "answer_sha256": "6b3e03e8747cb523aeeb695409176524d4ca37630e735d685642a34c136d41e6",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "8fca1fd234d07123b3150970fc8e60fc9eb666d710e41d4c19a1c9b28f61a121",
+      "image_sha256": "4e3dc0c0bf1322c47f231232af2a2b9e49184285ca1cf68347eef0fb8ff06c24",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0021,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0267"
+      }
+    },
+    {
+      "sample_id": "ocr_0354_gen0",
+      "page_id": "ocr_0354",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Malayalam",
+      "language_code": "ml",
+      "script_type": "code_mixed",
+      "question_type": "generated_extractive",
+      "question": "Which year is mentioned in the document?",
+      "question_sha256": "bf707f44240bf6360f6aa8625b9c9d0974dc8ce7c6dceff66cd5ea0016e9a14e",
+      "answers": [
+        "1901"
+      ],
+      "answer_sha256": "a56b54e1c5933a83f79b301d0c08410a5617b868120da82b7e088c42a5a8025c",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "ec56deb6882687be4919667bb218750fd8c9b430afb9bef4a68b9dd0541a71cf",
+      "image_sha256": "9cad9bd9b77cad885dd181733e3fb1d454ea4b1cab5a5ae2e412e1d616d0feb1",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.19,
+        "question_template_id": "year_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "year",
+        "source_page_id": "ocr_0354"
+      }
+    },
+    {
+      "sample_id": "ocr_0355_gen0",
+      "page_id": "ocr_0355",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Malayalam",
+      "language_code": "ml",
+      "script_type": "code_mixed",
+      "question_type": "generated_extractive",
+      "question": "Which year is mentioned in the document?",
+      "question_sha256": "bf707f44240bf6360f6aa8625b9c9d0974dc8ce7c6dceff66cd5ea0016e9a14e",
+      "answers": [
+        "2014"
+      ],
+      "answer_sha256": "96da37e95d5cc34fe3bef6c89428df859b8a217630d0c664da1daf1539caacf5",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "b8eb1a0dd42f234e6f9f34688748be98ef74ed5cd8c5f18035177ee4461a329e",
+      "image_sha256": "c172f7ed0436a6604102f4041ee16506199121b999766e1ddba2c8a647ef0227",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.2846,
+        "question_template_id": "year_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "year",
+        "source_page_id": "ocr_0355"
+      }
+    },
+    {
+      "sample_id": "ocr_0356_gen0",
+      "page_id": "ocr_0356",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Malayalam",
+      "language_code": "ml",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_extractive",
+      "question": "Which year is mentioned in the document?",
+      "question_sha256": "bf707f44240bf6360f6aa8625b9c9d0974dc8ce7c6dceff66cd5ea0016e9a14e",
+      "answers": [
+        "2014"
+      ],
+      "answer_sha256": "96da37e95d5cc34fe3bef6c89428df859b8a217630d0c664da1daf1539caacf5",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "4e2633a6dd9d978006828cecde931beee042857ff390795d9daaee982dc3a45e",
+      "image_sha256": "4c6d8b9484307aa54b6921e41feb96167ef52b396e7f650f33eb380cb8237761",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0145,
+        "question_template_id": "year_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "year",
+        "source_page_id": "ocr_0356"
+      }
+    },
+    {
+      "sample_id": "ocr_0442_cloze0",
+      "page_id": "ocr_0442",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Marathi",
+      "language_code": "mr",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"_____ दहा-बारा वर्षे ग्रामीण भागात मी खूप हिंडलोफिरलो.\"",
+      "question_sha256": "a9ce2fd51d4333d2be0e1a5d3047e0ce693245d2c6d2e891eb17c657b7bfd075",
+      "answers": [
+        "गेली"
+      ],
+      "answer_sha256": "72f8eb68c7925b4ff77b044131ef3d12e3991ffb76570c8181dd1f650b9a37a3",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "a1af4114c45368e381fcb6c5dfa6d4cccdbd717366145fec013b5552b1fefe7b",
+      "image_sha256": "50d1432e214ca7d80b138023bd8a8ab5d147137a90e9d891575a1c0d1232f07d",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0442"
+      }
+    },
+    {
+      "sample_id": "ocr_0443_cloze0",
+      "page_id": "ocr_0443",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Marathi",
+      "language_code": "mr",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"_____ संन्यास घ्यायला लावायचा, आणि यती म्हणून त्याला अंतःपुरात आणून बसवायचा; बलरामदादाला फसवायचे, वगैरे ज्याप्रमाणे कृष्णाने केले नाही, त्याचप्रमाणे पुढे काय होणार हे कळून सर्वांना वाचवण्याची शक्यता असताही पृथ्वीला भार झाला आहे, म्हणून सर्व योद्ध्यांना अश्वत्थाम्याच्या हातून मारवले, हेही कृष्णाने केले नाही.\"",
+      "question_sha256": "980df1c51298242aba5bcd61e565b334ae5f1bbd7d161c2a69ba20d11ace8838",
+      "answers": [
+        "त्रिदंडी"
+      ],
+      "answer_sha256": "16243ccbff8fae7c57e4f84cdda50f405775bfca852d80e7e8ff5ee0bf092bf6",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "bbd39b03e00629d8b92751d8404b5949025247c9a0924bec09dec592c318efb8",
+      "image_sha256": "1c498d39e1f308ecf8cec544f28e622157398eb43550a40e5280eeaca1fbbc0a",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0443"
+      }
+    },
+    {
+      "sample_id": "ocr_0444_cloze0",
+      "page_id": "ocr_0444",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Marathi",
+      "language_code": "mr",
+      "script_type": "code_mixed",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"कारण त्यात _____, मानवतावाद, आदर्श आशावाद, समता, बंधुतासारखी कालातीत मूल्यं आहेत.\"",
+      "question_sha256": "2c35e0e808169a9e2fb4567b2bf0a4e9db73fb7830837f87e3508be2b0d3d45f",
+      "answers": [
+        "वैश्विकता"
+      ],
+      "answer_sha256": "e61ee93b495a2f136cdf335c4eeda71a534c543529bdd27348c35e1d1a29f32c",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "3ebd9fb2a379c330a0362384885ac8402714d58c0fdc78ec056844154ca42130",
+      "image_sha256": "a321d8e91bf82819de57cd3d1c866850dc13615f91803e2f6d5f619bbfbc83f6",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.1555,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0444"
+      }
+    },
+    {
+      "sample_id": "ocr_0525_cloze0",
+      "page_id": "ocr_0525",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Odia",
+      "language_code": "or",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"_____, ଡେନ୍‌ମାର୍କଠାରୁ ପିଇବା ପାଣି, ଗୋବର ଓ ସର୍ବୋପରି ଓଡ଼ିଶା ଭଳି ରାଜ୍ୟର କ୍ଷୁଦ୍ର ଜିଲ୍ଲା ସହ ଆୟତନରେ ତୁଳନୀୟ ସୁଇଜରଲ୍ୟାଣ୍ଡଠାରୁ ଯେତେବେଳେ ସୂତା ମାଗିଲେ, ସେତେବେଳେ ବିଶ୍ୱ ଜନପ୍ରାଣଠାରୁ ସେ ଶ୍ରଦ୍ଧା କୁଆଡ଼େ ଉଭେଇଗଲା ବରଂ ସେ ସ୍ଥଳରେ ଦେଖାଦେଇଥିଲା ଘୃଣା ।\"",
+      "question_sha256": "5e2416b3f6319bc578779e174e39d7ccbd96b14b3a5ceefc7bbfbe37e5f32d29",
+      "answers": [
+        "ଖାଦ୍ୟ"
+      ],
+      "answer_sha256": "2488f35e0df517050c3308dec4d337b0e85aab13be4ebc59de3b0f7179f7d09a",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "25943ef10103e2de2211a15f76107be783e2a9116f5b5f946db545105f174c77",
+      "image_sha256": "280ab8de25885ab12d4da9128871a98aef6e42256d511dd1dd04f534f48c9cb6",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0525"
+      }
+    },
+    {
+      "sample_id": "ocr_0526_cloze0",
+      "page_id": "ocr_0526",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Odia",
+      "language_code": "or",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"_____ ପରେ ଯାହା କିଛି ରାତ୍ରୀଭୋଜନ କରି ବିଶ୍ରାମ ନେଲି ।\"",
+      "question_sha256": "bb61301714a4283320bfb35d144243df797e03b15a18437d9620b8987f5b0db7",
+      "answers": [
+        "ଘଣ୍ଟାକ"
+      ],
+      "answer_sha256": "9b95caa9f0e017bd87d95005554ace3ea2b10cd3b4213525d1ce7937ce124fd6",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "4a2b415a0102696a1f85751d0aa3a7a9226bb4d7187ce41a8adf85bb7e28cac1",
+      "image_sha256": "046c86c5e560fdfbe101c99cda8df14dcf800d7fcf1718b0c0ed0ebe47f96b30",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0526"
+      }
+    },
+    {
+      "sample_id": "ocr_0527_cloze0",
+      "page_id": "ocr_0527",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Odia",
+      "language_code": "or",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"ତେବେ _____ ରହିଗଲା ତାଙ୍କର ମୃତ୍ୟୁ ପୂ୍ର୍ବରୁ ମାଟି ମାଆର ମୁକତି ମିଳି ପାରିଲା ନାହିଁ।\"",
+      "question_sha256": "eb8c0919159963630711ac2355fd1aaa7de216b4efa917e810849a16f53f7317",
+      "answers": [
+        "ଅବଶୋଷ"
+      ],
+      "answer_sha256": "c0a9a8b0df2ddf0a2b808cf80b4e742e7b437787853d7d651741d08f9b4c7c9d",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "f68661596d598e215761c18b3dae9b65bfd68fd621a34f29015b3eff159b354a",
+      "image_sha256": "4c3f4aca33c17cae14bec4bdebd9acea0202780d01339d6e1fec1fc0cbf18236",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0527"
+      }
+    },
+    {
+      "sample_id": "ocr_0611_cloze0",
+      "page_id": "ocr_0611",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Punjabi",
+      "language_code": "pa",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"_____ ਤੈਨੂੰ ਪ੍ਰਸੰਨ ਕਰ ਸਕਦੀ ਹੈ, ਮੈਨੂੰ ਵੀ ਪਤਾ ਲੱਗੇ ?\"\"",
+      "question_sha256": "ff010c504d2d449e6abe6937b1bf7fe2bcae72e1eedec4ee24c8093da5c7394a",
+      "answers": [
+        "ਚੀਜ਼"
+      ],
+      "answer_sha256": "416f8f91db302eae2cb797be8f230289b9dab241c386a1203109ca77e6007e9d",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "65d31dd24c29f68330e3339543a338e931ae89adc4cce8c818d533ac37e489ac",
+      "image_sha256": "b08c733a74ae82e44a6f77068f97b8f6c5bfbe754110aea0203681ad531ed5ba",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0611"
+      }
+    },
+    {
+      "sample_id": "ocr_0612_cloze0",
+      "page_id": "ocr_0612",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Punjabi",
+      "language_code": "pa",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"ਤੇ _____ ਦੀਆਂ ਮੂਰਤਾਂ ਬਣ ਸੜਕ ਦੇ ਕੰਢੇ ਤੇ ਹੀ ਰਤੀ ਕੁ ਦਮ ਲੈਣ ਲਈ ਬੈਠ ਗਏ।\"",
+      "question_sha256": "21578cc3981471d762343c1a26406ed9dd8b1cd7465e370f92da671c448e643b",
+      "answers": [
+        "ਉਦਾਸੀ"
+      ],
+      "answer_sha256": "478d97652b5a100ae5a1056235e8ffeb20ff81a6791c3b9a1bb60b7e020d855d",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "33ce2c163b103b4c3ea7011703d6996eeec149ddc608709ffd926153ce4a3c68",
+      "image_sha256": "b8b465e011c3814e6b3e4388be008525626f757d209e835adf50c53dc6dc400c",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0612"
+      }
+    },
+    {
+      "sample_id": "ocr_0613_cloze0",
+      "page_id": "ocr_0613",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Punjabi",
+      "language_code": "pa",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"_____ ਉਹ ਵੀ ਹੁੰਦਾ ਪਰ ਸ਼ਰਾਬ ਦਾ।\"",
+      "question_sha256": "3aec8132a88b063dff6db82841d33ba64ad40247d1b4e9224c24094738abc612",
+      "answers": [
+        "ਭੰਨਿਆ"
+      ],
+      "answer_sha256": "85113bb557c23e01f431e832a89de87e302ee30a03841d855201786d62863aed",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "9202c48d910940b88eb3262a68656fcb9c28398a605cc08c9116c609591dc8a3",
+      "image_sha256": "a229377b979d7adbc92f6c7aad66695fd5e9bac38166699b762d001ab0c6de1a",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0613"
+      }
+    },
+    {
+      "sample_id": "ocr_0700_gen0",
+      "page_id": "ocr_0700",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Tamil",
+      "language_code": "ta",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_extractive",
+      "question": "Which name is mentioned in the document?",
+      "question_sha256": "d35c356df5567ad0a6e36a4762b634723967d01fffddcd2283beba7aa25e5d2c",
+      "answers": [
+        "Henry Alfred Krishna Pillai"
+      ],
+      "answer_sha256": "21521f972bd418cb6c55f6336f45e3f8626a8b9d8234101835b57b23a7691d20",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "9070385735959aeb1e519d663e183d2cd7be475b64e19e6e3e28312217b7bf5d",
+      "image_sha256": "85e5bd06d7c31f9c4978a8f9020b89293193f02e84aea20018a7ff82aa212d06",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0327,
+        "question_template_id": "name_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "name",
+        "source_page_id": "ocr_0700"
+      }
+    },
+    {
+      "sample_id": "ocr_0701_cloze0",
+      "page_id": "ocr_0701",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Tamil",
+      "language_code": "ta",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"_____, பால காண்டம்-மிதிலைக் காட்சிப் படலத்தில் உள்ள பாடல்கள்.\"",
+      "question_sha256": "830472c93dcf2dc7ceb0346599c6781725566ad995fed394bcd341b25ad6a480",
+      "answers": [
+        "﻿இவை"
+      ],
+      "answer_sha256": "32ce8b76ccff3b5bc4648d7dbc11ce59f3c7262e74bdbe707e4a279918a79fc4",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "9f2fb1429f0f6e60a11667f1b6b91211bc08a6614fc2f440b66d651682a31a03",
+      "image_sha256": "0894314e4919f5c1569c858b45b8dccd5953b796f48d0d0fa12afbb71423989b",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0082,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0701"
+      }
+    },
+    {
+      "sample_id": "ocr_0702_cloze0",
+      "page_id": "ocr_0702",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Tamil",
+      "language_code": "ta",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"“_____ ஒரு புதிய பாடல் பாடி வந்திருக்கிறேன்” என்று சொல்லிக்கொண்டே வந்தார்.\"",
+      "question_sha256": "8868721326432bc4a01c620d15ce66394db7d2fa31a77473704d5bce40df5243",
+      "answers": [
+        "இன்று"
+      ],
+      "answer_sha256": "e45445af24de1b75bf7f3fd6bc10bd451a224b17a45f92e2581dabcd5d17121f",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "1ebfc44ce203676fd9965880e563e71ea7d0fc0994424f1cdf4aa30b1a8bad8a",
+      "image_sha256": "9d157807afd9f419735556e3c132e230167c48238130cbfad8a0098ea54f1967",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0702"
+      }
+    },
+    {
+      "sample_id": "ocr_0788_cloze0",
+      "page_id": "ocr_0788",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Telugu",
+      "language_code": "te",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"_____ బందు నిశాటశోణితఝరావిక్షీరముల్ వేల్చు దు\"",
+      "question_sha256": "f7daa95b4287a43d2a0ba737b69a1a144d7f3ae2ace450d5080230ecbe7858fb",
+      "answers": [
+        "వీరం"
+      ],
+      "answer_sha256": "594efefb2ffa6db262bf067218c1f2a7a28fa625aaf0ab4cebbe4f2e85034e99",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "0c3c39f29bf31f482989986c79e201e9c76abecf06bc7066e3e86efbeaa54d3d",
+      "image_sha256": "02afccff1a86affee88a26eee9f2224308b14d7d7e249a40087407f472932483",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0788"
+      }
+    },
+    {
+      "sample_id": "ocr_0789_cloze0",
+      "page_id": "ocr_0789",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Telugu",
+      "language_code": "te",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"మన _____ - జిడ్డు కృష్ణమూర్తి వ్యాఖ్యానాలు.\"",
+      "question_sha256": "a435b951c906020b44c41ab70463745bf15229bc0badd880b1309bd75590561e",
+      "answers": [
+        "జీవితాలు"
+      ],
+      "answer_sha256": "513fc33f084945f1e53214b322f4170d00431a98bd55b4ad10add86595dbdf9d",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "2f3f9b589593981c78a77820ddd53c26861e0d122a96cf1d77931f28b2617dae",
+      "image_sha256": "90ca0a3c886c1f9306554a16302f1a8599f929381d0223a23c713136a04bd39e",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0789"
+      }
+    },
+    {
+      "sample_id": "ocr_0790_cloze0",
+      "page_id": "ocr_0790",
+      "dataset_name": "IndicVisionBench:ocr",
+      "dataset_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "split": "test",
+      "language": "Telugu",
+      "language_code": "te",
+      "script_type": "monolingual_indic",
+      "question_type": "generated_cloze",
+      "question": "Fill in the blank with the exact word from the document: \"'_____ దుర్బలము, కన్నులపాటవముం దొలంగె, నే\"",
+      "question_sha256": "7d9c45a667f35d9042f65b1a857178d1598079db666e7bda88412d369bb49a8f",
+      "answers": [
+        "కాయముజూడ"
+      ],
+      "answer_sha256": "a0f5b3e22f0177d20288ef4df3dae43e353be4e34ac160fae504a9b8fd929384",
+      "is_unanswerable": false,
+      "oracle_text_sha256": "b072f6a0d1b65cf45bbabc2d817a70de40504427201a703df529b2604e8b8889",
+      "image_sha256": "e7031293309f2b14afab63e59e66890027284e79ee9901cf00ce42d1f4ffe194",
+      "supports_text_oracle": true,
+      "supports_layout_oracle": false,
+      "answer_bbox": null,
+      "metadata": {
+        "smi": 0.0,
+        "question_template_id": "cloze_v1",
+        "question_generator_version": "2026-11-06.1",
+        "answer_type": "cloze",
+        "source_page_id": "ocr_0790"
+      }
+    }
+  ]
+}

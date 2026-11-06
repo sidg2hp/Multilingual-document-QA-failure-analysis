@@ -141,6 +141,24 @@ def test_qa_generation_is_unique_and_deterministic() -> None:
     assert unanswerable.ground_truth_answers == []
 
 
+def test_cloze_fallback_for_prose_pages() -> None:
+    row = {
+        "id": "ocr_prose",
+        "image": _image(),
+        "text": (
+            "भारत का संविधान देश का सर्वोच्च विधान है। "
+            "यह संविधान सभा द्वारा तैयार किया गया था।"
+        ),
+        "language": "Hindi",
+    }
+    page = sample_from_indic_ocr_row(row)
+    items = generate_qa_items(page, max_items=1)
+    assert len(items) == 1
+    assert items[0].metadata["answer_type"] == "cloze"
+    assert "_____" in items[0].question
+    assert items[0].ground_truth_answers[0] in (page.oracle_text or "")
+
+
 def test_manifest_roundtrip_and_stratification(tmp_path: Path) -> None:
     rows = [
         sample_from_indic_ocr_row(

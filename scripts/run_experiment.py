@@ -42,6 +42,7 @@ from src.data.manifest import (
     load_manifest,
     sha256_image,
 )
+from src.data.local_cache import load_cached_samples
 from src.data.qa_generation import generate_qa_items
 from src.data.schema import CounterfactualCondition, DocumentQASample, PredictionRecord
 from src.evaluation.attribution import (
@@ -62,6 +63,7 @@ from src.evaluation.statistics import (
     wilcoxon_signed_rank,
 )
 from src.models.ocr_pipeline import CascadedOCRPipeline
+from src.models.ollama_runner import OllamaVLMRunner
 from src.models.prompts import build_prompt
 from src.models.text_ops import shuffle_transcript, truncate_context
 from src.models.vlm_runner import OCRFreeVLMRunner
@@ -104,7 +106,15 @@ CONDITION_FIELDS = {
     "c3b_shuffled": "anls_c3b_shuffled",
 }
 
-SINGLE_SETTINGS = ("smoke", "funsd", "indic_ocr", "indic_vqa", "patram_local")
+SINGLE_SETTINGS = (
+    "smoke",
+    "funsd",
+    "indic_ocr",
+    "indic_vqa",
+    "patram_local",
+    "funsd_local",
+    "indic_ocr_local",
+)
 
 
 # ---------------------------------------------------------------------------
@@ -160,11 +170,41 @@ def _values_and_clusters(
 def runner_model_name(runner: object) -> str:
     if hasattr(runner, "ocr_backend"):
         return f"{runner.ocr_backend}+{runner.reader_model_id}"
+    if hasattr(runner, "model_name"):
+        return str(runner.model_name)
     return getattr(runner, "model_id", "unknown")
 
 
-def build_runner(kind: str, cfg: dict, dry_run: bool, quantization: Optional[str] = None):
+def runner_architecture(runner: object) -> str:
+    explicit = getattr(runner, "architecture", None)
+    if explicit in ("ocr_free_vlm", "cascaded_ocr"):
+        return str(explicit)
+    if isinstance(runner, (OCRFreeVLMRunner, OllamaVLMRunner)):
+        return "ocr_free_vlm"
+    return "cascaded_ocr"
+
+
+def build_runner(
+    kind: str,
+    cfg: dict,
+    dry_run: bool,
+    quantization: Optional[str] = None,
+    backend: str = "transformers",
+):
     hardware = cfg.get("project", {}).get("hardware_profile", {})
+    if backend == "ollama":
+        if kind == "ocr":
+            raise RuntimeError(
+                "The Ollama backend currently supports the OCR-free VLM only. "
+                "Use --models vlm, or install Tesseract for the cascade."
+            )
+        model_cfg = cfg["models"]["vlms"]["primary_vlm"]
+        return OllamaVLMRunner(
+            model_id=model_cfg.get("ollama_model") or model_cfg["model_id"],
+            host=str(cfg.get("project", {}).get("ollama_host", "http://127.0.0.1:11434")),
+            max_new_tokens=int(model_cfg.get("max_new_tokens", 160)),
+            dry_run=dry_run,
+        )
     if kind == "ocr":
         model_cfg = cfg["models"]["text_qa_reader"]
         return CascadedOCRPipeline(
@@ -296,16 +336,13 @@ def evaluate_with_cache(
         if cached is not None:
             return cached
 
-    kwargs = {}
-    if isinstance(runner, OCRFreeVLMRunner):
-        kwargs["seed"] = seed
     record = runner.evaluate_sample(
         sample=sample,
         condition=condition,
         image_override=image_override,
         perturbation_type=perturbation_type,
         perturbation_severity=perturbation_severity,
-        **kwargs,
+        seed=seed,
     )
     if cache is not None:
         cache.put(record)
@@ -322,6 +359,14 @@ def load_samples(mode: str, cfg: dict, max_samples: int) -> List[DocumentQASampl
         return build_pipeline_smoke_samples()[:max_samples]
     if mode == "funsd":
         return list(stream_funsd_samples(max_samples=max_samples))
+    if mode in ("funsd_local", "indic_ocr_local"):
+        dataset = "funsd" if mode == "funsd_local" else "indic_ocr"
+        cache_dir = (
+            cfg.get("datasets", {})
+            .get(dataset, {})
+            .get("cache_dir", f"data/cache/{dataset}")
+        )
+        return load_cached_samples(dataset, cache_dir, max_items=100000)
     if mode == "indic_ocr":
         samples: List[DocumentQASample] = []
         for page in stream_indic_vision_bench_ocr(max_samples=max(max_samples * 3, 20)):
@@ -381,9 +426,7 @@ def run_model_across_conditions(
     cache: Optional[PredictionCache] = None,
     seed: int = 42,
 ) -> Tuple[List[SampleAttribution], Dict[str, Dict[CounterfactualCondition, PredictionRecord]]]:
-    architecture = (
-        "ocr_free_vlm" if isinstance(runner, OCRFreeVLMRunner) else "cascaded_ocr"
-    )
+    architecture = runner_architecture(runner)
     attributions: List[SampleAttribution] = []
     records_by_sample: Dict[str, Dict[CounterfactualCondition, PredictionRecord]] = {}
 
@@ -440,9 +483,7 @@ def run_condition_sweep_with_records(
     Dict[str, Dict[str, Dict[CounterfactualCondition, PredictionRecord]]],
 ]:
     """Sweeps perturbations and returns rows, attributions, and raw records."""
-    architecture = (
-        "ocr_free_vlm" if isinstance(runner, OCRFreeVLMRunner) else "cascaded_ocr"
-    )
+    architecture = runner_architecture(runner)
     baseline: Dict[str, Dict[CounterfactualCondition, PredictionRecord]] = {}
     for sample in samples:
         supported = set(runner.supported_conditions(sample))
@@ -818,6 +859,10 @@ def main() -> None:
     parser.add_argument(
         "--models", choices=["both", "ocr", "vlm"], default="both"
     )
+    parser.add_argument(
+        "--backend", choices=["transformers", "ollama"], default=None,
+        help="Override project.backend.",
+    )
     parser.add_argument("--output-dir", default=None)
     args = parser.parse_args()
 
@@ -828,6 +873,7 @@ def main() -> None:
     samples = load_samples(args.mode, cfg, args.max_samples)
     if args.manifest:
         samples = filter_samples_by_manifest(samples, load_manifest(args.manifest))
+        samples = samples[: args.max_samples]
 
     dry_run = args.mode == "smoke"
     out_dir = Path(args.output_dir or cfg["project"]["output_dir"])
@@ -839,11 +885,22 @@ def main() -> None:
     cache_path = args.cache_path or str(out_dir / "cache" / f"predictions_{args.mode}.jsonl")
     cache = PredictionCache(cache_path) if args.resume else None
 
+    backend = args.backend or str(cfg.get("project", {}).get("backend", "transformers"))
     runners = []
     if args.models in ("both", "ocr"):
-        runners.append(("cascaded_ocr", build_runner("ocr", cfg, dry_run, args.quantization)))
+        runners.append(
+            (
+                "cascaded_ocr",
+                build_runner("ocr", cfg, dry_run, args.quantization, backend),
+            )
+        )
     if args.models in ("both", "vlm"):
-        runners.append(("ocr_free_vlm", build_runner("vlm", cfg, dry_run, args.quantization)))
+        runners.append(
+            (
+                "ocr_free_vlm",
+                build_runner("vlm", cfg, dry_run, args.quantization, backend),
+            )
+        )
 
     predictions_path = out_dir / f"predictions_{args.mode}.jsonl"
     if not (args.resume and predictions_path.exists()):
@@ -944,7 +1001,13 @@ def main() -> None:
     reportable = not dry_run and all(
         not sample.metadata.get("synthetic") for sample in samples
     )
-    is_document_qa = args.mode in {"funsd", "indic_ocr", "patram_local"}
+    is_document_qa = args.mode in {
+        "funsd",
+        "indic_ocr",
+        "patram_local",
+        "funsd_local",
+        "indic_ocr_local",
+    }
     if args.mode == "indic_vqa":
         is_document_qa = False
 
@@ -978,10 +1041,14 @@ def main() -> None:
                 if dry_run
                 else "No external validity claim is implied by a harness run.",
                 "Indic OCR items use generated extractive questions over real transcripts."
-                if args.mode == "indic_ocr"
+                if args.mode in ("indic_ocr", "indic_ocr_local")
                 else "",
                 "Cultural VQA is not document QA; C3 is unsupported."
                 if args.mode == "indic_vqa"
+                else "",
+                "Local Ollama Q4 pilot: model tags are mutable and this is not "
+                "the pinned HF paper path."
+                if backend == "ollama"
                 else "",
             ]
             if warning

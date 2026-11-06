@@ -39,6 +39,25 @@ PATTERNS: Dict[str, re.Pattern] = {
     "name": re.compile(r"\b(?:[A-Z][a-z]{2,}(?:\s+[A-Z][a-z]{2,}){1,3})\b"),
 }
 
+CLOZE_TEMPLATE = {
+    "id": "cloze_v1",
+    "question": (
+        "Fill in the blank with the exact word from the document: "
+        '"{sentence}"'
+    ),
+}
+
+_CLOZE_STOPWORDS = {
+    "the", "and", "for", "with", "from", "this", "that", "these", "those",
+    "are", "was", "were", "has", "have", "had", "not", "but", "you", "your",
+    "into", "than", "then", "they", "their", "there", "which", "while",
+    "shall", "will", "would", "could", "should", "been", "being", "also",
+    "एक", "और", "के", "की", "को", "में", "से", "है", "था", "थी", "यह",
+    "एवं", "पर", "का", "कि", "जो", "हो", "गया", "गई",
+    "এবং", "এই", "ও", "কে", "তে", "এর", "হয়", "ছিল",
+    "மற்றும்", "இந்த", "ஒரு", "ஆகும்",
+}
+
 TEMPLATES: Dict[str, Dict[str, str]] = {
     "amount": {
         "id": "amount_v1",
@@ -159,10 +178,71 @@ def extract_candidates(text: str) -> List[SpanCandidate]:
     return sorted(candidates, key=lambda c: (TYPE_PRIORITY.get(c.answer_type, 9), c.start))
 
 
+def _split_sentences(text: str) -> List[str]:
+    parts = re.split(r"(?<=[।.!?])\s+|\n+", text or "")
+    return [part.strip() for part in parts if len(part.strip()) >= 30]
+
+
+def _clean_token(token: str) -> str:
+    return token.strip(".,;:!?()[]{}\"'“”‘’।॥").strip()
+
+
+def _cloze_item(
+    sample: DocumentQASample, item_index: int
+) -> Optional[DocumentQASample]:
+    """Builds a fill-in-the-blank item from a sentence in the transcript.
+
+    This is the fallback for prose pages that contain no amount/date/ID. It is a
+    reading-and-grounding probe, not a natural information need; label it as
+    such in the paper.
+    """
+    text = sample.oracle_text or ""
+    for sentence in _split_sentences(text):
+        for token in sentence.split():
+            answer = _clean_token(token)
+            if len(answer) < 3 or answer.lower() in _CLOZE_STOPWORDS:
+                continue
+            if not any(ch.isalpha() for ch in answer):
+                continue
+            if text.count(answer) != 1:
+                continue
+            blanked = sentence.replace(answer, "_____", 1)
+            return DocumentQASample(
+                sample_id=f"{sample.sample_id}_cloze{item_index}",
+                dataset_name=sample.dataset_name,
+                language=sample.language,
+                language_code=sample.language_code,
+                script_type=sample.script_type,
+                question=CLOZE_TEMPLATE["question"].format(sentence=blanked),
+                ground_truth_answers=[answer],
+                oracle_text=sample.oracle_text,
+                answer_bbox=None,
+                layout_blocks=list(sample.layout_blocks),
+                page_id=sample.page_id or sample.sample_id,
+                dataset_revision=sample.dataset_revision,
+                split=sample.split,
+                supports_text_oracle=True,
+                supports_layout_oracle=False,
+                question_type="generated_cloze",
+                image_obj=sample.image_obj,
+                source_url=sample.source_url,
+                metadata={
+                    **sample.metadata,
+                    "question_template_id": CLOZE_TEMPLATE["id"],
+                    "question_generator_version": GENERATOR_VERSION,
+                    "answer_type": "cloze",
+                    "source_page_id": sample.page_id or sample.sample_id,
+                    "generated_question": True,
+                },
+            )
+    return None
+
+
 def generate_qa_items(
     sample: DocumentQASample,
     max_items: int = 1,
     answer_types: Optional[Sequence[str]] = None,
+    include_cloze: bool = True,
 ) -> List[DocumentQASample]:
     """Generates up to ``max_items`` extractive QA items from a page transcript."""
     if not sample.supports_text_oracle or not sample.oracle_text:
@@ -211,6 +291,10 @@ def generate_qa_items(
         )
         if len(items) >= max_items:
             break
+    if len(items) < max_items and include_cloze:
+        cloze = _cloze_item(sample, len(items))
+        if cloze is not None:
+            items.append(cloze)
     return items
 
 

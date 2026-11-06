@@ -251,6 +251,7 @@ class CascadedOCRPipeline:
         image_override: Optional[Image.Image] = None,
         perturbation_type: Optional[str] = None,
         perturbation_severity: Optional[str] = None,
+        seed: int = 42,
     ) -> PredictionRecord:
         """Executes a supported counterfactual condition on one sample."""
         t0 = time.perf_counter()
