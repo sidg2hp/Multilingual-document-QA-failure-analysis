@@ -1,15 +1,38 @@
-"""Counterfactual Stage-wise Error Attribution Engine.
+"""Counterfactual stage-wise error attribution engine.
 
-Separates end-to-end DocQA errors into:
-1. Visual Degradation Sensitivity (Delta_vis): Acc(C0) - Acc(C_delta)
-2. Spatial / Layout Grounding Error (Delta_lay): max(0, Acc(C2) - Acc(C0))
-3. Text / Script Recognition Error (Delta_rec): max(0, Acc(C3) - Acc(C2))
-4. Read-Reason Dissociation (Delta_dissoc): Acc(C1) - Acc(C0)
-5. Semantic / Cross-Lingual Reasoning Error (E_sem): 1 - Acc(C3)
+The attribution ladder is **architecture-specific**. Applying one decomposition
+to both cascaded OCR+LLM pipelines and OCR-free VLMs produces a reversed causal
+story for one of them, because the same condition means different things to the
+two architectures.
+
+OCR-free VLM (nested from least to most information)::
+
+    degraded -> clean -> oracle crop (C2) -> oracle text (C3)
+
+    E_total = (acc_C0 - acc_Cdelta)      perturbation
+            + (acc_C2 - acc_C0)          layout / localization
+            + (acc_C3 - acc_C2)          visual recognition
+            + (1 - acc_C3)               semantic reasoning
+
+Cascaded OCR + text LLM::
+
+    degraded -> clean -> oracle text (C3)
+
+    E_total = (acc_C0 - acc_Cdelta)      perturbation
+            + (acc_C3 - acc_C0)          joint extraction (recognition + order)
+            + (1 - acc_C3)               semantic reasoning
+
+    acc_C3 - acc_C0 cannot be split into recognition and reading-order error
+    without another intervention. The optional C2 (coordinate text) and C3b
+    (shuffled text) records are reported as separate diagnostics, not as terms
+    of the identity.
+
+Missing conditions are never imputed as 0.0 or as the gold answer. They are
+returned as ``None`` and excluded from aggregates, with coverage reported.
 """
 
-from dataclasses import dataclass
-from typing import Dict, List, Optional, Tuple
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Sequence, Tuple
 
 from src.data.schema import (
     BoundingBox,
@@ -27,31 +50,177 @@ from src.evaluation.metrics import (
     is_indic_confident_hallucination,
 )
 
+#: A transcript is treated as "read correctly" when its CER against the gold
+#: transcript is at most this value. The threshold is deliberately reported as
+#: a parameter of the analysis, not hidden inside the dissociation claim.
+READ_CORRECT_CER_THRESHOLD = 0.10
+
+
+class MissingConditionError(ValueError):
+    """Raised when an exact decomposition is requested without all conditions."""
+
 
 def format_layout_aware_oracle_text(
-    oracle_text: Optional[str], layout_blocks: List[BoundingBox]
+    oracle_text: Optional[str],
+    layout_blocks: List[BoundingBox],
 ) -> Tuple[str, str]:
-    """Produces (1) flat reading-order text and (2) explicit coordinate-annotated text.
+    """Produces (1) flat reading-order text and (2) coordinate-annotated text.
 
-    Used to mathematically isolate Layout/Structure Error (E_lay) from Visual Extraction
-    Error (E_vis):
-      - Flat text: standard reading order without spatial bounding boxes.
-      - Coordinate text: '[x0, y0, x1, y1] token' preserving tabular/form structure.
+    Blocks are ordered by inferred line (using the median block height as the
+    line tolerance) and then by horizontal position. This is adequate for
+    single-column forms and circulars. It is **not** a general multi-column
+    reading-order model; papers using it on multi-column pages must report the
+    limitation and ideally validate ordering on a sample.
     """
     if not layout_blocks:
         base = oracle_text or ""
         return base, base
 
-    sorted_blocks = sorted(layout_blocks, key=lambda b: (round(b.y0 / 12.0), b.x0))
+    heights = sorted(
+        max(1.0, b.y1 - b.y0) for b in layout_blocks if b.text
+    ) or [1.0]
+    line_tolerance = max(1.0, heights[len(heights) // 2] * 0.5)
+
+    sorted_blocks = sorted(
+        (b for b in layout_blocks if b.text),
+        key=lambda b: (round(b.y0 / line_tolerance), b.x0),
+    )
     flat_tokens = [b.text for b in sorted_blocks if b.text]
     coord_lines = [
         f"[{int(b.x0)},{int(b.y0)},{int(b.x1)},{int(b.y1)}] {b.text}"
         for b in sorted_blocks
-        if b.text
     ]
     flat_str = " ".join(flat_tokens) if flat_tokens else (oracle_text or "")
     coord_str = "\n".join(coord_lines) if coord_lines else flat_str
     return flat_str, coord_str
+
+
+def _round(value: Optional[float], digits: int = 4) -> Optional[float]:
+    return None if value is None else round(float(value), digits)
+
+
+def decompose_nested_error(
+    accuracies: Dict[CounterfactualCondition, float],
+    order: Sequence[CounterfactualCondition],
+    labels: Sequence[str],
+    architecture: str,
+) -> Dict[str, object]:
+    """Exact telescoping decomposition over a validated nested sequence.
+
+    ``order`` must run from the least informative condition to the most
+    informative. ``labels[i]`` names the loss between ``order[i]`` and
+    ``order[i+1]``; the final label names the residual loss ``1 - acc[last]``.
+    """
+    if len(labels) != len(order):
+        raise ValueError("labels and order must have the same length")
+    missing = [c.value for c in order if c not in accuracies]
+    if missing:
+        raise MissingConditionError(
+            f"Cannot decompose {architecture}: missing conditions {missing}"
+        )
+
+    values = [float(accuracies[c]) for c in order]
+    components: Dict[str, float] = {}
+    signed: Dict[str, float] = {}
+    for index, label in enumerate(labels):
+        if index < len(order) - 1:
+            signed_value = values[index + 1] - values[index]
+        else:
+            signed_value = 1.0 - values[index]
+        signed[label] = signed_value
+        components[label] = signed_value
+
+    total = 1.0 - values[0]
+    component_sum = sum(components.values())
+    return {
+        "architecture": architecture,
+        "sequence": [
+            {"condition": condition.value, "accuracy": _round(value)}
+            for condition, value in zip(order, values)
+        ],
+        "total_error": _round(total),
+        "components": {key: _round(value) for key, value in components.items()},
+        # Flattened keys keep reports convenient for the common component names.
+        **{key: _round(value) for key, value in components.items()},
+        "component_sum": _round(component_sum),
+        "identity_check_sum": _round(component_sum),
+        "identity_holds": abs(component_sum - total) < 1e-6,
+        "monotonic_nested_sequence": all(
+            earlier <= later + 1e-9 for earlier, later in zip(values, values[1:])
+        ),
+        "note": "Components are signed. Negative values are findings, not errors.",
+    }
+
+
+def decompose_vlm_error(
+    acc_degraded: float,
+    acc_clean: float,
+    acc_oracle_layout: float,
+    acc_oracle_text: float,
+) -> Dict[str, object]:
+    """Identified decomposition for an OCR-free VLM."""
+    return decompose_nested_error(
+        accuracies={
+            CounterfactualCondition.C_DELTA_DEGRADED: acc_degraded,
+            CounterfactualCondition.C0_CLEAN: acc_clean,
+            CounterfactualCondition.C2_ORACLE_LAYOUT: acc_oracle_layout,
+            CounterfactualCondition.C3_ORACLE_TEXT: acc_oracle_text,
+        },
+        order=[
+            CounterfactualCondition.C_DELTA_DEGRADED,
+            CounterfactualCondition.C0_CLEAN,
+            CounterfactualCondition.C2_ORACLE_LAYOUT,
+            CounterfactualCondition.C3_ORACLE_TEXT,
+        ],
+        labels=[
+            "perturbation_error",
+            "layout_localization_error",
+            "recognition_error",
+            "semantic_reasoning_error",
+        ],
+        architecture="ocr_free_vlm",
+    )
+
+
+def decompose_cascaded_error(
+    acc_degraded: float,
+    acc_clean: float,
+    acc_oracle_text: float,
+    acc_oracle_layout: Optional[float] = None,
+) -> Dict[str, object]:
+    """Identified decomposition for a cascaded OCR + text LLM pipeline.
+
+    The middle term is a **joint extraction** error: it contains both character
+    recognition and reading-order errors. ``acc_oracle_layout`` (coordinate text)
+    is optional and reported as a separate layout-representation diagnostic.
+    """
+    result = decompose_nested_error(
+        accuracies={
+            CounterfactualCondition.C_DELTA_DEGRADED: acc_degraded,
+            CounterfactualCondition.C0_CLEAN: acc_clean,
+            CounterfactualCondition.C3_ORACLE_TEXT: acc_oracle_text,
+        },
+        order=[
+            CounterfactualCondition.C_DELTA_DEGRADED,
+            CounterfactualCondition.C0_CLEAN,
+            CounterfactualCondition.C3_ORACLE_TEXT,
+        ],
+        labels=[
+            "perturbation_error",
+            "extraction_error",
+            "semantic_reasoning_error",
+        ],
+        architecture="cascaded_ocr",
+    )
+    if acc_oracle_layout is not None:
+        result["layout_representation_effect"] = _round(
+            acc_oracle_layout - acc_oracle_text
+        )
+        result["layout_representation_note"] = (
+            "Diagnostic only (coordinated gold text minus flat gold text); not "
+            "part of the error identity."
+        )
+    return result
 
 
 def decompose_telescoping_error(
@@ -60,175 +229,220 @@ def decompose_telescoping_error(
     acc_oracle_layout: float,
     acc_oracle_text: float,
 ) -> Dict[str, object]:
-    """Formal telescoping error attribution over the nested oracle sequence.
-
-    The conditions are nested from least to most information:
-
-        degraded -> clean -> oracle layout (C2) -> oracle text (C3)
-
-    Therefore the total error on the degraded input decomposes as:
-
-      E_total = 1 - acc_degraded
-              = (acc_clean        - acc_degraded)   [perturbation loss]
-              + (acc_oracle_layout - acc_clean)      [layout / localization loss]
-              + (acc_oracle_text   - acc_oracle_layout) [recognition loss]
-              + (1                 - acc_oracle_text)   [semantic reasoning loss]
-
-    Components are intentionally signed. A negative component means the oracle
-    intervention reduced accuracy (for example, cropping away useful context),
-    which is an empirical finding rather than a numerical error.
-    """
-    e_total = round(1.0 - acc_degraded, 4)
-    e_deg = round(acc_clean - acc_degraded, 4)
-    e_lay = round(acc_oracle_layout - acc_clean, 4)
-    e_rec = round(acc_oracle_text - acc_oracle_layout, 4)
-    e_sem = round(1.0 - acc_oracle_text, 4)
-    return {
-        "total_error": e_total,
-        "perturbation_error": e_deg,
-        "layout_localization_error": e_lay,
-        "recognition_error": e_rec,
-        "semantic_reasoning_error": e_sem,
-        "identity_check_sum": round(e_deg + e_lay + e_rec + e_sem, 4),
-        "monotonic_nested_sequence": bool(
-            acc_degraded <= acc_clean <= acc_oracle_layout <= acc_oracle_text
-        ),
-    }
+    """Deprecated VLM-only alias retained for backwards compatibility."""
+    return decompose_vlm_error(
+        acc_degraded=acc_degraded,
+        acc_clean=acc_clean,
+        acc_oracle_layout=acc_oracle_layout,
+        acc_oracle_text=acc_oracle_text,
+    )
 
 
 @dataclass
 class SampleAttribution:
-    """Counterfactual error decomposition for a single (sample, model) pair."""
+    """Counterfactual error decomposition for one (item, model) pair.
+
+    Optional condition scores are ``None`` when the condition was not run or is
+    not supported by the dataset. Downstream aggregation must ignore ``None``;
+    it must never treat it as zero.
+    """
 
     sample_id: str
     model_name: str
     language: str
     script_type: str
-    anls_c0_clean: float
-    anls_c_delta_degraded: float
-    anls_c1_self_ocr: float
-    anls_c2_oracle_layout: float
-    anls_c3_oracle_text: float
-    delta_vis: float
-    delta_lay: float
-    delta_rec: float
-    delta_dissoc: float
-    error_sem: float
+    page_id: Optional[str]
+    architecture: str
+    anls_c0_clean: Optional[float]
+    anls_c_delta_degraded: Optional[float]
+    anls_c1_self_ocr: Optional[float]
+    anls_c2_oracle_layout: Optional[float]
+    anls_c2b_placebo: Optional[float]
+    anls_c3_oracle_text: Optional[float]
+    anls_c3b_shuffled: Optional[float]
+    delta_vis: Optional[float]
+    delta_lay: Optional[float]
+    delta_rec: Optional[float]
+    delta_dissoc: Optional[float]
+    error_sem: Optional[float]
     primary_failure_stage: str
-    degraded_failure_mode: str  # "correct", "abstained", or "confident_hallucination"
+    degraded_failure_mode: Optional[str]
     ocr_cer_clean: Optional[float] = None
     ocr_matra_er_clean: Optional[float] = None
-    delta_vis_signed: float = 0.0
-    delta_lay_signed: float = 0.0
-    delta_rec_signed: float = 0.0
+    c1_transcript_cer: Optional[float] = None
+    c1_transcript_mer: Optional[float] = None
+    c1_read_correct: Optional[bool] = None
+    delta_vis_signed: Optional[float] = None
+    delta_lay_signed: Optional[float] = None
+    delta_rec_signed: Optional[float] = None
+    delta_lay_placebo: Optional[float] = None
+    delta_lay_net: Optional[float] = None
+    layout_representation_effect: Optional[float] = None
     indic_confident_hallucination: bool = False
+    conditions_available: List[str] = field(default_factory=list)
+
+
+def _score_or_none(
+    record: Optional[PredictionRecord], ground_truths: List[str]
+) -> Optional[float]:
+    if record is None:
+        return None
+    return compute_anls(record.predicted_answer, ground_truths)
 
 
 def attribute_sample_errors(
     sample: DocumentQASample,
     records_by_condition: Dict[CounterfactualCondition, PredictionRecord],
     failure_threshold: float = 0.5,
+    architecture: str = "ocr_free_vlm",
 ) -> SampleAttribution:
-    """Computes counterfactual stage-wise attribution for a document QA sample."""
-    gts = sample.ground_truth_answers
+    """Computes counterfactual attribution without imputing missing conditions.
 
-    def _score(cond: CounterfactualCondition) -> float:
-        rec = records_by_condition.get(cond)
-        if rec is None:
-            return 0.0
-        return compute_anls(rec.predicted_answer, gts)
+    ``architecture`` must be ``"ocr_free_vlm"`` or ``"cascaded_ocr"``. For the
+    cascade, C1 and C2 have different meanings (C1 is undefined; C2 is
+    coordinate gold text), and the primary-failure labels reflect that.
+    """
+    if architecture not in ("ocr_free_vlm", "cascaded_ocr"):
+        raise ValueError(f"Unknown architecture: {architecture}")
 
-    s_c0 = _score(CounterfactualCondition.C0_CLEAN)
-    s_cd = (
-        _score(CounterfactualCondition.C_DELTA_DEGRADED)
-        if CounterfactualCondition.C_DELTA_DEGRADED in records_by_condition
-        else s_c0
-    )
-    s_c1 = (
-        _score(CounterfactualCondition.C1_SELF_OCR_PROBE)
-        if CounterfactualCondition.C1_SELF_OCR_PROBE in records_by_condition
-        else s_c0
-    )
-    s_c2 = (
-        _score(CounterfactualCondition.C2_ORACLE_LAYOUT)
-        if CounterfactualCondition.C2_ORACLE_LAYOUT in records_by_condition
-        else s_c0
-    )
-    s_c3 = (
-        _score(CounterfactualCondition.C3_ORACLE_TEXT)
-        if CounterfactualCondition.C3_ORACLE_TEXT in records_by_condition
-        else s_c2
-    )
+    gts = sample.all_answers()
+    scores = {
+        condition: _score_or_none(records_by_condition.get(condition), gts)
+        for condition in (
+            CounterfactualCondition.C0_CLEAN,
+            CounterfactualCondition.C_DELTA_DEGRADED,
+            CounterfactualCondition.C1_SELF_OCR_PROBE,
+            CounterfactualCondition.C2_ORACLE_LAYOUT,
+            CounterfactualCondition.C2B_PLACEBO_CROP,
+            CounterfactualCondition.C3_ORACLE_TEXT,
+            CounterfactualCondition.C3B_SHUFFLED_TEXT,
+        )
+    }
 
-    delta_vis_signed = round(s_c0 - s_cd, 4)
-    delta_lay_signed = round(s_c2 - s_c0, 4)
-    delta_rec_signed = round(s_c3 - s_c2, 4)
-    delta_vis = round(max(0.0, delta_vis_signed), 4)
-    delta_lay = round(max(0.0, delta_lay_signed), 4)
-    delta_rec = round(max(0.0, delta_rec_signed), 4)
-    delta_dissoc = round(s_c1 - s_c0, 4)
-    error_sem = round(1.0 - s_c3, 4)
+    c0 = scores[CounterfactualCondition.C0_CLEAN]
+    cd = scores[CounterfactualCondition.C_DELTA_DEGRADED]
+    c1 = scores[CounterfactualCondition.C1_SELF_OCR_PROBE]
+    c2 = scores[CounterfactualCondition.C2_ORACLE_LAYOUT]
+    c2b = scores[CounterfactualCondition.C2B_PLACEBO_CROP]
+    c3 = scores[CounterfactualCondition.C3_ORACLE_TEXT]
+    c3b = scores[CounterfactualCondition.C3B_SHUFFLED_TEXT]
 
-    # Classify primary root cause of failure
-    if s_c0 >= failure_threshold and s_cd >= failure_threshold:
-        primary_stage = "no_failure"
-    elif s_c0 >= failure_threshold and s_cd < failure_threshold:
-        primary_stage = "visual_degradation"
-    elif s_c3 < failure_threshold:
-        primary_stage = "semantic_reasoning"
-    elif s_c2 >= failure_threshold and s_c0 < failure_threshold:
-        primary_stage = "layout_localization"
-    elif s_c1 >= failure_threshold and s_c0 < failure_threshold:
-        primary_stage = "read_reason_dissociation"
-    else:
-        primary_stage = "text_recognition"
+    def diff(high: Optional[float], low: Optional[float]) -> Optional[float]:
+        if high is None or low is None:
+            return None
+        return _round(high - low)
 
-    # Classify whether degraded error is an explicit abstention or confident hallucination
-    deg_rec = records_by_condition.get(
-        CounterfactualCondition.C_DELTA_DEGRADED,
-        records_by_condition.get(CounterfactualCondition.C0_CLEAN),
+    delta_vis = diff(c0, cd)
+    delta_lay = diff(c2, c0)
+    delta_rec = diff(c3, c2)
+    delta_dissoc = diff(c1, c0)
+    error_sem = None if c3 is None else _round(1.0 - c3)
+
+    # C1 transcript fidelity: this is what distinguishes "can read but cannot
+    # use the reading" from "fabricated a fluent transcript".
+    c1_record = records_by_condition.get(CounterfactualCondition.C1_SELF_OCR_PROBE)
+    c1_cer: Optional[float] = None
+    c1_mer: Optional[float] = None
+    c1_read_correct: Optional[bool] = None
+    if c1_record and c1_record.extracted_ocr_text and sample.oracle_text:
+        c1_cer = _round(compute_cer(c1_record.extracted_ocr_text, sample.oracle_text))
+        c1_mer = _round(
+            compute_matra_error_rate(c1_record.extracted_ocr_text, sample.oracle_text)
+        )
+        c1_read_correct = c1_cer <= READ_CORRECT_CER_THRESHOLD
+
+    # Primary failure stage. Only assigned when the conditions it depends on
+    # exist; otherwise the item is explicitly "insufficient_conditions".
+    primary_stage = "insufficient_conditions"
+    if architecture == "ocr_free_vlm":
+        if c0 is not None:
+            if c0 >= failure_threshold and (cd is None or cd >= failure_threshold):
+                primary_stage = "no_failure"
+            elif c0 >= failure_threshold and cd is not None:
+                primary_stage = "visual_degradation"
+            elif c3 is not None and c3 < failure_threshold:
+                primary_stage = "semantic_reasoning"
+            elif c2 is not None and c2 >= failure_threshold:
+                primary_stage = "layout_localization"
+            elif c1 is not None and c1 >= failure_threshold:
+                primary_stage = "read_reason_dissociation"
+            elif c3 is not None:
+                primary_stage = "text_recognition"
+    else:  # cascaded_ocr
+        if c0 is not None:
+            if c0 >= failure_threshold and (cd is None or cd >= failure_threshold):
+                primary_stage = "no_failure"
+            elif c0 >= failure_threshold and cd is not None:
+                primary_stage = "visual_degradation"
+            elif c3 is not None and c3 < failure_threshold:
+                primary_stage = "semantic_reasoning"
+            elif c3 is not None:
+                primary_stage = "text_extraction"
+            elif c2 is not None:
+                primary_stage = "insufficient_conditions"
+
+    degraded_record = records_by_condition.get(
+        CounterfactualCondition.C_DELTA_DEGRADED
     )
-    if deg_rec is not None:
-        degraded_mode = classify_answer_failure(
-            deg_rec.predicted_answer, gts, deg_rec.abstained, failure_threshold
+    if degraded_record is not None:
+        degraded_mode: Optional[str] = classify_answer_failure(
+            degraded_record.predicted_answer,
+            gts,
+            degraded_record.abstained,
+            failure_threshold,
         )
     else:
-        degraded_mode = "correct" if s_cd >= failure_threshold else "confident_hallucination"
+        degraded_mode = None
 
     indic_hallucination = False
-    if deg_rec is not None and sample.script_type in (
-        ScriptType.MONOLINGUAL_INDIC,
-        ScriptType.CODE_MIXED,
+    if (
+        degraded_record is not None
+        and sample.script_type
+        in (ScriptType.MONOLINGUAL_INDIC, ScriptType.CODE_MIXED)
     ):
         reference = sample.oracle_text or (gts[0] if gts else "")
         indic_hallucination = is_indic_confident_hallucination(
-            deg_rec.predicted_answer,
+            degraded_record.predicted_answer,
             reference,
-            abstained=deg_rec.abstained,
+            abstained=degraded_record.abstained,
             threshold=failure_threshold,
         )
 
-    # Compute OCR CER & Matra Error Rate if oracle_text and extracted_ocr_text exist
-    c0_rec = records_by_condition.get(CounterfactualCondition.C0_CLEAN)
+    c0_record = records_by_condition.get(CounterfactualCondition.C0_CLEAN)
     cer_clean = None
     mer_clean = None
-    if c0_rec and c0_rec.extracted_ocr_text and sample.oracle_text:
-        cer_clean = round(compute_cer(c0_rec.extracted_ocr_text, sample.oracle_text), 4)
-        mer_clean = round(
-            compute_matra_error_rate(c0_rec.extracted_ocr_text, sample.oracle_text), 4
+    if c0_record and c0_record.extracted_ocr_text and sample.oracle_text:
+        cer_clean = _round(compute_cer(c0_record.extracted_ocr_text, sample.oracle_text))
+        mer_clean = _round(
+            compute_matra_error_rate(
+                c0_record.extracted_ocr_text, sample.oracle_text
+            )
         )
 
-    model_name = c0_rec.model_name if c0_rec else "unknown"
+    layout_representation_effect = None
+    if architecture == "cascaded_ocr" and c2 is not None and c3 is not None:
+        layout_representation_effect = _round(c2 - c3)
+
+    delta_lay_placebo = diff(c2b, c0)
+    delta_lay_net = None
+    if c2 is not None and c2b is not None:
+        delta_lay_net = _round(c2 - c2b)
+
+    model_name = c0_record.model_name if c0_record else "unknown"
     return SampleAttribution(
         sample_id=sample.sample_id,
         model_name=model_name,
         language=sample.language,
         script_type=sample.script_type.value,
-        anls_c0_clean=s_c0,
-        anls_c_delta_degraded=s_cd,
-        anls_c1_self_ocr=s_c1,
-        anls_c2_oracle_layout=s_c2,
-        anls_c3_oracle_text=s_c3,
+        page_id=sample.page_id or sample.sample_id,
+        architecture=architecture,
+        anls_c0_clean=c0,
+        anls_c_delta_degraded=cd,
+        anls_c1_self_ocr=c1,
+        anls_c2_oracle_layout=c2,
+        anls_c2b_placebo=c2b,
+        anls_c3_oracle_text=c3,
+        anls_c3b_shuffled=c3b,
         delta_vis=delta_vis,
         delta_lay=delta_lay,
         delta_rec=delta_rec,
@@ -238,86 +452,126 @@ def attribute_sample_errors(
         degraded_failure_mode=degraded_mode,
         ocr_cer_clean=cer_clean,
         ocr_matra_er_clean=mer_clean,
-        delta_vis_signed=delta_vis_signed,
-        delta_lay_signed=delta_lay_signed,
-        delta_rec_signed=delta_rec_signed,
+        c1_transcript_cer=c1_cer,
+        c1_transcript_mer=c1_mer,
+        c1_read_correct=c1_read_correct,
+        delta_vis_signed=delta_vis,
+        delta_lay_signed=diff(c2, c0),
+        delta_rec_signed=diff(c3, c2),
+        delta_lay_placebo=delta_lay_placebo,
+        delta_lay_net=delta_lay_net,
+        layout_representation_effect=layout_representation_effect,
         indic_confident_hallucination=indic_hallucination,
+        conditions_available=[
+            condition.value
+            for condition in records_by_condition
+            if scores.get(condition) is not None
+        ],
     )
 
 
+def _mean(values: List[Optional[float]]) -> Optional[float]:
+    present = [float(v) for v in values if v is not None]
+    if not present:
+        return None
+    return round(sum(present) / len(present), 4)
+
+
+def _distribution(values: List[str]) -> Dict[str, float]:
+    if not values:
+        return {}
+    counts: Dict[str, int] = {}
+    for value in values:
+        counts[value] = counts.get(value, 0) + 1
+    total = float(len(values))
+    return {key: round(count / total, 4) for key, count in sorted(counts.items())}
+
+
 def _aggregate_subset(attributions: List[SampleAttribution]) -> Dict[str, object]:
-    """Computes the metric bundle for one group of attributions."""
+    """Metric bundle for one group; every mean is over non-missing values."""
     n = float(len(attributions))
     if n == 0:
         return {}
 
-    stage_counts: Dict[str, int] = {}
-    mode_counts: Dict[str, int] = {}
-    for attr in attributions:
-        stage_counts[attr.primary_failure_stage] = (
-            stage_counts.get(attr.primary_failure_stage, 0) + 1
-        )
-        mode_counts[attr.degraded_failure_mode] = (
-            mode_counts.get(attr.degraded_failure_mode, 0) + 1
-        )
-
-    num_abstained = mode_counts.get("abstained", 0)
-    num_hallucinated = mode_counts.get("confident_hallucination", 0)
+    stage_counts = [a.primary_failure_stage for a in attributions]
+    mode_counts = [
+        a.degraded_failure_mode
+        for a in attributions
+        if a.degraded_failure_mode is not None
+    ]
+    num_abstained = sum(1 for m in mode_counts if m == "abstained")
+    num_hallucinated = sum(1 for m in mode_counts if m == "confident_hallucination")
     num_indic_hallucinated = sum(
         1 for a in attributions if a.indic_confident_hallucination
     )
 
-    return {
+    def coverage(field_name: str) -> int:
+        return sum(
+            1 for a in attributions if getattr(a, field_name, None) is not None
+        )
+
+    summary: Dict[str, object] = {
         "num_samples": len(attributions),
-        "mean_anls_c0_clean": round(sum(a.anls_c0_clean for a in attributions) / n, 4),
-        "mean_anls_c_delta_degraded": round(
-            sum(a.anls_c_delta_degraded for a in attributions) / n, 4
-        ),
-        "mean_anls_c1_self_ocr": round(
-            sum(a.anls_c1_self_ocr for a in attributions) / n, 4
-        ),
-        "mean_anls_c2_oracle_layout": round(
-            sum(a.anls_c2_oracle_layout for a in attributions) / n, 4
-        ),
-        "mean_anls_c3_oracle_text": round(
-            sum(a.anls_c3_oracle_text for a in attributions) / n, 4
-        ),
-        "mean_delta_vis": round(sum(a.delta_vis for a in attributions) / n, 4),
-        "mean_delta_lay": round(sum(a.delta_lay for a in attributions) / n, 4),
-        "mean_delta_rec": round(sum(a.delta_rec for a in attributions) / n, 4),
-        "mean_delta_vis_signed": round(
-            sum(a.delta_vis_signed for a in attributions) / n, 4
-        ),
-        "mean_delta_lay_signed": round(
-            sum(a.delta_lay_signed for a in attributions) / n, 4
-        ),
-        "mean_delta_rec_signed": round(
-            sum(a.delta_rec_signed for a in attributions) / n, 4
-        ),
-        "mean_delta_dissoc": round(sum(a.delta_dissoc for a in attributions) / n, 4),
-        "mean_error_sem": round(sum(a.error_sem for a in attributions) / n, 4),
+        "num_documents": len({a.page_id for a in attributions if a.page_id}),
         "num_abstained_degraded": num_abstained,
         "num_confident_hallucination_degraded": num_hallucinated,
         "num_indic_confident_hallucination": num_indic_hallucinated,
         "hallucination_to_abstention_ratio": compute_hallucination_to_abstention_ratio(
             num_hallucinated, num_abstained
         ),
-        "primary_failure_stage_distribution": {
-            k: round(v / n, 4) for k, v in stage_counts.items()
-        },
-        "degraded_failure_mode_distribution": {
-            k: round(v / n, 4) for k, v in mode_counts.items()
+        "primary_failure_stage_distribution": _distribution(stage_counts),
+        "degraded_failure_mode_distribution": _distribution(mode_counts),
+        "condition_coverage": {
+            field_name: coverage(field_name)
+            for field_name in (
+                "anls_c0_clean",
+                "anls_c_delta_degraded",
+                "anls_c1_self_ocr",
+                "anls_c2_oracle_layout",
+                "anls_c2b_placebo",
+                "anls_c3_oracle_text",
+                "anls_c3b_shuffled",
+                "c1_transcript_cer",
+            )
         },
     }
 
+    means = {
+        "mean_anls_c0_clean": "anls_c0_clean",
+        "mean_anls_c_delta_degraded": "anls_c_delta_degraded",
+        "mean_anls_c1_self_ocr": "anls_c1_self_ocr",
+        "mean_anls_c2_oracle_layout": "anls_c2_oracle_layout",
+        "mean_anls_c2b_placebo": "anls_c2b_placebo",
+        "mean_anls_c3_oracle_text": "anls_c3_oracle_text",
+        "mean_anls_c3b_shuffled": "anls_c3b_shuffled",
+        "mean_delta_vis": "delta_vis",
+        "mean_delta_lay": "delta_lay",
+        "mean_delta_rec": "delta_rec",
+        "mean_delta_dissoc": "delta_dissoc",
+        "mean_error_sem": "error_sem",
+        "mean_delta_lay_placebo": "delta_lay_placebo",
+        "mean_delta_lay_net": "delta_lay_net",
+        "mean_layout_representation_effect": "layout_representation_effect",
+        "mean_c1_transcript_cer": "c1_transcript_cer",
+        "mean_c1_transcript_mer": "c1_transcript_mer",
+        "mean_ocr_cer_clean": "ocr_cer_clean",
+        "mean_ocr_matra_er_clean": "ocr_matra_er_clean",
+    }
+    for key, field_name in means.items():
+        summary[key] = _mean([getattr(a, field_name) for a in attributions])
+
+    summary["c1_read_correct_rate"] = _mean(
+        [1.0 if a.c1_read_correct else 0.0 for a in attributions if a.c1_read_correct is not None]
+    )
+    return summary
+
 
 def summarize_attributions(attributions: List[SampleAttribution]) -> Dict[str, object]:
-    """Aggregates stage-wise error attribution, HAR, and script/language breakdowns."""
+    """Aggregates stage-wise attribution, HAR, and script/language breakdowns."""
     if not attributions:
         return {}
 
     summary = _aggregate_subset(attributions)
-
     by_script: Dict[str, List[SampleAttribution]] = {}
     by_language: Dict[str, List[SampleAttribution]] = {}
     for attr in attributions:

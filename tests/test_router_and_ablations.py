@@ -1,12 +1,23 @@
-"""Unit tests for the 5-level ablation spectrum, telescoping error math, and OCR-VLM router."""
+"""Unit tests for the 5-level ablation spectrum, error math, and OCR-VLM router."""
 
+import pytest
 from PIL import Image, ImageDraw
 
 from src.evaluation.attribution import (
+    MissingConditionError,
+    attribute_sample_errors,
+    decompose_cascaded_error,
     decompose_telescoping_error,
+    decompose_vlm_error,
     format_layout_aware_oracle_text,
 )
-from src.data.schema import BoundingBox
+from src.data.schema import (
+    BoundingBox,
+    CounterfactualCondition,
+    DocumentQASample,
+    PredictionRecord,
+    ScriptType,
+)
 from src.perturbations.degrade import apply_perturbation
 from src.routing.features import DocumentRoutingFeatures, extract_routing_features
 from src.routing.router import AdaptiveDocQARouter, PIPELINE_OCR, PIPELINE_VLM
@@ -48,6 +59,71 @@ def test_telescoping_error_decomposition_identity() -> None:
     assert decomp["recognition_error"] == 0.09
     assert decomp["semantic_reasoning_error"] == 0.07
     assert decomp["monotonic_nested_sequence"] is True
+
+
+def test_decompositions_are_architecture_specific() -> None:
+    vlm = decompose_vlm_error(
+        acc_degraded=0.40, acc_clean=0.65, acc_oracle_layout=0.80, acc_oracle_text=0.90
+    )
+    assert vlm["architecture"] == "ocr_free_vlm"
+    assert vlm["identity_holds"] is True
+    assert vlm["recognition_error"] == 0.10
+    assert vlm["semantic_reasoning_error"] == 0.10
+
+    cascade = decompose_cascaded_error(
+        acc_degraded=0.40, acc_clean=0.65, acc_oracle_text=0.90, acc_oracle_layout=0.85
+    )
+    assert cascade["architecture"] == "cascaded_ocr"
+    assert cascade["identity_holds"] is True
+    assert cascade["extraction_error"] == 0.25
+    # Coordinated gold text is *worse* than flat gold text here: a finding, not
+    # an error term, and it must not be folded into the identity.
+    assert cascade["layout_representation_effect"] == pytest.approx(-0.05)
+    assert "recognition_error" not in cascade
+
+
+def test_decomposition_rejects_missing_conditions() -> None:
+    from src.evaluation.attribution import decompose_nested_error
+
+    with pytest.raises(MissingConditionError):
+        decompose_nested_error(
+            accuracies={CounterfactualCondition.C0_CLEAN: 0.6},
+            order=[
+                CounterfactualCondition.C0_CLEAN,
+                CounterfactualCondition.C3_ORACLE_TEXT,
+            ],
+            labels=["extraction", "semantic"],
+            architecture="cascaded_ocr",
+        )
+
+
+def test_missing_conditions_are_not_imputed_as_zero() -> None:
+    sample = DocumentQASample(
+        sample_id="s1",
+        dataset_name="fixture",
+        language="hi",
+        script_type=ScriptType.MONOLINGUAL_INDIC,
+        question="What is the amount?",
+        ground_truth_answers=["500"],
+        oracle_text="Amount: 500",
+        supports_text_oracle=True,
+    )
+    records = {
+        CounterfactualCondition.C0_CLEAN: PredictionRecord(
+            sample_id="s1",
+            model_name="m",
+            quantization="nf4",
+            condition=CounterfactualCondition.C0_CLEAN,
+            perturbation_type=None,
+            perturbation_severity=None,
+            predicted_answer="500",
+        )
+    }
+    attr = attribute_sample_errors(sample, records)
+    assert attr.anls_c3_oracle_text is None
+    assert attr.error_sem is None
+    assert attr.delta_lay is None
+    assert "C0_clean_end2end" in attr.conditions_available
 
 
 def test_layout_aware_oracle_formatting() -> None:
