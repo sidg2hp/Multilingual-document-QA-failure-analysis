@@ -171,14 +171,21 @@ def build_runner(kind: str, cfg: dict, dry_run: bool, quantization: Optional[str
             ocr_backend="tesseract",
             reader_model_id=model_cfg["model_id"],
             quantization=quantization or model_cfg.get("quantization", "nf4"),
+            lang_map=(
+                cfg.get("models", {})
+                .get("ocr_engines", {})
+                .get("tesseract", {})
+                .get("lang_map")
+            ),
             model_revision=model_cfg.get("revision"),
             max_new_tokens=int(model_cfg.get("max_new_tokens", 128)),
             dry_run=dry_run,
         )
     model_cfg = cfg["models"]["vlms"]["primary_vlm"]
+    default_quantization = (model_cfg.get("quantization_modes") or ["nf4"])[0]
     return OCRFreeVLMRunner(
         model_id=model_cfg["model_id"],
-        quantization=quantization or "nf4",
+        quantization=quantization or default_quantization,
         max_new_tokens=int(model_cfg.get("max_new_tokens", 128)),
         min_pixels=int(model_cfg.get("min_pixels", 200704)),
         max_pixels=int(model_cfg.get("max_pixels", 802816)),
