@@ -483,6 +483,8 @@ def stream_indic_vision_bench_ocr(
             sample = sample_from_indic_ocr_row(row, spec)
         except (ValueError, TypeError):
             continue
+        if sample.image_obj is None:
+            continue
         yield sample
         count += 1
         if count >= max_samples:
@@ -504,6 +506,8 @@ def stream_indic_vision_bench_vqa(
             sample = sample_from_indic_vqa_row(row, spec)
         except (ValueError, TypeError):
             continue
+        if sample.image_obj is None:
+            continue
         yield sample
         count += 1
         if count >= max_samples:
@@ -519,6 +523,8 @@ def stream_funsd_samples(
     emitted = 0
     for row in _load_streaming(spec.repo, spec.config, spec.split, revision):
         for sample in samples_from_funsd_row(row, spec):
+            if sample.image_obj is None:
+                continue
             yield sample
             emitted += 1
             if emitted >= max_samples:

@@ -406,6 +406,7 @@ def attribute_sample_errors(
             reference,
             abstained=degraded_record.abstained,
             threshold=failure_threshold,
+            gold_answers=gts,
         )
 
     c0_record = records_by_condition.get(CounterfactualCondition.C0_CLEAN)

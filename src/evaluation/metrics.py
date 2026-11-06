@@ -349,18 +349,26 @@ def is_indic_confident_hallucination(
     reference: str,
     abstained: bool = False,
     threshold: float = 0.5,
+    gold_answers: Optional[List[str]] = None,
 ) -> bool:
     """Conservative proxy for a confident, wrong answer on an Indic reference.
 
-    Requires an Indic reference, a non-abstaining substantive prediction, and
-    failed ANLS. It is **not** proof of a matra-specific error; use human labels
-    for causal claims.
+    ``reference`` is used only to confirm that the document contains Indic
+    script. The correctness check must use the **gold answer(s)**, not the full
+    transcript: comparing a short correct answer to a whole page would classify
+    it as a hallucination. Pass ``gold_answers`` for that check.
+
+    This is **not** proof of a matra-specific error; use human labels for causal
+    claims.
     """
     if abstained or not (prediction or "").strip() or not reference:
         return False
     if not any(_is_indic_codepoint(ch) for ch in reference):
         return False
-    return compute_anls(prediction, [reference], threshold=threshold) < threshold
+    targets = [answer for answer in (gold_answers or []) if answer]
+    if not targets:
+        targets = [reference]
+    return compute_anls(prediction, targets, threshold=threshold) < threshold
 
 
 def compute_field_f1(prediction: str, ground_truths: List[str]) -> float:

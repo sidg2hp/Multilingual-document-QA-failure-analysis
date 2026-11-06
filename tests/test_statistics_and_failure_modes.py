@@ -78,6 +78,20 @@ def test_har_and_failure_modes() -> None:
     assert is_indic_confident_hallucination("गलत उत्तर", "कुल राशि 500") is True
     assert is_indic_confident_hallucination("कुल राशि 500", "कुल राशि 500") is False
     assert is_indic_confident_hallucination("total 900", "total 500") is False
+    # A short correct answer against a long Indic transcript must not be
+    # classified as a hallucination just because ANLS against the page is low.
+    assert (
+        is_indic_confident_hallucination(
+            "500", "कुल राशि 500 निर्धारित है", gold_answers=["500"]
+        )
+        is False
+    )
+    assert (
+        is_indic_confident_hallucination(
+            "999", "कुल राशि 500 निर्धारित है", gold_answers=["500"]
+        )
+        is True
+    )
 
 
 def _make_attribution(mode: str, indic_hallucination: bool) -> SampleAttribution:
