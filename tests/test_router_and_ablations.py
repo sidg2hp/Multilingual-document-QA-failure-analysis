@@ -144,8 +144,16 @@ def test_adaptive_ocr_vlm_router_and_pareto() -> None:
 
     img_blur = apply_perturbation(img_clean, "gaussian_blur", severity="level_5")
 
-    f_clean = extract_routing_features(img_clean, sample_id="doc_clean", script_mixing_index=0.0)
-    f_blur = extract_routing_features(img_blur, sample_id="doc_blur", script_mixing_index=0.45)
+    f_clean = extract_routing_features(
+        img_clean, sample_id="doc_clean", declared_language="en"
+    )
+    f_blur = extract_routing_features(
+        img_blur,
+        sample_id="doc_blur",
+        declared_language="hi",
+        script_mixing_index=0.45,
+        script_mixing_source="declared_metadata",
+    )
 
     router = AdaptiveDocQARouter(ocr_relative_cost=0.25, vlm_relative_cost=1.0, cost_tradeoff_lambda=0.1)
     # Train on synthetic pattern: clean favors OCR (equal accuracy, lower cost), blurry/code-mixed favors VLM
@@ -193,3 +201,61 @@ def test_router_cv_prevents_in_sample_leakage() -> None:
     assert "oof_prediction_mae_ocr" in result
     assert "oof_prediction_mae_vlm" in result
     assert len(result["pareto_frontier"]) > 0
+
+
+def test_router_rejects_oracle_features() -> None:
+    feature = DocumentRoutingFeatures(
+        sample_id="leak",
+        laplacian_variance=100.0,
+        rms_contrast=0.5,
+        shannon_entropy=5.0,
+        impulse_noise_ratio=0.0,
+        horizontal_transition_rate=0.1,
+        vertical_transition_rate=0.1,
+        script_mixing_index=0.4,
+        script_mixing_source="oracle_text",
+        uses_oracle_text=True,
+    )
+    router = AdaptiveDocQARouter()
+    with pytest.raises(Exception):
+        router.fit([feature, feature], [0.9, 0.9], [0.8, 0.8])
+
+
+def test_router_uses_document_groups_and_measured_cost() -> None:
+    features = []
+    ocr_scores = []
+    vlm_scores = []
+    groups = []
+    for index in range(12):
+        clean = index % 2 == 0
+        features.append(
+            DocumentRoutingFeatures(
+                sample_id=f"doc_{index}",
+                laplacian_variance=500.0 if clean else 20.0,
+                rms_contrast=0.5,
+                shannon_entropy=5.0,
+                impulse_noise_ratio=0.0,
+                horizontal_transition_rate=0.1,
+                vertical_transition_rate=0.1,
+                declared_indic=0.0 if clean else 1.0,
+            )
+        )
+        ocr_scores.append(0.9 if clean else 0.2)
+        vlm_scores.append(0.8 if clean else 0.85)
+        groups.append(f"page_{index // 2}")  # two questions per page
+
+    router = AdaptiveDocQARouter()
+    result = router.evaluate_pareto_frontier_cv(
+        features,
+        ocr_scores,
+        vlm_scores,
+        n_splits=3,
+        seed=7,
+        group_ids=groups,
+        ocr_cost_ms=200.0,
+        vlm_cost_ms=1000.0,
+    )
+    assert result["evaluation_protocol"].endswith("grouped_by_document")
+    assert result["n_clusters"] == 6
+    assert result["cost_model"] == "measured_ms"
+    assert result["oracle_router_upper_bound_anls"] >= result["best_single_anls"]
