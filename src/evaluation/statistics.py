@@ -395,7 +395,9 @@ def risk_coverage_curve(
     cumulative = np.cumsum(sorted_correct)
     coverage = np.arange(1, conf.size + 1) / float(conf.size)
     risk = 1.0 - cumulative / np.arange(1, conf.size + 1)
-    trapezoid = getattr(np, "trapezoid", np.trapz)
+    trapezoid = getattr(np, "trapezoid", None)
+    if trapezoid is None:  # NumPy < 2
+        trapezoid = getattr(np, "trapz")
     aurc = float(trapezoid(risk, coverage)) if conf.size > 1 else float(risk[0])
     return {
         "aurc": round(aurc, 4),
