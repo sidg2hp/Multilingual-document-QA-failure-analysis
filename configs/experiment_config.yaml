@@ -93,6 +93,7 @@ models:
 
   text_qa_reader:
     model_id: "Qwen/Qwen2.5-3B-Instruct"
+    revision: "aa8e72537993ba99e69dfaafa59ed015b17504d1"
     quantization: "nf4"
     max_new_tokens: 128
     temperature: 0.0
@@ -100,6 +101,7 @@ models:
   vlms:
     primary_vlm:
       model_id: "Qwen/Qwen2.5-VL-3B-Instruct"
+      revision: "66285546d2b821cf421d4f5eb2576359d3770cd3"
       quantization_modes: ["nf4", "int8"]
       min_pixels: 200704       # 256 * 28 * 28 (fits easily in 6GB VRAM)
       max_pixels: 802816       # 1024 * 28 * 28
