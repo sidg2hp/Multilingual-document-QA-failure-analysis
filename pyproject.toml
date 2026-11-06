@@ -38,11 +38,12 @@ dev = ["pytest>=8.2", "pytest-cov>=5.0", "ruff>=0.6"]
 Repository = "https://github.com/sidg2hp/Multilingual-document-QA-failure-analysis"
 
 [tool.setuptools.packages.find]
-include = ["src*"]
+include = ["src*", "scripts*"]
 
 [tool.pytest.ini_options]
 minversion = "8.0"
 testpaths = ["tests"]
+pythonpath = ["."]
 addopts = "-q"
 
 [tool.ruff]
