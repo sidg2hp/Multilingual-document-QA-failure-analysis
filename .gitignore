@@ -31,9 +31,10 @@ wandb/
 .ipynb_checkpoints
 .pytest_cache/
 
-# OS / Editor files
+# OS / Editor / Local Notes files
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
 *.swp
+PROJECT_MASTER_NOTES.txt
