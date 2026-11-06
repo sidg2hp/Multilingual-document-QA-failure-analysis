@@ -66,31 +66,26 @@ GitHub credentials; see the final section.
 | `docs(results): add the RTX 3050 pilot, its negative findings, and the cascade prompt bug` | Curated results, raw predictions, OCR text, limitations. |
 | `docs: clarify the local pilot scope` | Remove ambiguous wording. |
 
-## Why the remote is behind
+## Push status
 
-The local branch is ahead of `origin/main` by these commits. A push fails with:
+The series is published to `origin/main`. The local branch and the GitHub remote
+match; no force-push or history rewrite was used.
 
-```text
-fatal: could not read Username for 'https://github.com'
+```bash
+git fetch origin
+git log -1 --oneline origin/main
+git rev-list --count origin/main..HEAD   # 0
 ```
 
-Git Credential Manager cannot open its prompt in this session (the shell cannot
-create the named objects it needs). Authentication is required from a normal
-terminal:
+For future changes from this machine, the HTTPS backend may need:
 
 ```bash
 git -c http.sslBackend=openssl push origin main
 ```
 
-or:
-
-```bash
-cd C:\Users\SIDDHARTHA\Downloads\doc-ocr
-git push origin main
-```
-
-After authentication, the remote will show the full series. No history rewrite
-or force-push is needed.
+Git Credential Manager can open its prompt from a normal interactive terminal;
+this agent session cannot create the named objects it needs for interactive
+authentication, but the stored credential worked for the publish above.
 
 ## Verify the series locally
 
