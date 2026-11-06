@@ -281,3 +281,42 @@ The test footprint for each change ships with that change; there is no separate
      out-of-fold routing decisions.
 6. `docs: finalize improvement changelog and README usage`
    - Updates this changelog and the README quickstart/structure.
+
+## 6. Later hardening (6 Nov 2026)
+
+The review in `docs/peer_review.md` found that the harness was not yet measuring
+what it claimed. The following commits address those issues; the empirical
+verdict is unchanged because no real run exists.
+
+1. `docs: add adversarial peer review, data provenance, and preregistration`
+   - Records the verified data/model/citation facts and the calibrated venue
+     assessment; withdraws the unsupported 75–85% estimate.
+2. `fix(eval): make attribution architecture-specific and stop imputing missing conditions`
+   - Splits VLM and cascade decompositions; adds C2b/C3b controls; scores C1
+     transcripts; removes the gold-answer fallback.
+3. `fix(eval): make metrics script-aware and statistics cluster-aware`
+   - Restricts MER to Indic marks; adds base CER, McNemar/permutation, clustered
+     bootstrap, ECE, risk–coverage, and MDE.
+4. `fix(data): replace unverified loaders with schema-checked adapters and a frozen manifest`
+   - Corrects the IndicVisionBench split use, derives FUNSD field QA, adds a
+     transcript-grounded question generator, and makes Patram-Bench fail loudly.
+5. `fix(runtime): version prompts, parse answers, and key the cache by provenance`
+   - Shared prompt rules, answer parsing, capability checks, placebo/sham
+     conditions, and a cache key that includes prompt/model/dataset/image hashes.
+6. `fix(routing): remove oracle leakage and evaluate with measured costs and document groups`
+   - Rejects oracle SMI, uses declared language only, measured latency, and
+     GroupKFold by page.
+7. `feat(report): rewrite the runner around provenance, capability checks, and honest reporting`
+   - Smoke reports are `reportable: false`; comparisons are joined by ID; reports
+     include revisions, prompt hashes, coverage, and architecture-specific
+     decompositions.
+8. `feat(data): add provenance audit and frozen probe-set builder`
+   - Confirms the live dataset schemas/revisions and the Patram 401; builds
+     hashed manifests.
+9. `feat(analysis): generate result tables and paired tests from released predictions`
+   - Refuses synthetic predictions; produces the paper tables from the JSONL.
+10. `chore(repro): add license, packaging, CI, and reproduction guide`
+    - MIT license, pyproject extras, GitHub Actions, `REPRODUCE.md`, paper plan.
+
+The remaining open items are listed in `docs/response_to_review.md`; none can be
+closed by more code alone.

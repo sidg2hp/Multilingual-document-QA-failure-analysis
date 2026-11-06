@@ -148,6 +148,10 @@ injection.
 
 ## 4. Verification commands
 
+A snapshot of the audit run on 6 Nov 2026 is committed at
+`docs/provenance_audit_2026-11-06.json`. It records the IndicVisionBench OCR/VQA
+row counts and schemas, the FUNSD split, and the Patram-Bench 401.
+
 Run these before a submission and paste the outputs into the artifact appendix.
 
 ```bash

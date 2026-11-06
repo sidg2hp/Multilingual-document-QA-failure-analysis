@@ -9,6 +9,11 @@ submission and as a resource/demo paper. I have read every source file, run the
 test suite, executed the smoke pipeline, and checked every external dependency
 (datasets, model IDs, cited papers) against primary sources on the same date.
 
+> **Response:** `docs/response_to_review.md` maps each defect below to the commit
+> that fixes it (or states why it cannot be fixed by code). This review remains a
+> snapshot of the artifact at `8f18b0c`; the verdict is unchanged until a real
+> confirmatory run exists.
+
 **Bottom line:** this is not yet a paper. It is a well-organized *protocol and
 harness* for a paper that has not been run, on data that cannot currently be
 obtained in the form the code assumes. The engineering is respectable; the

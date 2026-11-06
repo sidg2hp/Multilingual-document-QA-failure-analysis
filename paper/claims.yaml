@@ -1,0 +1,105 @@
+schema_version: "1.0"
+paper_status: "harness_only_no_confirmatory_run"
+frozen_manifest: null
+target_venue: "strong domain workshop or Findings"
+
+claims:
+  - id: H1
+    short: "Read-reason dissociation on Indic documents"
+    statement: >
+      OCR-free VLMs transcribe the answer-bearing span with low CER but fail to
+      use it when answering directly, and the C1-C0 gap is larger for Indic
+      scripts than for Latin.
+    status: unexecuted
+    required_conditions: [C0_clean_end2end, C1_self_ocr_then_reason]
+    required_measurements:
+      - item-level C1 transcript CER and MER against the gold transcript
+      - item-level C0 and C1 ANLS
+      - script-stratified paired difference
+    analysis: "paired permutation + cluster bootstrap + McNemar; interaction test"
+    current_evidence: "C1 transcript scoring implemented; no real predictions"
+    failure_criterion: "C1-C0 gap not significant or explained by transcript CER"
+
+  - id: H2
+    short: "Matra vulnerability under degradation"
+    statement: >
+      Recognition errors concentrate in Indic combining marks relative to base
+      characters under blur/downscale, and the effect grows with severity.
+    status: unexecuted
+    required_conditions: [C0_clean_end2end, C_delta_degraded_end2end]
+    required_measurements:
+      - CER, base CER, and MER curves across calibrated severity levels
+      - monotonic manipulation check
+    analysis: "cluster-robust regression of MER/base CER on severity and script"
+    current_evidence: "metrics implemented; no calibrated levels or runs"
+    failure_criterion: "MER and base CER scale similarly"
+
+  - id: H3
+    short: "Localization is not just clutter removal"
+    statement: >
+      A gold-region crop improves QA beyond a same-size placebo crop.
+    status: unexecuted
+    required_conditions: [C0_clean_end2end, C2_oracle_layout_crop, C2b_placebo_crop]
+    required_measurements:
+      - item-level difference-in-differences
+      - enough items with gold boxes
+    analysis: "cluster bootstrap on (C2-C0) - (C2b-C0)"
+    current_evidence: "placebo crop implemented; boxes only for FUNSD"
+    failure_criterion: "placebo crop captures the same gain"
+
+  - id: H4
+    short: "Quantization x script interaction"
+    statement: >
+      NF4 degrades Indic recognition more than Latin recognition relative to
+      FP16, at matched prompts and decoding.
+    status: unexecuted
+    required_conditions: [C0_clean_end2end]
+    required_measurements:
+      - same model at NF4/INT8/FP16
+      - 3 seeds where decoding is stochastic
+      - per-script CER/MER
+    analysis: "matched interaction with CIs"
+    current_evidence: "runner supports the precisions; no runs"
+    failure_criterion: "interaction CI includes zero"
+
+  - id: H5
+    short: "Leakage-free routing captures the oracle gap"
+    statement: >
+      A text-free image router captures at least 50% of the per-item OCR/VLM
+      oracle gap at no more than 60% of VLM cost, out-of-fold and grouped by
+      document.
+    status: unexecuted
+    required_conditions: [C0_clean_end2end]
+    required_measurements:
+      - features from the same image as the labels
+      - measured wall-clock costs
+      - grouped CV by page
+      - bootstrap CI on the captured fraction
+    analysis: "grouped out-of-fold Pareto with measured cost"
+    current_evidence: "leakage guard, grouped CV, and measured costs implemented"
+    failure_criterion: "router does not beat the best single pipeline"
+
+  - id: H6
+    short: "Hallucination vs abstention under severe degradation"
+    statement: >
+      OCR-free VLMs have a higher hallucination-to-abstention ratio than
+      cascaded OCR at severe degradation, and the automatic proxy agrees with
+      human labels.
+    status: unexecuted
+    required_conditions: [C_delta_degraded_end2end]
+    required_measurements:
+      - HAR counts and CIs
+      - 100 human-labelled failures with agreement
+    analysis: "Wilson CIs; kappa vs human labels"
+    current_evidence: "HAR implemented; proxy unvalidated"
+    failure_criterion: "human agreement too low or HAR not different"
+
+prohibited_claims:
+  - "Evaluated on Patram-Bench (data not public at the configured ID)."
+  - "Document QA on IndicVisionBench vqa_indic (it is cultural VQA)."
+  - "State-of-the-art baselines."
+  - "Exact recognition/layout split for cascaded OCR."
+  - "Read-reason dissociation without transcript CER."
+  - "Leakage-free router with an oracle-transcript SMI feature."
+  - "75-85% acceptance probability."
+  - "First Indic document benchmark or first attribution study."

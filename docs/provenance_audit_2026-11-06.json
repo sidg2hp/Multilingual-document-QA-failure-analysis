@@ -1,0 +1,142 @@
+{
+  "audited_at_utc": "2026-11-06T16:00:11.383785+00:00",
+  "datasets": [
+    {
+      "name": "indic_vision_bench_ocr",
+      "repo": "krutrim-ai-labs/IndicVisionBench",
+      "expected_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "expected_config": "ocr",
+      "expected_status": "verified",
+      "found": true,
+      "config": "ocr",
+      "splits": {
+        "test": 876
+      },
+      "features": [
+        "id",
+        "image",
+        "text",
+        "language",
+        "page_url"
+      ],
+      "revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "gated": false,
+      "last_modified": "2026-03-11T11:46:18.000Z",
+      "reachable": true,
+      "revision_matches_expected": true
+    },
+    {
+      "name": "indic_vision_bench_vqa_indic",
+      "repo": "krutrim-ai-labs/IndicVisionBench",
+      "expected_revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "expected_config": "vqa_indic",
+      "expected_status": "verified",
+      "found": true,
+      "config": "vqa_indic",
+      "splits": {
+        "test": 1007
+      },
+      "features": [
+        "id",
+        "image",
+        "topic",
+        "State/UT",
+        "language",
+        "short_q1",
+        "short_a1",
+        "short_q2",
+        "short_a2",
+        "mcq",
+        "mcq_a",
+        "mcq_opt1",
+        "mcq_opt2",
+        "mcq_opt3",
+        "mcq_opt4",
+        "true_false_q",
+        "true_false_a",
+        "long_q",
+        "long_a",
+        "adversarial_question",
+        "adversarial_answer",
+        "source_url"
+      ],
+      "revision": "45269760b15938c6a345f74373f56c7a5ab7ecc8",
+      "gated": false,
+      "last_modified": "2026-03-11T11:46:18.000Z",
+      "reachable": true,
+      "revision_matches_expected": true
+    },
+    {
+      "name": "funsd",
+      "repo": "nielsr/funsd",
+      "expected_revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
+      "expected_config": null,
+      "expected_status": "verified",
+      "found": true,
+      "config": "default",
+      "splits": {
+        "train": 149,
+        "test": 50
+      },
+      "features": [
+        "id",
+        "words",
+        "bboxes",
+        "ner_tags",
+        "image"
+      ],
+      "revision": "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5",
+      "gated": false,
+      "last_modified": "2025-06-23T14:34:08.000Z",
+      "reachable": true,
+      "revision_matches_expected": true
+    },
+    {
+      "name": "patram_bench",
+      "repo": "bharatgenai/Patram-Bench",
+      "expected_revision": "unreleased",
+      "expected_config": null,
+      "expected_status": "unavailable",
+      "reachable": false,
+      "error": "HTTPError: HTTP Error 401: Unauthorized",
+      "found": false
+    }
+  ],
+  "models": [
+    {
+      "model_id": "Qwen/Qwen2.5-VL-3B-Instruct",
+      "reachable": true,
+      "revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+      "revision_matches_expected": true,
+      "gated": false,
+      "license": null
+    },
+    {
+      "model_id": "Qwen/Qwen2.5-3B-Instruct",
+      "reachable": true,
+      "revision": "aa8e72537993ba99e69dfaafa59ed015b17504d1",
+      "revision_matches_expected": true,
+      "gated": false,
+      "license": "other"
+    },
+    {
+      "model_id": "bharatgenai/patram-7b-instruct",
+      "reachable": true,
+      "revision": "6a31983daa739b18ba029c767c65d3f68d9be06c",
+      "revision_matches_expected": true,
+      "gated": "auto",
+      "license": "apache-2.0"
+    },
+    {
+      "model_id": "HuggingFaceTB/SmolVLM2-2.2B-Instruct",
+      "reachable": true,
+      "revision": "482adb537c021c86670beed01cd58990d01e72e4",
+      "revision_matches_expected": true,
+      "gated": false,
+      "license": "apache-2.0"
+    }
+  ],
+  "unresolved": [
+    "patram_bench"
+  ]
+}

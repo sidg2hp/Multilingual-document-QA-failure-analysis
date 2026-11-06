@@ -1,127 +1,172 @@
 # Where Does Document Understanding Break?
-**A Counterfactual Error-Propagation Study of Cascaded OCR and OCR-Free VLMs on Multilingual Indian Documents**
 
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Hardware: RTX 3050 6GB](https://img.shields.io/badge/VRAM-6GB%20Compatible-green.svg)](#hardware-aware-execution-rtx-3050-6gb)
+**A counterfactual error-propagation harness for OCR-based and OCR-free document QA on multilingual documents.**
+
+> **Status (6 Nov 2026): research harness, not a paper, and not a validated empirical result.**
+> There has been no real-model confirmatory run. The smoke pipeline produces
+> `[SMOKE]` outputs and marks its report `reportable: false`. Read
+> [`docs/peer_review.md`](docs/peer_review.md) for the adversarial review and a
+> calibrated venue assessment before citing or submitting anything here.
+
+[![CI](https://github.com/sidg2hp/Multilingual-document-QA-failure-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/sidg2hp/Multilingual-document-QA-failure-analysis/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## Overview
+## What this is
 
-End-to-end Document Question Answering (DocQA) benchmarks typically report aggregate task metrics (ANLS, Exact Match, F1), obscuring *where* and *why* pipelines fail. When a system answers a question incorrectly on a multilingual or visually degraded document, how much of the failure originates from:
+A measurement harness for asking **where** a document QA system fails, not just
+how often:
 
-1. **Visual Perception ($\mathcal{E}_{\text{vis}}$)**: Sensitivity to blur, resolution loss, ink bleed, or camera perspective distortion.
-2. **Script & Text Recognition ($\mathcal{E}_{\text{rec}}$)**: Character/matra/conjunct recognition errors in Indic abugida scripts and code-mixed spans.
-3. **Layout & Spatial Grounding ($\mathcal{E}_{\text{lay}}$)**: Inability to localize the answer-bearing region or preserve multi-column/tabular reading order.
-4. **Semantic & Cross-Lingual Reasoning ($\mathcal{E}_{\text{sem}}$)**: Failure to infer the answer even when ground-truth localized text is supplied.
+- visual degradation,
+- localization / reading order,
+- script and character recognition (including Indic matras),
+- semantic / cross-lingual reasoning.
 
-This repository implements a **Counterfactual Stage-wise Attribution Framework** across **Patram-Bench**, **IndicVisionBench**, and **FUNSD**, designed to run reproducibly on consumer hardware (NVIDIA RTX 3050 6GB VRAM).
+It implements an **architecture-specific counterfactual ladder** for both
+cascaded OCR+LLM pipelines and OCR-free VLMs, with explicit negative controls, a
+transcript-scored read–reason probe, matra-aware metrics, clustered statistics,
+a leakage-guarded router, and a provenance-aware prediction cache.
 
----
+## What this is not
 
-## Counterfactual Intervention Protocol
+- It is **not** a new benchmark, model, or leaderboard entry.
+- It is **not** an accepted paper. The current artifact has no confirmatory
+  results, and its original data plan was not executable (see below).
+- It does **not** support claims about Patram-Bench, 23 languages, or "first"
+  Indic attribution; those claims were removed.
 
-Unlike prior comparisons that only inject oracle text into cascaded OCR+LLM pipelines, we isolate failure stages across **both OCR-based and OCR-free Vision-Language Models (VLMs)** using five controlled conditions per document-question pair $(I, Q, A^*)$:
+## Verified data status
 
-```mermaid
-graph TD
-    I[Document Image I + Question Q] --> C0[C0: Standard End-to-End Inference]
-    I --> Cdelta[C_delta: Controlled Visual Degradation I_delta]
-    I --> C1[C1: Self-OCR / Visual Transcription Probe]
-    I --> C2[C2: Oracle Layout Crop / Structured Reading Order]
-    I --> C3[C3: Oracle Text Injection T*]
-    C0 --> Attr[Counterfactual Error Attribution Engine]
-    Cdelta --> Attr
-    C1 --> Attr
-    C2 --> Attr
-    C3 --> Attr
+| Dataset | What it actually contains | Status | Use here |
+| :--- | :--- | :--- | :--- |
+| **IndicVisionBench `ocr`** | 876 Indic document pages with gold transcripts, 10 languages; **no QA, no boxes** | Public, revision `45269760…` | Transcript-grounded generated QA; CER/MER and read–reason conditions |
+| **IndicVisionBench `vqa_indic`** | 1,007 cultural VQA rows over **natural images**, no transcript | Public, same revision | Multilingual visual-reasoning control only; **not DocQA** |
+| **FUNSD** | 50 test forms, word boxes, BIO entity tags | Public, revision `7e7eeeee…` | English/Latin layout control; field-value QA derived from entities |
+| **Patram-Bench** | ICDAR 2026 paper; no public HF dataset at the configured ID (HTTP 401 on 2026-11-06) | **Blocked** | Not used until the authors release it |
+
+The audit is reproducible:
+
+```bash
+python scripts/audit_datasets.py --out outputs/provenance/dataset_audit.json
 ```
 
-| Condition | Input Provided to Model | Isolates |
+Details, licenses, and model revisions are in
+[`docs/data_provenance.md`](docs/data_provenance.md).
+
+## Protocol
+
+### OCR-free VLM
+
+| Condition | Input | Identifies |
 | :--- | :--- | :--- |
-| **$C_0$ (Clean Baseline)** | Clean image $I$ + Question $Q$ | Baseline end-to-end error |
-| **$C_\delta$ (Degraded Input)** | Perturbed image $I_\delta$ + Question $Q$ | **Visual Robustness Gap** ($\Delta_{\text{vis}} = \text{Acc}(C_0) - \text{Acc}(C_\delta)$) |
-| **$C_1$ (Self-OCR Probe)** | Prompt VLM to transcribe region first, then answer | **Read-Reason Dissociation** (can the VLM read what it fails to reason over?) |
-| **$C_2$ (Oracle Layout)** | Ground-truth BBox crop $I_{\text{crop}}$ (VLM) or ordered blocks (OCR) | **Layout Localization Error** ($\Delta_{\text{lay}} = \text{Acc}(C_2) - \text{Acc}(C_0)$) |
-| **$C_3$ (Oracle Text)** | Ground-truth transcript $T^*$ + Question $Q$ | **Recognition vs. Reasoning Split** ($\Delta_{\text{rec}} = \text{Acc}(C_3) - \text{Acc}(C_2)$, $\mathcal{E}_{\text{sem}} = 1 - \text{Acc}(C_3)$) |
+| `C0` | clean image + question | baseline |
+| `C_δ` | perturbed image + question | degradation sensitivity |
+| `C1` | transcribe, then answer from own transcript (transcript scored) | read–reason dissociation |
+| `C2` | gold answer-region crop | localization + clutter removal |
+| `C2b` | placebo crop of the same size | crop/context control |
+| `C3` | gold transcript | recognition oracle |
+| `C3b` | shuffled gold transcript | transcript-content control |
 
----
-
-## Datasets & Baselines
-
-### Benchmarks
-- **Patram-Bench** ([Srinivasan et al., 2026](https://patrambench.github.io/)): Stratified subset across Indic scripts, code-mixed documents, and key-value/VQA tasks.
-- **IndicVisionBench** ([Faraz et al., ICLR 2026](https://huggingface.co/datasets/krutrim-ai-labs/IndicVisionBench)): Level-4 Wikisource OCR ground-truth pages (`ocr` split) paired with multilingual VQA (`vqa_indic` & `vqa_en`).
-- **FUNSD** ([Jaume et al., 2019](https://guillaumejaume.github.io/FUNSD/)): Structured form understanding baseline with ground-truth entity bounding boxes and links.
-
-### Evaluated Systems
-1. **Traditional OCR Cascade**: `Tesseract 5` (Indic + English packs) $\to$ Quantized Instruct LLM (`Qwen2.5-3B-Instruct`).
-2. **Neural OCR Cascade**: `PaddleOCR (PP-OCRv4)` / `Surya OCR` $\to$ Quantized Instruct LLM (`Qwen2.5-3B-Instruct`).
-3. **OCR-Free VLM (Primary)**: `Qwen2.5-VL-3B-Instruct` (evaluated across NF4, INT8, and FP16/BF16).
-4. **OCR-Free VLM (Secondary)**: `SmolVLM-2.2B-Instruct` / `PaliGemma2-3B-pt-448`.
-
----
-
-## Repository Structure
+Identified decomposition:
 
 ```text
-├── configs/
-│   ├── experiment_config.yaml       # Reproducible hyperparameters, quantization & seeds
-│   └── param_ganga_config.yaml      # 2x V100 HPC scaling profile
-├── docs/
-│   ├── research_protocol.md         # Experimental methodology & workshop paper blueprint
-│   └── paper_readiness_and_improvements.md  # Acceptance assessment + change log
-├── scripts/
-│   └── run_experiment.py            # CLI: data prep, inference, sweep, attribution, stats
-├── src/
-│   ├── data/
-│   │   ├── schema.py                # Dataclasses for documents, perturbations, and conditions
-│   │   └── datasets.py              # Streaming loaders for Patram-Bench, IndicVisionBench, FUNSD
-│   ├── perturbations/
-│   │   └── degrade.py               # Controlled visual degradations & bbox layout interventions
-│   ├── models/
-│   │   ├── ocr_pipeline.py          # Tesseract / PaddleOCR + Text-QA cascade runners
-│   │   └── vlm_runner.py            # Memory-bounded OCR-free VLM counterfactual runner
-│   ├── routing/
-│   │   ├── features.py              # 7 lightweight image/script routing features
-│   │   └── router.py                # Accuracy-cost router + CV Pareto evaluation
-│   ├── evaluation/
-│   │   ├── metrics.py               # CER, WER, MER, ANLS, EM, F1, HAR, failure modes
-│   │   ├── attribution.py           # Telescoping causal decomposition & grouped summaries
-│   │   └── statistics.py            # Bootstrap CIs, paired tests, Holm-Bonferroni
-│   └── utils/
-│       ├── prediction_cache.py      # Resumable JSONL prediction cache
-│       └── seed.py                  # Global deterministic seeding
-└── tests/
-    ├── test_metrics_and_attribution.py
-    ├── test_router_and_ablations.py
-    ├── test_statistics_and_failure_modes.py
-    └── test_cache_and_sweep.py
+E_total = (C0 − Cδ) + (C2 − C0) + (C3 − C2) + (1 − C3)
 ```
+
+### Cascaded OCR + text LLM
+
+`C1` is undefined (C0 already reads then reasons). `C2` is **coordinate gold
+text**, not an image crop. The identified decomposition is:
+
+```text
+E_total = (C0 − Cδ) + (C3 − C0) + (1 − C3)
+```
+
+The middle term is **joint extraction** (recognition + reading order); it is not
+split. `C2_coord − C3_flat` is reported separately as a layout-representation
+diagnostic. Missing conditions are `None`, never zero and never the gold answer.
+
+## What is implemented
+
+- Architecture-specific attribution, signed components, exact identity, and
+  condition-coverage reporting.
+- CER, WER, base-character CER, Matra Error Rate (Indic-only marks), ANLS, EM,
+  field F1, failure modes, and HAR with counts/saturation.
+- Document-clustered bootstrap, paired permutation, McNemar, Wilcoxon, Cohen's d,
+  Holm–Bonferroni, Wilson intervals, ECE, risk–coverage/AURC, and MDE.
+- Versioned prompts and answer parsing; cache keys include prompt hash, model
+  revision, dataset revision, and image hash.
+- Capability-checked runners that raise on unsupported conditions instead of
+  silently falling back.
+- A leakage-guarded router: text-free/declared-language features, measured
+  latency, and GroupKFold by page.
+- Frozen manifests, a provenance audit, and an analysis script that refuses
+  synthetic predictions.
 
 ## Quickstart
 
 ```bash
-# 1. Install dependencies
-pip install -r requirements.txt
+python -m venv .venv
+# Windows: .venv\Scripts\activate
+source .venv/bin/activate
+pip install -e ".[data,gpu,ocr,dev]"   # CPU-only: pip install -e ".[dev]"
 
-# 2. Run unit tests for metrics, perturbations, and error attribution
-pytest tests/
-
-# 3. Run a dry-run counterfactual evaluation pipeline (resumable cache)
-python scripts/run_experiment.py --config configs/experiment_config.yaml \
-  --mode dry_run --resume --seed 42
-
-# 4. Run the full 5-perturbation x 5-severity sweep
-python scripts/run_experiment.py --config configs/experiment_config.yaml \
-  --mode dry_run --sweep --resume --seed 42
+pytest -q                              # no network, GPU, or datasets needed
+python scripts/run_experiment.py --mode smoke --max-samples 3 --seed 42
 ```
 
-Dry-run predictions are synthetic and intended only for pipeline verification;
-they are not experimental evidence.
+The smoke run writes `outputs/smoke_report.json` with `reportable: false`. It is
+a pipeline test, not evidence.
 
-## Paper Readiness
+See [`REPRODUCE.md`](REPRODUCE.md) for the real-data workflow, the frozen
+manifest, the analysis tables, and the PARAM Ganga template.
 
-`docs/paper_readiness_and_improvements.md` contains an honest acceptance
-assessment (current state vs. executed study), the reviewer objections that must
-be addressed, the minimum experiment package, and a commit-by-commit record of
-the rigor improvements in this repository.
+## Repository map
+
+```text
+configs/
+  experiment_config.yaml   # models, precision, dataset revisions
+  datasets.yaml            # verified revisions, licenses, supported conditions
+  param_ganga_config.yaml  # 2x V100 FP16 profile
+docs/
+  peer_review.md           # adversarial review, venue assessment, defect index
+  data_provenance.md       # verified datasets/models/literature
+  preregistration.md       # hypotheses, endpoints, exclusions, analysis plan
+  claim_evidence_matrix.md # claims vs. evidence today
+  research_protocol.md     # original protocol (partially superseded)
+  paper_readiness_and_improvements.md
+paper/
+  README.md, outline.md, claims.yaml
+scripts/
+  run_experiment.py        # data -> conditions -> report
+  analyze_results.py       # predictions + manifest -> tables
+  build_probe_set.py       # frozen manifest
+  audit_datasets.py        # provenance audit
+src/
+  data/                    # schema, adapters, QA generation, manifest
+  perturbations/           # degradations, oracle/placebo crops
+  models/                  # OCR cascade, VLM runner, prompts, parsing
+  routing/                 # text-free features, cost-aware router
+  evaluation/              # metrics, attribution, statistics
+tests/                     # 48 offline tests
+```
+
+## What still must happen before a paper
+
+1. Obtain Patram-Bench or finalize the public-data scope; freeze the manifest.
+2. Run real inference on ≥600 items, both pipelines, all supported conditions,
+   with calibrated perturbations and a 7B FP16 scale check.
+3. Add human validation of 100 failure cases and report agreement.
+4. Replace every placeholder with numbers generated by `scripts/analyze_results.py`.
+5. Write around **one** mechanistic claim (read–reason dissociation, matra
+   vulnerability, or routing), not around the framework.
+
+The honest assessment is in [`docs/peer_review.md`](docs/peer_review.md):
+the current artifact is not submittable; a strong workshop paper is plausible
+after a clean, pre-registered study.
+
+## License and citation
+
+Code is MIT-licensed ([`LICENSE`](LICENSE)). Dataset and model terms are their
+own; see [`docs/data_provenance.md`](docs/data_provenance.md). Citation metadata
+is in [`CITATION.cff`](CITATION.cff), but do not cite this as a validated result
+until the confirmatory run exists.
