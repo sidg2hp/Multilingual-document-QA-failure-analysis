@@ -10,6 +10,8 @@
 > paper evidence. Read [`docs/peer_review.md`](docs/peer_review.md) for the
 > adversarial review and a calibrated venue assessment before citing anything.
 
+> **Formal report (6 Nov 2026):** [Project report and PARAM Ganga compute request](reports/Document_QA_Failure_Analysis_Project_Report.pdf) — 26-page PDF for faculty review.
+
 [![CI](https://github.com/sidg2hp/Multilingual-document-QA-failure-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/sidg2hp/Multilingual-document-QA-failure-analysis/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
