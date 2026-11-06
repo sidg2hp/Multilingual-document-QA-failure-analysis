@@ -46,6 +46,28 @@ the paper is ready.
 5. **7B FP16 scale check.** The code path exists; the PARAM Ganga run does not.
 6. **Paper writing.** `paper/` is an outline, not a draft.
 
+## Local pilot (6 Nov 2026, RTX 3050)
+
+Because the human cannot run experiments, I ran the strongest study the laptop
+supports without annotators:
+
+- Windows.Media.Ocr (English only) + Qwen2.5-1.5B Q4_K_M via Ollama.
+- 20 FUNSD documents for an OCR-only CER/WER degradation curve.
+- 10 rendered synthetic invoice pages for controlled pipeline validation.
+- 60 real FUNSD questions for a negative, question-quality-limited cascade run.
+
+Results are in `results/local_pilot/`. They are explicitly **not paper evidence**:
+no VLM was available (Ollama 0.5.7 rejects Qwen2.5-VL and the LLaVA projector
+download did not complete), Windows OCR has no Indic recognizers, Qwen-1.5B is
+far below the paper's 3B/7B readers, and the FUNSD questions are derived by a
+spatial heuristic.
+
+The pilot did find and fix a real bug that would have invalidated every cascade
+result: **C0/C_delta used the image-condition prompt ("Document image attached")
+even though the text reader only receives OCR text**, so the reader ignored the
+OCR entirely. After the fix, the controlled synthetic run moves from C0 = 0.0 to
+C0 = 0.733 with C3 = 1.0; this is the expected oracle ceiling behavior.
+
 ## What would change the verdict
 
 A completed 600-item study with document-clustered CIs and one replicated

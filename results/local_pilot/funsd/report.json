@@ -1,0 +1,290 @@
+{
+  "schema_version": "3.0",
+  "generated_at_utc": "2026-11-06T17:15:55.063494+00:00",
+  "reportable": true,
+  "not_reportable_reason": null,
+  "mode": "funsd_local",
+  "is_document_qa": true,
+  "seed": 42,
+  "git_commit": "4424ff90b32ab709919ba7de3645620e09f12aee",
+  "config_path": "configs/local_cascade.yaml",
+  "config_sha256": "1b049ab3b97c7b0e471203e054c21de34f693b10355267e9b5b0750257a2ce27",
+  "perturbation": {
+    "type": "gaussian_blur",
+    "severity": "severe"
+  },
+  "cache": {
+    "enabled": true,
+    "entries": 300,
+    "path": "outputs\\local_cascade_v3\\cache\\predictions_funsd_local.jsonl"
+  },
+  "data": {
+    "num_items": 60,
+    "num_documents": 20,
+    "by_dataset": {
+      "FUNSD": 60
+    },
+    "by_language": {
+      "en": 60
+    },
+    "by_script_type": {
+      "monolingual_latin": 60
+    },
+    "by_question_type": {
+      "field_extraction": 60
+    },
+    "num_unanswerable": 0
+  },
+  "models": {
+    "cascaded_ocr": {
+      "model_name": "windows_ocr+qwen2.5:1.5b",
+      "model_revision": "ae57435a742bf355973ad0e07db8247ad9ea6c2da5aa945d7dace1891fc67857",
+      "quantization": "Q4_K_M",
+      "num_items": 60,
+      "representative_setting": null,
+      "summary": {
+        "num_samples": 60,
+        "num_documents": 20,
+        "num_abstained_degraded": 60,
+        "num_confident_hallucination_degraded": 0,
+        "num_indic_confident_hallucination": 0,
+        "hallucination_to_abstention_ratio": 0.0,
+        "hallucination_to_abstention_saturated": false,
+        "hallucination_to_abstention_note": null,
+        "primary_failure_stage_distribution": {
+          "semantic_reasoning": 0.8667,
+          "text_extraction": 0.05,
+          "visual_degradation": 0.0833
+        },
+        "degraded_failure_mode_distribution": {
+          "abstained": 1.0
+        },
+        "condition_coverage": {
+          "anls_c0_clean": 60,
+          "anls_c_delta_degraded": 60,
+          "anls_c1_self_ocr": 0,
+          "anls_c2_oracle_layout": 60,
+          "anls_c2b_placebo": 0,
+          "anls_c3_oracle_text": 60,
+          "anls_c3b_shuffled": 60,
+          "c1_transcript_cer": 0
+        },
+        "mean_anls_c0_clean": 0.0733,
+        "mean_anls_c_delta_degraded": 0.0,
+        "mean_anls_c1_self_ocr": null,
+        "mean_anls_c2_oracle_layout": 0.0906,
+        "mean_anls_c2b_placebo": null,
+        "mean_anls_c3_oracle_text": 0.0772,
+        "mean_anls_c3b_shuffled": 0.103,
+        "mean_delta_vis": 0.0733,
+        "mean_delta_lay": 0.0174,
+        "mean_delta_rec": -0.0134,
+        "mean_delta_dissoc": null,
+        "mean_error_sem": 0.9228,
+        "mean_delta_lay_placebo": null,
+        "mean_delta_lay_net": null,
+        "mean_layout_representation_effect": 0.0134,
+        "mean_c1_transcript_cer": null,
+        "mean_c1_transcript_mer": null,
+        "mean_ocr_cer_clean": 0.8305,
+        "mean_ocr_matra_er_clean": 0.0,
+        "c1_read_correct_rate": null,
+        "by_script_type": {
+          "monolingual_latin": {
+            "num_samples": 60,
+            "num_documents": 20,
+            "num_abstained_degraded": 60,
+            "num_confident_hallucination_degraded": 0,
+            "num_indic_confident_hallucination": 0,
+            "hallucination_to_abstention_ratio": 0.0,
+            "hallucination_to_abstention_saturated": false,
+            "hallucination_to_abstention_note": null,
+            "primary_failure_stage_distribution": {
+              "semantic_reasoning": 0.8667,
+              "text_extraction": 0.05,
+              "visual_degradation": 0.0833
+            },
+            "degraded_failure_mode_distribution": {
+              "abstained": 1.0
+            },
+            "condition_coverage": {
+              "anls_c0_clean": 60,
+              "anls_c_delta_degraded": 60,
+              "anls_c1_self_ocr": 0,
+              "anls_c2_oracle_layout": 60,
+              "anls_c2b_placebo": 0,
+              "anls_c3_oracle_text": 60,
+              "anls_c3b_shuffled": 60,
+              "c1_transcript_cer": 0
+            },
+            "mean_anls_c0_clean": 0.0733,
+            "mean_anls_c_delta_degraded": 0.0,
+            "mean_anls_c1_self_ocr": null,
+            "mean_anls_c2_oracle_layout": 0.0906,
+            "mean_anls_c2b_placebo": null,
+            "mean_anls_c3_oracle_text": 0.0772,
+            "mean_anls_c3b_shuffled": 0.103,
+            "mean_delta_vis": 0.0733,
+            "mean_delta_lay": 0.0174,
+            "mean_delta_rec": -0.0134,
+            "mean_delta_dissoc": null,
+            "mean_error_sem": 0.9228,
+            "mean_delta_lay_placebo": null,
+            "mean_delta_lay_net": null,
+            "mean_layout_representation_effect": 0.0134,
+            "mean_c1_transcript_cer": null,
+            "mean_c1_transcript_mer": null,
+            "mean_ocr_cer_clean": 0.8305,
+            "mean_ocr_matra_er_clean": 0.0,
+            "c1_read_correct_rate": null
+          }
+        },
+        "by_language": {
+          "en": {
+            "num_samples": 60,
+            "num_documents": 20,
+            "num_abstained_degraded": 60,
+            "num_confident_hallucination_degraded": 0,
+            "num_indic_confident_hallucination": 0,
+            "hallucination_to_abstention_ratio": 0.0,
+            "hallucination_to_abstention_saturated": false,
+            "hallucination_to_abstention_note": null,
+            "primary_failure_stage_distribution": {
+              "semantic_reasoning": 0.8667,
+              "text_extraction": 0.05,
+              "visual_degradation": 0.0833
+            },
+            "degraded_failure_mode_distribution": {
+              "abstained": 1.0
+            },
+            "condition_coverage": {
+              "anls_c0_clean": 60,
+              "anls_c_delta_degraded": 60,
+              "anls_c1_self_ocr": 0,
+              "anls_c2_oracle_layout": 60,
+              "anls_c2b_placebo": 0,
+              "anls_c3_oracle_text": 60,
+              "anls_c3b_shuffled": 60,
+              "c1_transcript_cer": 0
+            },
+            "mean_anls_c0_clean": 0.0733,
+            "mean_anls_c_delta_degraded": 0.0,
+            "mean_anls_c1_self_ocr": null,
+            "mean_anls_c2_oracle_layout": 0.0906,
+            "mean_anls_c2b_placebo": null,
+            "mean_anls_c3_oracle_text": 0.0772,
+            "mean_anls_c3b_shuffled": 0.103,
+            "mean_delta_vis": 0.0733,
+            "mean_delta_lay": 0.0174,
+            "mean_delta_rec": -0.0134,
+            "mean_delta_dissoc": null,
+            "mean_error_sem": 0.9228,
+            "mean_delta_lay_placebo": null,
+            "mean_delta_lay_net": null,
+            "mean_layout_representation_effect": 0.0134,
+            "mean_c1_transcript_cer": null,
+            "mean_c1_transcript_mer": null,
+            "mean_ocr_cer_clean": 0.8305,
+            "mean_ocr_matra_er_clean": 0.0,
+            "c1_read_correct_rate": null
+          }
+        }
+      },
+      "decomposition": {
+        "architecture": "cascaded_ocr",
+        "n_items": 60,
+        "total_error": 1.0,
+        "components": {
+          "perturbation_error": 0.0733,
+          "extraction_error": 0.0039,
+          "semantic_reasoning_error": 0.9228
+        },
+        "component_sum": 1.0,
+        "identity_holds": true,
+        "note": "Averaged over items with complete conditions. Negative components are findings, not errors. The cascade's extraction term is joint recognition+order and is not split.",
+        "layout_representation_effect": 0.0134
+      },
+      "confidence_intervals_95": {
+        "c0_clean": {
+          "n": 60,
+          "n_clusters": 20,
+          "mean": 0.0733,
+          "std": 0.2462,
+          "ci_low": 0.0149,
+          "ci_high": 0.1444,
+          "ci_level": 0.95,
+          "n_boot": 2000
+        },
+        "c_delta_degraded": {
+          "n": 60,
+          "n_clusters": 20,
+          "mean": 0.0,
+          "std": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "ci_level": 0.95,
+          "n_boot": 2000
+        },
+        "c1_self_ocr": {
+          "n": 0,
+          "n_clusters": 0,
+          "mean": null,
+          "std": null,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_level": 0.95,
+          "n_boot": 0
+        },
+        "c2_oracle_layout": {
+          "n": 60,
+          "n_clusters": 20,
+          "mean": 0.0906,
+          "std": 0.2788,
+          "ci_low": 0.0351,
+          "ci_high": 0.1504,
+          "ci_level": 0.95,
+          "n_boot": 2000
+        },
+        "c2b_placebo": {
+          "n": 0,
+          "n_clusters": 0,
+          "mean": null,
+          "std": null,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_level": 0.95,
+          "n_boot": 0
+        },
+        "c3_oracle_text": {
+          "n": 60,
+          "n_clusters": 20,
+          "mean": 0.0772,
+          "std": 0.2415,
+          "ci_low": 0.0198,
+          "ci_high": 0.1477,
+          "ci_level": 0.95,
+          "n_boot": 2000
+        },
+        "c3b_shuffled": {
+          "n": 60,
+          "n_clusters": 20,
+          "mean": 0.103,
+          "std": 0.2535,
+          "ci_low": 0.0419,
+          "ci_high": 0.1623,
+          "ci_level": 0.95,
+          "n_boot": 2000
+        }
+      }
+    }
+  },
+  "paired_model_comparisons_vlm_minus_ocr": {},
+  "adaptive_router": {},
+  "warnings": [
+    "No external validity claim is implied by a harness run.",
+    "Local Ollama Q4 pilot: model tags are mutable and this is not the pinned HF paper path.",
+    "Windows OCR exposes only English recognizers here; this is a Latin-script control, not an Indic OCR baseline."
+  ],
+  "predictions_path": "outputs\\local_cascade_v3\\predictions_funsd_local.jsonl",
+  "manifest_path": null
+}

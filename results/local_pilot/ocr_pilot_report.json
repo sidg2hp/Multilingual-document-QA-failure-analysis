@@ -1,0 +1,301 @@
+{
+  "scope": "ocr_manipulation_check_only",
+  "engine": "Windows.Media.Ocr (English en-GB/en-US)",
+  "dataset": "FUNSD test (local cache)",
+  "num_documents": 20,
+  "num_conditions": 520,
+  "seed": 42,
+  "summary": [
+    {
+      "perturbation_type": "clean",
+      "severity": "none",
+      "n": 20,
+      "mean_cer": 0.5972,
+      "cer_ci_low": 0.5428,
+      "cer_ci_high": 0.6453,
+      "mean_wer": 0.7297,
+      "mean_ocr_chars": 613.6,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "gaussian_blur",
+      "severity": "level_1",
+      "n": 20,
+      "mean_cer": 0.6523,
+      "cer_ci_low": 0.5949,
+      "cer_ci_high": 0.7058,
+      "mean_wer": 0.7845,
+      "mean_ocr_chars": 487.1,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "gaussian_blur",
+      "severity": "level_2",
+      "n": 20,
+      "mean_cer": 0.9651,
+      "cer_ci_low": 0.9479,
+      "cer_ci_high": 0.9795,
+      "mean_wer": 0.9789,
+      "mean_ocr_chars": 36.5,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "gaussian_blur",
+      "severity": "level_3",
+      "n": 20,
+      "mean_cer": 0.9965,
+      "cer_ci_low": 0.9928,
+      "cer_ci_high": 0.9993,
+      "mean_wer": 0.9985,
+      "mean_ocr_chars": 3.8,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "gaussian_blur",
+      "severity": "level_4",
+      "n": 20,
+      "mean_cer": 1.0,
+      "cer_ci_low": 1.0,
+      "cer_ci_high": 1.0,
+      "mean_wer": 1.0,
+      "mean_ocr_chars": 0.0,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "gaussian_blur",
+      "severity": "level_5",
+      "n": 20,
+      "mean_cer": 1.0,
+      "cer_ci_low": 1.0,
+      "cer_ci_high": 1.0,
+      "mean_wer": 1.0,
+      "mean_ocr_chars": 0.0,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "jpeg_artifacts",
+      "severity": "level_1",
+      "n": 20,
+      "mean_cer": 0.6133,
+      "cer_ci_low": 0.5575,
+      "cer_ci_high": 0.6635,
+      "mean_wer": 0.7489,
+      "mean_ocr_chars": 571.6,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "jpeg_artifacts",
+      "severity": "level_2",
+      "n": 20,
+      "mean_cer": 0.623,
+      "cer_ci_low": 0.5668,
+      "cer_ci_high": 0.6758,
+      "mean_wer": 0.7536,
+      "mean_ocr_chars": 547.6,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "jpeg_artifacts",
+      "severity": "level_3",
+      "n": 20,
+      "mean_cer": 0.6774,
+      "cer_ci_low": 0.6268,
+      "cer_ci_high": 0.7278,
+      "mean_wer": 0.8066,
+      "mean_ocr_chars": 444.9,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "jpeg_artifacts",
+      "severity": "level_4",
+      "n": 20,
+      "mean_cer": 0.7939,
+      "cer_ci_low": 0.7577,
+      "cer_ci_high": 0.8258,
+      "mean_wer": 0.8812,
+      "mean_ocr_chars": 273.3,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "jpeg_artifacts",
+      "severity": "level_5",
+      "n": 20,
+      "mean_cer": 0.8958,
+      "cer_ci_low": 0.871,
+      "cer_ci_high": 0.9187,
+      "mean_wer": 0.9511,
+      "mean_ocr_chars": 141.0,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "perspective_skew",
+      "severity": "level_1",
+      "n": 20,
+      "mean_cer": 0.6906,
+      "cer_ci_low": 0.6462,
+      "cer_ci_high": 0.7357,
+      "mean_wer": 0.8142,
+      "mean_ocr_chars": 434.3,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "perspective_skew",
+      "severity": "level_2",
+      "n": 20,
+      "mean_cer": 0.6894,
+      "cer_ci_low": 0.6437,
+      "cer_ci_high": 0.7325,
+      "mean_wer": 0.8058,
+      "mean_ocr_chars": 439.6,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "perspective_skew",
+      "severity": "level_3",
+      "n": 20,
+      "mean_cer": 0.7043,
+      "cer_ci_low": 0.6584,
+      "cer_ci_high": 0.7467,
+      "mean_wer": 0.8134,
+      "mean_ocr_chars": 417.8,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "perspective_skew",
+      "severity": "level_4",
+      "n": 20,
+      "mean_cer": 0.6964,
+      "cer_ci_low": 0.6475,
+      "cer_ci_high": 0.742,
+      "mean_wer": 0.8059,
+      "mean_ocr_chars": 416.1,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "perspective_skew",
+      "severity": "level_5",
+      "n": 20,
+      "mean_cer": 0.6851,
+      "cer_ci_low": 0.6369,
+      "cer_ci_high": 0.7312,
+      "mean_wer": 0.8006,
+      "mean_ocr_chars": 435.7,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "resolution_downscale",
+      "severity": "level_1",
+      "n": 20,
+      "mean_cer": 0.8036,
+      "cer_ci_low": 0.7598,
+      "cer_ci_high": 0.8422,
+      "mean_wer": 0.8777,
+      "mean_ocr_chars": 259.9,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "resolution_downscale",
+      "severity": "level_2",
+      "n": 20,
+      "mean_cer": 0.9233,
+      "cer_ci_low": 0.9003,
+      "cer_ci_high": 0.9437,
+      "mean_wer": 0.9516,
+      "mean_ocr_chars": 87.2,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "resolution_downscale",
+      "severity": "level_3",
+      "n": 20,
+      "mean_cer": 0.9836,
+      "cer_ci_low": 0.975,
+      "cer_ci_high": 0.9912,
+      "mean_wer": 0.9913,
+      "mean_ocr_chars": 16.7,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "resolution_downscale",
+      "severity": "level_4",
+      "n": 20,
+      "mean_cer": 0.9976,
+      "cer_ci_low": 0.9939,
+      "cer_ci_high": 1.0,
+      "mean_wer": 0.9989,
+      "mean_ocr_chars": 2.4,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "resolution_downscale",
+      "severity": "level_5",
+      "n": 20,
+      "mean_cer": 0.9999,
+      "cer_ci_low": 0.9996,
+      "cer_ci_high": 1.0,
+      "mean_wer": 0.9997,
+      "mean_ocr_chars": 0.1,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "salt_and_pepper",
+      "severity": "level_1",
+      "n": 20,
+      "mean_cer": 0.6123,
+      "cer_ci_low": 0.5624,
+      "cer_ci_high": 0.6575,
+      "mean_wer": 0.7406,
+      "mean_ocr_chars": 580.1,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "salt_and_pepper",
+      "severity": "level_2",
+      "n": 20,
+      "mean_cer": 0.6449,
+      "cer_ci_low": 0.6002,
+      "cer_ci_high": 0.6848,
+      "mean_wer": 0.77,
+      "mean_ocr_chars": 532.8,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "salt_and_pepper",
+      "severity": "level_3",
+      "n": 20,
+      "mean_cer": 0.695,
+      "cer_ci_low": 0.6575,
+      "cer_ci_high": 0.7342,
+      "mean_wer": 0.8206,
+      "mean_ocr_chars": 448.4,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "salt_and_pepper",
+      "severity": "level_4",
+      "n": 20,
+      "mean_cer": 0.7795,
+      "cer_ci_low": 0.7511,
+      "cer_ci_high": 0.8073,
+      "mean_wer": 0.8843,
+      "mean_ocr_chars": 304.1,
+      "mean_gold_chars": 1000.6
+    },
+    {
+      "perturbation_type": "salt_and_pepper",
+      "severity": "level_5",
+      "n": 20,
+      "mean_cer": 0.8894,
+      "cer_ci_low": 0.8695,
+      "cer_ci_high": 0.908,
+      "mean_wer": 0.9558,
+      "mean_ocr_chars": 144.4,
+      "mean_gold_chars": 1000.6
+    }
+  ],
+  "notes": [
+    "CER/WER compare Windows OCR to the FUNSD gold word sequence.",
+    "The engine has no Indic recognizers on this machine; do not use for Indic claims.",
+    "This is a perturbation calibration check, not a DocQA result."
+  ]
+}
