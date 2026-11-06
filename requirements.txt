@@ -1,3 +1,8 @@
+# Legacy convenience file for the full GPU + OCR + data stack.
+# Prefer the extras in pyproject.toml:
+#   pip install -e ".[data,gpu,ocr,dev]"
+# Pin exact versions in your run environment; these are lower bounds, not a lock.
+
 torch>=2.2.0
 torchvision>=0.17.0
 transformers>=4.45.0

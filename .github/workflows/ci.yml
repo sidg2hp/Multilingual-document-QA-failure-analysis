@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install CPU test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+      - name: Compile
+        run: python -m compileall -q src scripts
+      - name: Unit tests
+        run: pytest -q
+      - name: Smoke pipeline
+        run: python scripts/run_experiment.py --mode smoke --max-samples 3 --seed 42
+      - name: Ensure smoke report is marked non-reportable
+        run: |
+          python - <<'PY'
+          import json
+          report = json.load(open("outputs/smoke_report.json", encoding="utf-8"))
+          assert report["reportable"] is False, report["reportable"]
+          assert report["not_reportable_reason"]
+          print("smoke report gating OK")
+          PY

@@ -31,6 +31,9 @@ wandb/
 .ipynb_checkpoints
 .pytest_cache/
 
+# Smoke manifests are pipeline fixtures, not frozen probe sets
+manifests/smoke_*.json
+
 # OS / Editor / Local Notes files
 .DS_Store
 Thumbs.db

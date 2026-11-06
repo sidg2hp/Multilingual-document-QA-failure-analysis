@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this code, cite the repository. It currently documents a research harness, not a validated empirical result."
+title: "Where Does Document Understanding Break? A Counterfactual Error-Propagation Study of OCR and OCR-Free VLMs"
+abstract: >-
+  A research harness for counterfactual, architecture-specific attribution of
+  document question answering failures on multilingual documents. The repository
+  implements a measurement protocol, metrics, routing experiments, and
+  reproducibility tooling. As of version 0.1.0 it does not contain an executed
+  confirmatory study; see docs/peer_review.md for the assessment.
+authors:
+  - family-names: "sidg2hp"
+    name: "sidg2hp"
+version: "0.1.0"
+date-released: "2026-11-06"
+license: MIT
+repository-code: "https://github.com/sidg2hp/Multilingual-document-QA-failure-analysis"
+keywords:
+  - document question answering
+  - OCR
+  - vision-language models
+  - multilingual
+  - error attribution
+  - Indic scripts

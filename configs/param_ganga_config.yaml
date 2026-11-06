@@ -4,30 +4,33 @@ project:
   output_dir: "outputs/param_ganga"
   hardware_profile:
     cluster: "IITR PARAM Ganga"
-    gpu: "2x NVIDIA Tesla V100-PCIE-16GB (32GB Total VRAM, Volta sm_70)"
-    # IMPORTANT: Tesla V100 (sm_70) does NOT support native bfloat16 or FlashAttention-2.
-    # Always use float16 and PyTorch SDPA on V100 nodes.
+    gpu: "2x NVIDIA Tesla V100-PCIE-16GB (32GB total, Volta sm_70)"
+    # V100 does not support native bf16 or FlashAttention-2. Keep FP16 + SDPA.
     torch_dtype: "float16"
     attn_implementation: "sdpa"
-    device_map: "auto"
+    vram_limit_mb: 32000
 
 datasets:
+  # Patram-Bench is not public at the configured HF ID (audit 2026-11-06).
+  # Obtain a release from the ICDAR 2026 authors and set local_path.
   patram_bench:
     hf_repo: "bharatgenai/Patram-Bench"
-    languages: ["hi", "bn", "ta", "te", "mr", "gu", "kn", "ml", "pa", "or", "en"]
-    include_code_mixed: true
-    max_samples_per_language: 250
-    streaming: true
+    status: "unavailable_public_release"
+    local_path: null
+    streaming: false
   indic_vision_bench:
     hf_repo: "krutrim-ai-labs/IndicVisionBench"
-    configs: ["ocr", "vqa_indic", "vqa_en"]
+    revision: "45269760b15938c6a345f74373f56c7a5ab7ecc8"
+    ocr_config: "ocr"
+    vqa_config: "vqa_indic"
     languages: ["Hindi", "Bengali", "Tamil", "Telugu", "Marathi", "Gujarati", "Kannada", "Malayalam", "Odia", "Punjabi"]
-    max_samples_per_language: 200
+    max_samples_per_language: 100
     streaming: true
   funsd:
     hf_repo: "nielsr/funsd"
+    revision: "7e7eeeedd84ce86540eb83cbbf7c75a3fcc7c7a5"
     split: "test"
-    max_samples: 150
+    max_samples: 50
 
 ablations:
   degradation_spectrum_levels: ["level_1", "level_2", "level_3", "level_4", "level_5"]
@@ -38,31 +41,57 @@ ablations:
     - "resolution_downscale"
     - "perspective_skew"
   code_mixing_smi_bins:
-    - [0.00, 0.05]   # Pure Monolingual
-    - [0.05, 0.20]   # Light Code-Mixing
-    - [0.20, 0.35]   # Moderate Code-Mixing
-    - [0.35, 0.50]   # Balanced 50/50 Script Switching
+    - [0.00, 0.05]
+    - [0.05, 0.20]
+    - [0.20, 0.35]
+    - [0.35, 0.50]
   prompting_strategies:
     - "direct_qa"
     - "cot_self_ocr_stepwise"
 
 models:
   ocr_engines:
-    - "tesseract_v5"
-    - "paddleocr_v4"
-    - "surya_ocr"
-  text_qa_readers:
-    - model_id: "Qwen/Qwen2.5-7B-Instruct"
-      precision: "fp16"
-    - model_id: "meta-llama/Meta-Llama-3.1-8B-Instruct"
-      precision: "fp16"
+    tesseract:
+      version: "5.x"
+      lang_map:
+        hi: "hin+eng"
+        bn: "ben+eng"
+        ta: "tam+eng"
+        te: "tel+eng"
+        mr: "mar+eng"
+        gu: "guj+eng"
+        kn: "kan+eng"
+        ml: "mal+eng"
+        pa: "pan+eng"
+        or: "ori+eng"
+        en: "eng"
+    paddleocr:
+      version: "PP-OCRv4"
+      use_angle_cls: true
+      use_gpu: true
+  text_qa_reader:
+    model_id: "Qwen/Qwen2.5-7B-Instruct"
+    revision: "a09a35458c702b33eeacc393d103063234e8bc28"
+    quantization: "fp16"
+    max_new_tokens: 128
+    temperature: 0.0
   vlms:
-    - model_id: "Qwen/Qwen2.5-VL-7B-Instruct"
-      precision: "fp16"
-    - model_id: "bharatgenai/patram-7b-instruct"
-      precision: "fp16"
-    - model_id: "OpenGVLab/InternVL2_5-8B"
-      precision: "fp16"
+    primary_vlm:
+      model_id: "Qwen/Qwen2.5-VL-7B-Instruct"
+      revision: "cc594898137f460bfe9f0759e9844b3ce807cfb5"
+      quantization_modes: ["fp16"]
+      min_pixels: 200704
+      max_pixels: 802816
+      max_new_tokens: 128
+      temperature: 0.0
+    # Patram-7B requires trust_remote_code and a non-ChatML template; the runner
+    # selects AutoModelForCausalLM for it. It is gated, so request access first.
+    optional_patram:
+      model_id: "bharatgenai/patram-7b-instruct"
+      revision: "6a31983daa739b18ba029c767c65d3f68d9be06c"
+      quantization_modes: ["fp16"]
+      max_new_tokens: 128
+      temperature: 0.0
 
 routing:
   ocr_relative_cost: 0.22
