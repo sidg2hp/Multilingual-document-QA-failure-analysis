@@ -1,5 +1,14 @@
 # Paper Readiness Assessment & Implemented Improvements
 
+> **Status (6 Nov 2026): superseded in part by `docs/peer_review.md`.** The
+> "no executed results" verdict stands. The venue table in §1.2 is optimistic
+> for a first-time study and should be read together with the calibrated table
+> in `docs/peer_review.md` §6. The data plan in this document assumes
+> Patram-Bench is available at `bharatgenai/Patram-Bench` and that
+> IndicVisionBench `vqa_indic` is document QA; both assumptions are false (see
+> `docs/data_provenance.md`). Treat the 600-document slice described here as a
+> target to re-specify, not a runnable plan.
+
 This document has two purposes:
 
 1. Give an honest, calibrated assessment of whether the current project can be

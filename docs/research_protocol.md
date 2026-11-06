@@ -1,5 +1,14 @@
 # Research Protocol & Workshop Acceptance Strategy
 
+> **Status (6 Nov 2026): partially superseded.** The protocol below is a useful
+> design sketch, but two of its premises are not executable as written:
+> Patram-Bench is not available at the configured Hugging Face ID, and
+> IndicVisionBench `vqa_indic` is a cultural VQA benchmark over natural images,
+> not a document-QA benchmark. The acceptance estimate in §2 has been withdrawn;
+> see `docs/peer_review.md` for the calibrated assessment and
+> `docs/data_provenance.md` for verified dataset/model facts. Use
+> `docs/preregistration.md` for the analysis plan that replaces this one.
+
 ## 1. Realistic Literature Check & Workshop Viability (2026 Landscape)
 
 ### Existing Prior Work You Must Cite and Differentiate Against
@@ -16,7 +25,12 @@
 
 ---
 
-## 2. Upgraded Research Formulation (High Acceptance Potential: ~75–85%)
+## 2. Upgraded Research Formulation (Acceptance conditional on executed evidence)
+
+> The earlier claim of "~75–85%" acceptance is retracted. With no executed
+> results, the work is not submittable; with a clean 600-item study and one
+> replicated mechanistic claim, a strong workshop is plausible (see
+> `docs/peer_review.md` §6).
 
 To make this a **strong paper for ICDAR, ACL/EMNLP MRL or Document Intelligence Workshop, or ICLR/NeurIPS Workshops**, we upgrade the study in **three specific ways**:
 
