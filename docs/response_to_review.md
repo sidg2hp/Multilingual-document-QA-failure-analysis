@@ -48,8 +48,8 @@ the paper is ready.
 
 ## Local pilot (6 Nov 2026, RTX 3050)
 
-Because the human cannot run experiments, I ran the strongest study the laptop
-supports without annotators:
+To make progress without the author running experiments, I ran the strongest
+study the laptop supports without annotators:
 
 - Windows.Media.Ocr (English only) + Qwen2.5-1.5B Q4_K_M via Ollama.
 - 20 FUNSD documents for an OCR-only CER/WER degradation curve.
